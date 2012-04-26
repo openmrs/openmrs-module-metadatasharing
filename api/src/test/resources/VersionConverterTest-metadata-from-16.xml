@@ -1,0 +1,169 @@
+<list id="1">
+  <org.openmrs.ConceptNumeric id="2" uuid="ee3247fb-7ed0-4395-934e-78087ce3086e">
+      <retired>false</retired>
+      <datatype id="3" resolves-to="org.openmrs.ConceptDatatype"
+                uuid="f4e04736-f5b6-497f-b5c0-0234bb98f706">
+         <name>Numeric</name>
+         <description>Numeric value, including integer or float (e.g., creatinine, weight)</description>
+         <creator/>
+         <dateCreated id="5">2004-02-02 00:00:00</dateCreated>
+         <retired>false</retired>
+         <hl7Abbreviation>NM</hl7Abbreviation>
+      </datatype>
+      <conceptClass id="6" resolves-to="org.openmrs.ConceptClass"
+                    uuid="d2d76071-daa6-46a1-9a8c-9193ddd2a39f">
+         <name>Test</name>
+         <description>Acq. during patient encounter (vitals, labs, etc.)</description>
+         <creator/>
+         <dateCreated id="8">2004-02-02 00:00:00</dateCreated>
+         <retired>false</retired>
+      </conceptClass>
+      <set>false</set>
+      <version/>
+      <creator/>
+      <dateCreated id="9">2004-08-12 00:00:00</dateCreated>
+      <changedBy/>
+      <dateChanged id="10">2012-01-09 09:53:27</dateChanged>
+      <names class="set" id="11">
+         <org.openmrs.ConceptName id="12" uuid="5c310703-b1aa-4b70-bb2e-035f0928fe15">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <name>WEIGHT (KG)</name>
+            <locale id="13">en</locale>
+            <creator/>
+            <dateCreated id="14">2004-08-12 00:00:00</dateCreated>
+            <voided>false</voided>
+            <tags class="set" id="15">
+               <org.openmrs.ConceptNameTag id="16" uuid="4670e11e-ebf9-4808-89d9-64cad64e67c9">
+                  <tag>preferred_</tag>
+                  <description>preferred name in a language</description>
+                  <creator/>
+                  <dateCreated id="17">2007-05-01 00:00:00</dateCreated>
+                  <voided>false</voided>
+               </org.openmrs.ConceptNameTag>
+               <org.openmrs.ConceptNameTag id="90" uuid="4670e11e-ebf9-4808-89d9-64cad64e67c9">
+                  <tag>preferred</tag>
+                  <description>preferred name</description>
+                  <creator/>
+                  <dateCreated id="91">2007-05-01 00:00:00</dateCreated>
+                  <voided>false</voided>
+               </org.openmrs.ConceptNameTag>
+            </tags>
+         </org.openmrs.ConceptName>
+         <org.openmrs.ConceptName id="18" uuid="b4fe0de4-188d-409c-81f0-4b9473a5fef5">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <name>WT</name>
+            <locale id="19">en</locale>
+            <creator/>
+            <dateCreated id="20">2004-08-12 00:00:00</dateCreated>
+            <voided>false</voided>
+            <tags class="set" id="21">
+               <org.openmrs.ConceptNameTag id="22" uuid="dca540b6-7330-4ced-91e9-b6bf3ceaee6b">
+                  <tag>short</tag>
+                  <description>preferred short name for a concept</description>
+                  <creator/>
+                  <dateCreated id="23">2007-05-01 00:00:00</dateCreated>
+                  <voided>false</voided>
+               </org.openmrs.ConceptNameTag>
+            </tags>
+         </org.openmrs.ConceptName>
+         <org.openmrs.ConceptName id="24" uuid="9bc5693a-f558-40c9-8177-145a4b119ca7">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <name>WEIGHT (KG)</name>
+            <locale id="25">en</locale>
+            <creator/>
+            <dateCreated id="26">2004-08-12 00:00:00</dateCreated>
+            <voided>false</voided>
+            <tags class="set" id="27">
+               <org.openmrs.ConceptNameTag reference="16"/>
+            </tags>
+         </org.openmrs.ConceptName>
+         <org.openmrs.ConceptName id="28" uuid="377051e1-6bde-4880-8c0c-8fbc3047c12a">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <name>WT</name>
+            <locale id="29">en</locale>
+            <creator/>
+            <dateCreated id="30">2004-08-12 00:00:00</dateCreated>
+            <voided>false</voided>
+            <tags class="set" id="31">
+               <org.openmrs.ConceptNameTag reference="22"/>
+            </tags>
+         </org.openmrs.ConceptName>
+      </names>
+      <answers class="set" id="32"/>
+      <conceptSets class="set" id="33"/>
+      <descriptions class="set" id="34">
+         <org.openmrs.ConceptDescription id="35" uuid="62ae59a6-8a49-4b8e-a3be-80284fbd5913">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <description>Patient's weight in kilograms.</description>
+            <locale id="36">en</locale>
+            <creator/>
+            <dateCreated id="37">2004-08-12 00:00:00</dateCreated>
+            <changedBy/>
+            <dateChanged id="38">2012-01-09 09:53:27</dateChanged>
+         </org.openmrs.ConceptDescription>
+      </descriptions>
+      <conceptMappings class="set" id="39">
+         <org.openmrs.ConceptMap id="40" uuid="4acef65d-3a76-4102-8d88-53b2a7c2dd1e">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <source id="41" resolves-to="org.openmrs.ConceptSource"
+                    uuid="00001827-639f-4cb4-961f-1e025bf80000">
+               <name>Some Standardized Terminology</name>
+               <description>A made up source</description>
+               <creator/>
+               <dateCreated id="43">2005-02-24 00:00:00</dateCreated>
+               <retired>false</retired>
+               <hl7Code>SSTRM</hl7Code>
+            </source>
+            <sourceCode>WGT234</sourceCode>
+            <comment>A person's weight in kilograms</comment>
+            <creator/>
+            <dateCreated id="44">2004-08-12 00:00:00</dateCreated>
+         </org.openmrs.ConceptMap>
+         <org.openmrs.ConceptMap id="45" uuid="4bb7f2b7-7bd1-41c5-a7a0-30454559e78f">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <source id="46" resolves-to="org.openmrs.ConceptSource"
+                    uuid="j3nfjk33-639f-4cb4-961f-1e025b908433">
+               <name>SNOMED CT</name>
+               <description>'Systematized Nomenclature of Medicine--Clinical Terms' is a comprehensive clinical terminology</description>
+               <creator/>
+               <dateCreated id="48">2005-02-24 00:00:00</dateCreated>
+               <retired>false</retired>
+               <hl7Code>SNOMED-CT</hl7Code>
+            </source>
+            <sourceCode>2332523</sourceCode>
+            <comment>A person's weight in kilograms</comment>
+            <creator/>
+            <dateCreated id="49">2004-08-12 00:00:00</dateCreated>
+         </org.openmrs.ConceptMap>
+         <org.openmrs.ConceptMap id="50" uuid="7b295ce2-11a9-410b-b5c1-94704a6c28b2">
+            <concept class="org.openmrs.ConceptNumeric" reference="2"/>
+            <source id="51" uuid="8f29c8b7-818e-4747-9e56-2783aeeab466">
+               <name>8f29c8b7-818e-4747-9e56-2783aeeab466</name>
+               <creator/>
+               <dateCreated id="52">2012-01-09 09:53:27</dateCreated>
+               <retired>false</retired>
+            </source>
+            <sourceCode>5089</sourceCode>
+            <creator/>
+            <dateCreated id="53">2012-01-09 09:53:27</dateCreated>
+         </org.openmrs.ConceptMap>
+      </conceptMappings>
+      <compatibleCache id="54">
+         <entry>
+            <locale id="55">en_GB</locale>
+            <vector id="56">
+               <org.openmrs.ConceptName reference="12"/>
+               <org.openmrs.ConceptName reference="18"/>
+               <org.openmrs.ConceptName reference="24"/>
+               <org.openmrs.ConceptName reference="28"/>
+            </vector>
+         </entry>
+      </compatibleCache>
+      <hiAbsolute>250</hiAbsolute>
+      <hiNormal>250</hiNormal>
+      <lowAbsolute>0</lowAbsolute>
+      <lowCritical>0</lowCritical>
+      <units>kg</units>
+      <precise>true</precise>
+  </org.openmrs.ConceptNumeric>
+</list>

@@ -1,0 +1,356 @@
+.dataTables_length {
+	padding: 3px;
+	width: 40%;
+	float: left;
+}
+
+.dataTables_filter {
+	padding: 3px;
+	float: right;
+	text-align: right;
+}
+
+.dataTables_wrapper {
+	clear: both;
+	min-height: 0px;
+	position: relative;
+}
+
+.dataTables_paginate {
+	padding: 3px;
+	float: right;
+	text-align: right;
+}
+
+.dataTables_info {
+	padding: 3px;
+	float: left;
+	width: 55%;
+}
+
+.paging_full_numbers .fg-button {
+	margin: 2px;
+	padding: 2px;
+	cursor: pointer;
+}
+
+#manageMetadataSharing #metadataPackages {
+	width: 100%;
+}
+
+#manageMetadataSharing #metadataPackages .nameColumn {
+	width: 45%;
+}
+
+#manageMetadataSharing #metadataPackages th {
+	white-space: nowrap;
+}
+
+#manageMetadataSharing #metadataPackages .nameColumn p {
+	padding: 2px 5px;
+	margin: 0;
+	white-space: nowrap;
+}
+
+#manageMetadataSharing #metadataPackages .nameColumn small {
+	color: grey;
+	width: 100%;
+	display: block;
+	padding-top: 2px;
+}
+
+#manageMetadataSharing #metadataPackages .nameColumn .publishWarning {
+	float: right;
+	margin: 0 10px;
+	color: black;
+}
+
+#manageMetadataSharing #metadataPackages .descriptionColumn {
+	width: 45%;
+}
+
+#manageMetadataSharing .even:hover,#packageSummary .even:hover,#subscriptions .even:hover
+	{
+	background-color: WhiteSmoke;
+}
+
+#manageMetadataSharing .odd:hover,#packageSummary .odd:hover,#subscriptions .odd:hover
+	{
+	background-color: #EEEEEE;
+}
+
+#packageSummary #packages {
+	width: 100%;
+}
+
+#packageSummary #packages th {
+	white-space: nowrap;
+}
+
+#packageSummary #shareUrl input {
+	width: 750px;
+}
+
+#packageSummary #shareUrl .disabled {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+#packageSummary #shareUrl {
+	margin: 7px 2px;
+}
+
+#packageSummary .actionColumn .delete {
+	background: url('../images/delete.png') no-repeat;
+}
+
+#packageSummary .actionColumn .download {
+	background: url('../images/download.png') no-repeat;
+}
+
+#packageSummary .actionColumn .newVersion {
+	background: url('../images/newVersion.png') no-repeat;
+}
+
+#packageSummary .publish {
+	background: url('../images/publish.png') no-repeat;
+	background-position: right center;
+	padding-left: 6px;
+}
+
+#packageSummary .unpublish {
+	background: url('../images/unpublish.png') no-repeat;
+}
+
+#packageSummary .actionColumn {
+	width: 90px;
+}
+
+#packageSummary .publishedColumn {
+	width: 90px;
+}
+
+#packageSummary .versionColumn {
+	width: 65px;
+}
+
+#packageSummary .dateColumn {
+	width: 140px;
+}
+
+#packageSummary .nameColumn {
+	width: 300px;
+}
+
+#packageSummary .publishedColumn span {
+	float: left;
+}
+
+#packageSummary #notPublishedWarning {
+	margin: 5px 2px;
+	width: 310px;
+	white-space: nowrap;
+}
+
+#packageSummary .dataTables_wrapper span {
+	margin-left: 2px;
+}
+
+#packageSummary .dataTables_wrapper {
+	margin-top: 5px;
+}
+
+#packageSummary td {
+	padding: 0 5px;
+}
+
+#packageSummary .iconButton {
+	width: 22px;
+	height: 22px;
+	float: left;
+	margin: 0 4px;
+}
+
+#packageSummary .iconButton:hover {
+	cursor: pointer;
+}
+
+#packageSummary .dateColumn {
+	white-space: nowrap;
+}
+
+.toolbarButton {
+	padding: 1px;
+	margin: 3px 10px 3px 2px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	white-space: nowrap;
+	display: inline;
+	float: left;
+}
+
+.toolbarButton:hover {
+	cursor: pointer;
+}
+
+.manageSubscriptions #subscriptionsTitle {
+	display: inline;
+	float: left;
+	margin: 7px 0 0 2px;
+}
+
+.manageSubscriptions .unsubscribeColumn {
+	text-align: center;
+	width: 100px;
+}
+
+.manageSubscriptions .subscriptionColumn {
+	white-space: nowrap;
+}
+
+.manageSubscriptions .subscriptionColumn small {
+	color: gray;
+}
+
+small {
+	font-size: 11px;
+}
+
+.manageSubscriptions #subscriptions {
+	width: 100%;
+}
+
+.manageSubscriptions toolbar {
+	clear: both;
+}
+
+.manageSubscriptions .subscriptionColumn p {
+	padding: 2px 5px;
+	margin: 0;
+}
+
+.manageSubscriptions .subscriptionColumn .version {
+	float: right;
+	margin-right: 10px;
+	display: inline;
+}
+
+.manageSubscriptions .statusColumn {
+	white-space: nowrap;
+	height: 38px;
+	width: 400px;
+}
+
+.manageSubscriptions .statusColumn p {
+	margin: 0;
+	padding: 0;
+}
+
+.manageSubscriptions .statusColumn div {
+	padding: 2px 5px;
+	margin: 0;
+	height: 100%;
+}
+
+.manageSubscriptions .statusError {
+	background-color: lightPink;
+}
+
+.manageSubscriptions .statusGood {
+	background-color: lightGreen;
+}
+
+.manageSubscriptions .statusNeutral {
+	background-color: #FFFF66;
+}
+
+.manageSubscriptions .loading {
+	background: url('../images/loading.gif') no-repeat;
+	background-position: center center;
+	margin: 0;
+	padding: 0;
+}
+
+#downloadPackage #downloadStatusBar {
+	background: url('../images/loading.gif') no-repeat;
+	background-position: left center;
+	padding-left: 30px;
+}
+
+#downloadPackage #downloadErrorBar {
+	display: none;
+}
+
+#downloadPackage #errorStackTrace {
+	width: 100%;
+	padding: 5px;
+	word-wrap: break-word;
+	display: none;
+}
+
+#downloadPackage #backButton {
+	display: none;
+	margin: 5px;
+}
+
+#downloadPackage #toggleStackTrace {
+	margin: 5px;
+	display: none;
+}
+
+.warning {
+	background-color: #FFEE6B;
+}
+
+.correct {
+	background-color: #C8F0C8;
+}
+
+span.normal {
+	padding: 1px 6px 1px 6px;
+	margin-left: 4px;
+	margin-right: 4px;
+	vertical-align: middle;
+}
+
+span.warning,div.warning,span.correct {
+	border: 1px dashed #FFE100;
+	padding: 1px 6px 1px 6px;
+	margin-left: 4px;
+	margin-right: 4px;
+	vertical-align: middle;
+}
+
+.oddAssessed {
+	background-color: #A0F0A0;
+}
+
+.evenAssessed {
+	background-color: #C8F0C8;
+}
+
+.to_upper {
+	vertical-align: top;
+}
+
+.to_right {
+	text-align: right;
+}
+
+.same {
+	background-color: #6AFB92;
+}
+
+.different {
+	background-color: #FFFC17;
+}
+
+.retired {
+	text-decoration: line-through;
+}

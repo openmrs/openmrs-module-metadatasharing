@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
+
+	<description>
+		JavaScript safe printing object's fields. It prints the given text HTML and JavaScript escaped. 
+		If the text is empty or null it prints "null" (without quotation marks).
+		If the asString value is true the printed text is wrapped by single quotation marks. E.g. 'this is some text'
+	</description>
+	<tlib-version>1.0</tlib-version>
+	<short-name>utils</short-name>
+
+	<tag>
+		<name>printJavaScript</name>
+		<tagclass>org.openmrs.module.metadatasharing.web.taglib.PrintJavaScriptTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<attribute>
+			<name>text</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>asString</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

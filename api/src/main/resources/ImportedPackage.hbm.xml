@@ -1,0 +1,39 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openmrs.module.metadatasharing">
+	<class name="ImportedPackage" table="metadatasharing_imported_package">
+		<id name="id" type="int" column="imported_package_id"
+			unsaved-value="0">
+			<generator class="native" />
+		</id>
+		<discriminator column="imported_package_id" insert="false" />
+		<property name="uuid" type="java.lang.String" column="uuid"
+			length="38" unique="true" />
+		<property name="groupUuid" type="java.lang.String" column="group_uuid"
+			length="38" not-null="true" />
+		<property name="dateCreated" type="java.util.Date" column="date_created"
+			not-null="true" length="19" />
+		<property name="dateImported" type="java.util.Date" column="date_imported"
+			length="19" />
+		<property name="subscriptionUrl" type="java.lang.String"
+			column="subscription_url" length="512" />
+		<property name="subscriptionStatus" column="subscription_status">
+			<type name="org.openmrs.module.metadatasharing.api.db.hibernate.EnumType">
+				<param name="enumClass">org.openmrs.module.metadatasharing.SubscriptionStatus</param>
+				<param name="type">-6</param>
+			</type>
+		</property>
+		<property name="name" type="java.lang.String" column="name"
+			length="64" />
+		<property name="description" type="java.lang.String" column="description"
+			length="256" />
+		<property name="importConfig" column="import_config">
+			<type
+				name="org.openmrs.module.metadatasharing.api.db.hibernate.XMLSerializableType">
+				<param name="class">org.openmrs.module.metadatasharing.ImportConfig</param>
+			</type>
+		</property>
+		<property name="remoteVersion" type="java.lang.Integer"
+			column="remote_version" />
+		<property name="version" type="java.lang.Integer" column="version" />
+	</class>
+</hibernate-mapping>
