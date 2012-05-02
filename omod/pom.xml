@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>metadatasharing</artifactId>
-		<version>1.0.8-SNAPSHOT</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>metadatasharing-omod</artifactId>
