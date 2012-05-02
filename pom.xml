@@ -21,12 +21,20 @@
 		<name>OpenMRS</name>
 		<url>http://openmrs.org</url>
 	</organization>
-
+	
 	<scm>
-		<connection>scm:svn:https://svn.openmrs.org/openmrs-modules/metadatasharing/trunk/</connection>
-		<developerConnection>scm:svn:https://svn.openmrs.org/openmrs-modules/metadatasharing/trunk/</developerConnection>
-		<url>https://svn.openmrs.org/openmrs-modules/metadatasharing/trunk/</url>
+		<connection>scm:git:https://github.com/OpenMRS/openmrs-module-metadatasharing/</connection>
+		<developerConnection>scm:git:https://github.com/OpenMRS/openmrs-module-metadatasharing/</developerConnection>
+		<url>https://github.com/OpenMRS/openmrs-module-metadatasharing/</url>
 	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>openmrs-repo-modules</id>
+			<name>Modules</name>
+			<url>http://mavenrepo.openmrs.org/nexus/content/repositories/modules/</url>
+		</repository>
+	</distributionManagement>
 
 	<modules>
 		<module>api</module>
