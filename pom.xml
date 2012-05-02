@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>metadatasharing</artifactId>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.7</version>
 	<packaging>pom</packaging>
 	<name>Metadata Sharing Module</name>
 	<description>Allows all kinds of metadata (concepts, locations, roles, etc.) to be exchanged between different OpenMRS installations.</description>
