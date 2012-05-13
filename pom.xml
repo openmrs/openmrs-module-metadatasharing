@@ -58,6 +58,7 @@
 	<modules>
 		<module>api</module>
 		<module>omod</module>
+	 <module>test</module>
 	</modules>
 
 	<properties>

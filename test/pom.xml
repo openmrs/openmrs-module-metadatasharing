@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.openmrs.module</groupId>
+		<artifactId>metadatasharing</artifactId>
+		<version>1.0.8-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>metadatasharing-test</artifactId>
+	<packaging>jar</packaging>
+	<name>Metadata Sharing Module TEST</name>
+	<description>TEST project for Metadata Sharing Module</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-omod</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>test-with-core</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>Expand test classes</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.openmrs.api</groupId>
+											<artifactId>openmrs-api</artifactId>
+											<version>${openmrsVersion}</version>
+											<type>jar</type>
+											<classifier>tests</classifier>
+										</artifactItem>
+										<artifactItem>
+											<groupId>org.openmrs.web</groupId>
+											<artifactId>openmrs-web</artifactId>
+											<version>${openmrsVersion}</version>
+											<type>jar</type>
+											<classifier>tests</classifier>
+										</artifactItem>
+										<artifactItem>
+											<groupId>${project.parent.groupId}</groupId>
+											<artifactId>${project.parent.artifactId}-api</artifactId>
+											<version>${project.parent.version}</version>
+											<classifier>tests</classifier>
+										</artifactItem>
+										<artifactItem>
+											<groupId>${project.parent.groupId}</groupId>
+											<artifactId>${project.parent.artifactId}-omod</artifactId>
+											<version>${project.parent.version}</version>
+											<classifier>tests</classifier>
+										</artifactItem>
+									</artifactItems>
+									<excludes>TestingApplicationContext.xml</excludes>
+									<outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
