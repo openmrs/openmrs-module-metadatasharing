@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -10,7 +11,7 @@
 	<artifactId>metadatasharing-omod</artifactId>
 	<packaging>jar</packaging>
 	<name>Metadata Sharing Module OMOD</name>
-	<description>OMOD project for MetadataSharing</description>
+	<description>OMOD project for Metadata Sharing Module</description>
 	
 	<properties>
 		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
@@ -20,9 +21,6 @@
 	</properties>
 
 	<dependencies>
-
-		<!-- Begin project modules -->
-
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api</artifactId>
@@ -36,31 +34,6 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- End project modules -->
-
-		<!-- Begin OpenMRS core -->
-
-		<dependency>
-			<groupId>org.openmrs.api</groupId>
-			<artifactId>openmrs-api</artifactId>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openmrs.web</groupId>
-			<artifactId>openmrs-web</artifactId>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openmrs.test</groupId>
-			<artifactId>openmrs-test</artifactId>
-			<type>jar</type>
-		</dependency>
-
-		<!-- End OpenMRS core -->
-
 	</dependencies>
 
 	<build>
