@@ -8,10 +8,10 @@
 		<version>1.0.8-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>metadatasharing-test</artifactId>
+	<artifactId>metadatasharing-it</artifactId>
 	<packaging>jar</packaging>
-	<name>Metadata Sharing Module TEST</name>
-	<description>TEST project for Metadata Sharing Module</description>
+	<name>Metadata Sharing Module IT</name>
+	<description>Integration Test project for Metadata Sharing Module</description>
 
 	<dependencies>
 		<dependency>
@@ -33,7 +33,7 @@
 	
 	<profiles>
 		<profile>
-			<id>test-with-core</id>
+			<id>integration-test</id>
 			<build>
 				<plugins>
 					<plugin>

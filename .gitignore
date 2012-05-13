@@ -2,3 +2,4 @@
 /.project
 /target
 /test/velocity.log
+/it/velocity.log

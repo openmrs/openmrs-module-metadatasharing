@@ -58,10 +58,10 @@
 	<modules>
 		<module>api</module>
 		<module>omod</module>
-	 <module>test</module>
 	</modules>
 
 	<properties>
+		<openmrsVersion>1.6.5</openmrsVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -112,9 +112,6 @@
 	<profiles>
 		<profile>
 			<id>openmrs-1.6.5</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<openmrsVersion>1.6.5</openmrsVersion>
 			</properties>
@@ -132,6 +129,13 @@
 			<properties>
 				<openmrsVersion>1.9.0-RC3</openmrsVersion>
 			</properties>
+		</profile>
+		
+		<profile>
+			<id>integration-test</id>
+			<modules>
+				<module>it</module>
+			</modules>
 		</profile>
 	</profiles>
 	
