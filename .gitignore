@@ -3,3 +3,4 @@
 /target
 /test/velocity.log
 /it/velocity.log
+/nbactions-integration-test.xml
