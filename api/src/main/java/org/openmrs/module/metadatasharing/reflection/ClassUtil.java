@@ -49,12 +49,18 @@ public abstract class ClassUtil {
 	 * 
 	 * @param clazz
 	 * @return the class
+	 * @should handle cglib generated proxy names
+	 * @should handle javassist generated proxy names
 	 */
 	public static Class<?> getDeproxiedClass(Class<?> clazz) {
 		String name = clazz.getName();
-		int proxySuffix = name.indexOf("$");
+		// first we look for javassist proxies like "org.openmrs.ConceptDatatype_$$_javassist_65"
+		int proxySuffix = name.indexOf("_$");
+		// next we look for cglib proxies like "org.openmrs.ConceptDatatype$$EnhancerByCGLIB$$3c710f29"
+		if (proxySuffix < 0)
+			proxySuffix = name.indexOf("$");
 		if (proxySuffix > 0) {
-			name = name.substring(0, name.indexOf("$"));
+			name = name.substring(0, proxySuffix);
 			return loadClass(name);
 		} else {
 			return clazz;
