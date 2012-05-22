@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.ConceptDatatype;
 import org.openmrs.OpenmrsMetadata;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.RelationshipType;
@@ -33,8 +35,10 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.ModuleUtil;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.util.OpenmrsClassLoader;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -152,6 +156,11 @@ public class OpenmrsClassScanner {
 			future += CACHE_TIMEOUT_IN_MS;
 			metadataTypesCacheTimeout = new Date(future);
 			metadataTypesCache = getClasses(OpenmrsMetadata.class, true);
+			for (Iterator<Class<OpenmrsMetadata>> i = metadataTypesCache.iterator(); i.hasNext(); ) {
+				if (!canBeSaved(i.next())) {
+					i.remove();
+				}
+			}
 		}
 		return new ArrayList<Class<OpenmrsMetadata>>(metadataTypesCache);
 	}
@@ -199,8 +208,10 @@ public class OpenmrsClassScanner {
 			for (Method method : methods) {
 				if (method.getName().startsWith("save")) {
 					if (Arrays.equals(method.getParameterTypes(), new Class<?>[] { method.getReturnType() })) {
-						serviceSaveMethodsCache
-						        .put(method.getReturnType(), new ClassMethod<OpenmrsService>(service, method));
+						if (canBeSaved(method.getReturnType())) {
+							serviceSaveMethodsCache
+								.put(method.getReturnType(), new ClassMethod<OpenmrsService>(service, method));
+						}
 					}
 				}
 			}
@@ -219,6 +230,21 @@ public class OpenmrsClassScanner {
 		catch (Exception ex) {}
 	}
 	
+	/**
+     * Currently this only handles the case where starting in OpenMRS 1.9 you are no longer allowed to modify
+     * a ConceptDatatype.
+     * 
+     * @param clazz
+     * @return true for all cases except ConceptDatatype on OpenMRS 1.9+
+     */
+    private boolean canBeSaved(Class<?> clazz) {
+    	if (clazz.equals(ConceptDatatype.class) && ModuleUtil.compareVersion(OpenmrsConstants.OPENMRS_VERSION_SHORT, "1.9") >= 0) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+
 	protected <T> T invokeServiceSaveItem(T item) throws APIException {
 		ClassMethod<OpenmrsService> classMethod = serviceSaveMethodsCache.get(item.getClass());
 		if (classMethod == null) {
