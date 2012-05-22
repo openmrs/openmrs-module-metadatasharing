@@ -57,6 +57,8 @@
 
 	<modules>
 		<module>api</module>
+		<module>api-1.9</module>
+		<module>api-bundle</module>
 		<module>omod</module>
 	</modules>
 
