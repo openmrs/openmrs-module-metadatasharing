@@ -27,7 +27,7 @@
 	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
-		<class>@MODULE_PACKAGE@.extension.html.AdminList</class>
+		<class>@MODULE_PACKAGE@.web.extension.html.AdminList</class>
 	</extension>
 
 	<mappingFiles>

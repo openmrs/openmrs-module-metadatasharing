@@ -13,6 +13,10 @@
 	<name>Metadata Sharing Module API 1.9</name>
 	<description>API 1.9 project for Metadata Sharing Module</description>
 
+	<properties>
+		<openMRSVersion>1.9.0</openMRSVersion>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
@@ -21,9 +25,22 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.api</groupId>
+			<artifactId>openmrs-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openmrs.api</groupId>
+			<artifactId>openmrs-api</artifactId>
+			<classifier>tests</classifier>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.test</groupId>
+			<artifactId>openmrs-test</artifactId>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
-	
-	<properties>
-		<openmrsVersion>1.9.0-RC3</openmrsVersion>
-	</properties>
 </project>

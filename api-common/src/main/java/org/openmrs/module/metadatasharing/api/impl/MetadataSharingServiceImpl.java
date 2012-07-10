@@ -20,7 +20,8 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.directwebremoting.util.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.APIException;
 import org.openmrs.api.ConceptService;
@@ -47,7 +48,7 @@ import org.openmrs.module.metadatasharing.updater.SubscriptionUpdater;
  */
 public class MetadataSharingServiceImpl extends BaseOpenmrsService implements MetadataSharingService {
 	
-	protected final Logger log = Logger.getLogger(MetadataSharingServiceImpl.class);
+	protected final Log log = LogFactory.getLog(MetadataSharingServiceImpl.class);
 	
 	@Resource(name = "hibernateMetadataSharingDAO")
 	private MetadataSharingDAO dao;

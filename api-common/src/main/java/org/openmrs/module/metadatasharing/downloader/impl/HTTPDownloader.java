@@ -20,8 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.openmrs.module.metadatasharing.downloader.Downloader;
 import org.openmrs.module.metadatasharing.downloader.exception.ServiceUnavailableException;
 import org.openmrs.module.metadatasharing.downloader.exception.TimeoutException;
@@ -84,7 +82,7 @@ public class HTTPDownloader extends Downloader {
 		}
 		try {
 			initialzeConnection();
-			if (connection.getResponseCode() != HttpServletResponse.SC_OK) {
+			if (connection.getResponseCode() != 200 /* HttpServletResponse.SC_OK */) {
 				throw new ServiceUnavailableException("Error code:" + connection.getResponseCode());
 			}
 			reader = new BufferedInputStream(connection.getInputStream(), bufferSize);
