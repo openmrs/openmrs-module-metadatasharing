@@ -16,9 +16,6 @@
 		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
 	</bean>
 
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
-
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
