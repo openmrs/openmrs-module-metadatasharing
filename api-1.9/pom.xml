@@ -14,7 +14,7 @@
 	<description>API 1.9 project for Metadata Sharing Module</description>
 
 	<properties>
-		<openMRSVersion>1.9.0</openMRSVersion>
+		<openMRSAPIVersion>1.9.0</openMRSAPIVersion>
 	</properties>
 
 	<dependencies>
@@ -29,17 +29,20 @@
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
+			<version>${openMRSAPIVersion}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
+			<version>${openMRSAPIVersion}</version>
 			<classifier>tests</classifier>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.test</groupId>
 			<artifactId>openmrs-test</artifactId>
+			<version>${openMRSAPIVersion}</version>
 			<type>pom</type>
 		</dependency>
 	</dependencies>
