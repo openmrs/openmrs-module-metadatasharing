@@ -11,6 +11,19 @@
 	<artifactId>metadatasharing-api</artifactId>
 	<packaging>jar</packaging>
 	<name>Metadata Sharing Module API</name>
-	<description>API project for Metadata Sharing Module</description>
+	<description>API Bundle project for Metadata Sharing Module</description>
 
+	<dependencies>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api-1.9</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
 </project>

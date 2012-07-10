@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<concept concept_id="5089" retired="false" datatype_id="1" class_id="1" is_set="false" creator="1" date_created="2004-08-12 00:00:00.0" version="" changed_by="1" date_changed="2005-02-25 11:43:43.0" uuid="ee3247fb-7ed0-4395-934e-78087ce3086e"/>
+	<concept concept_id="5090" retired="false" datatype_id="1" class_id="1" is_set="false" creator="1" date_created="2004-08-12 00:00:00.0" version="" changed_by="1" date_changed="2005-02-25 11:43:43.0" uuid="b342314a-211a-415c-8294-26d5283226bf"/>
+	<concept_class concept_class_id="1" name="Test" description="Acq. during patient encounter (vitals, labs, etc.)" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="d2d76071-daa6-46a1-9a8c-9193ddd2a39f"/>
+	<concept_datatype concept_datatype_id="1" name="Numeric" hl7_abbreviation="NM" description="Numeric value, including integer or float (e.g., creatinine, weight)" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="f4e04736-f5b6-497f-b5c0-0234bb98f706"/>
+	<concept_description concept_description_id="1" concept_id="5089" description="Patient&apos;s weight in kilograms." locale="en" creator="1" date_created="2004-08-12 00:00:00.0" uuid="62ae59a6-8a49-4b8e-a3be-80284fbd5913"/>
+	<concept_description concept_description_id="2" concept_id="5090" description="This is another concept." locale="en" creator="1" date_created="2004-08-12 00:00:00.0" uuid="e5d7f6b2-5700-401c-a240-1eb0ece1a4a3"/>
+	<concept_name concept_id="5089" name="WEIGHT (KG)" locale="en" creator="1" date_created="2004-08-12 00:00:00.0" concept_name_id="1" voided="false" uuid="5c310703-b1aa-4b70-bb2e-035f0928fe15"/>
+	<concept_name concept_id="5090" name="SOME OTHER CONCEPT" locale="en" creator="1" date_created="2004-08-12 00:00:00.0" concept_name_id="2" voided="false" uuid="c3f32ec2-5bce-4914-b219-fa51846176b3"/>
+	<concept_name concept_id="5089" name="WT" locale="en" creator="1" date_created="2004-08-12 00:00:00.0" concept_name_id="3" voided="false" uuid="b4fe0de4-188d-409c-81f0-4b9473a5fef5"/>
+	<concept_name concept_id="5090" name="WT" locale="en" creator="1" date_created="2004-08-12 00:00:00.0" concept_name_id="4" voided="false" uuid="30ed3ab0-4ea6-46dd-9aea-d0cd35c5916e"/>
+	<concept_name_tag concept_name_tag_id="1" tag="default" description="name to use when nothing else is available" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="84726350-2d71-4f25-a39f-2b101f0cc7db"/>
+	<concept_name_tag concept_name_tag_id="2" tag="short" description="preferred short name for a concept" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="dca540b6-7330-4ced-91e9-b6bf3ceaee6b"/>
+	<concept_name_tag concept_name_tag_id="3" tag="synonym" description="a different word with similar meaning" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="cb3b4c9c-a012-4bd2-a50f-e1f0da6764a9"/>
+	<concept_name_tag concept_name_tag_id="4" tag="preferred" description="preferred name in a language" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="4670e11e-ebf9-4808-89d9-64cad64e67c9"/>
+	<concept_name_tag concept_name_tag_id="5" tag="preferred_KE" description="preferred name in Kenya" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="51ffe040-af53-4275-a579-6e6dab14aa11"/>
+	<concept_name_tag concept_name_tag_id="6" tag="preferred_LS" description="preferred name in Lesotho" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="2157abaf-d160-45d3-a51c-f9690a3a4cc6"/>
+	<concept_name_tag concept_name_tag_id="7" tag="preferred_MW" description="preferred name in Malawi" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="67f3b6dc-d11a-4d27-9790-4769a76eadf1"/>
+	<concept_name_tag concept_name_tag_id="8" tag="preferred_RW" description="preferred name in Rwanda" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="f96d416e-5043-428c-81aa-9655574ab260"/>
+	<concept_name_tag concept_name_tag_id="9" tag="preferred_SA" description="preferred name in South Africa" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="1d239647-dedc-48f0-9096-6403f38b0cc5"/>
+	<concept_name_tag concept_name_tag_id="10" tag="preferred_TZ" description="preferred name in Tanzania" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="00bc2006-d828-48a5-ad13-eedc84f12845"/>
+	<concept_name_tag concept_name_tag_id="11" tag="preferred_UG" description="preferred name in Uganda" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="e60cf829-b3dd-4b20-8347-2da9fc216bd8"/>
+	<concept_name_tag concept_name_tag_id="12" tag="preferred_UK" description="preferred name in the United Kingdom" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="f37df6af-956f-4279-80a0-33fe72016240"/>
+	<concept_name_tag concept_name_tag_id="13" tag="preferred_US" description="preferred name in the United States" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="110f7886-6d9d-4e0e-b67b-d81b0578e41b"/>
+	<concept_name_tag concept_name_tag_id="14" tag="preferred_ZM" description="preferred name in Zambia" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="4ac196a4-86a2-43a3-bf46-3bd9856f0326"/>
+	<concept_name_tag concept_name_tag_id="15" tag="preferred_ZW" description="preferred name in Zimbabwe" creator="1" date_created="2007-06-20 00:00:00.0" voided="false" uuid="551475f2-525e-491b-8f47-ae6e20ed5450"/>
+	<concept_name_tag_map concept_name_id="1" concept_name_tag_id="4"/>
+	<concept_name_tag_map concept_name_id="2" concept_name_tag_id="4"/>
+	<concept_name_tag_map concept_name_id="3" concept_name_tag_id="2"/>
+	<concept_name_tag_map concept_name_id="4" concept_name_tag_id="2"/>
+	<concept_numeric concept_id="5089" hi_absolute="250.0" low_absolute="0.0" units="kg" precise="true"/>
+	<concept_numeric concept_id="5090" hi_absolute="10.0" low_absolute="0.0" units="kg" precise="true"/>
+	
+	<person person_id="501" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" changed_by="1" date_changed="2008-08-15 15:47:07.0" voided="true" date_voided="2008-08-30 15:47:07.0" voided_by="1" void_reason="Test purposes" uuid="df8ae447-6745-45be-b859-403241d9913c"/>
+    <users user_id="1" person_id="501" system_id="2-6" username="bruno" password="ff6d1655327d385e11a04e1632b4f33ceb8fafd2" salt="5d32c5fd9fde391c755f1f4dfd5e1d6e3debe6" secret_question="" creator="1" date_created="2008-08-15 15:46:47.0" changed_by="1" date_changed="2008-08-15 15:47:07.0" retired="true" date_retired="2008-08-30 15:47:07.0" retire_reason="Test purposes" uuid="55685062-1b48-11df-a5c7-001e378eb67e"/>
+    <role role="Provider" description="General privileges held by all providers" uuid="3480cb6d-c291-46c8-8d3a-96dc33d199fb"/>
+    <user_role user_id="1" role="Provider"/>
+    <user_property user_id="1" property="lockoutTimestamp" property_value="0"/>
+    <user_property user_id="1" property="loginAttempts" property_value="0"/>
+    
+    <location location_id="1" name="Unknown Location" description="The default location used when limited information is known" address1="" address2="" city_village="" state_province="" postal_code="" country="" creator="1" date_created="2005-09-22 00:00:00.0" retired="false" uuid="dc5c1fcc-0459-4201-bf70-0b90535ba362"/>
+	<location location_id="2" parent_location="1" name="Xanadu" description="A metaphor for opulence, most famously in the English Romantic Samuel Taylor Coleridge&apos;s poem Kubla Khan." address1="800 Boylston Street" address2="" city_village="Boston" state_province="MA" postal_code="02115" country="USA" latitude="" longitude="" creator="1" date_created="2008-08-15 13:46:50.0" retired="false" uuid="9356400c-a5a2-4532-8f2b-2361b3446eb8"/>
+	<location location_id="3" name="Never Never Land" description="This is never be found" address1="" address2="" city_village="Peter" state_province="Pan" postal_code="" country="Wendy" latitude="" longitude="" creator="1" date_created="2008-08-15 15:28:54.0" retired="true" retired_by="1" date_retired="2008-08-15 00:00:00.0" retire_reason="test" uuid="167ce20c-4785-4285-9119-d197268f7f4a"/>
+</dataset>
