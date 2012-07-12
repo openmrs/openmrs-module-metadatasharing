@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
 import org.openmrs.util.OpenmrsClassLoader;
 
@@ -28,7 +28,7 @@ public abstract class ClassUtil {
 			loadedClass = classLoader.loadClass(name);
 		}
 		catch (ClassNotFoundException e) {
-			Logger.getLogger(ClassUtil.class).warn("Class is not present on the classpath: " + name, e);
+			LogFactory.getLog(ClassUtil.class).debug("Class is not present on the classpath: " + name);
 		}
 		return loadedClass;
 	}
