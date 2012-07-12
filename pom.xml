@@ -9,7 +9,7 @@
 	<packaging>pom</packaging>
 	<name>Metadata Sharing Module</name>
 	<description>Allows all kinds of metadata (concepts, locations, roles, etc.) to be exchanged between different OpenMRS installations.</description>
-	<url>https://wiki.openmrs.org/display/docs/Metadata+Sharing+Module+Module</url>
+	<url>https://wiki.openmrs.org/display/docs/Metadata+Sharing+Module</url>
 
 	<developers>
 		<developer>
@@ -64,7 +64,7 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>1.6.5</openMRSVersion>
+		<openMRSVersion>1.8.3</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
