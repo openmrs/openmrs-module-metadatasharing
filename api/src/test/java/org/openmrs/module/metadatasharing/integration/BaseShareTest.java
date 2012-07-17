@@ -13,7 +13,9 @@
  */
 package org.openmrs.module.metadatasharing.integration;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +31,20 @@ import org.springframework.util.StringUtils;
 
 public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 	
-	public static final Log log = LogFactory.getLog(BaseShareTest.class);
+	protected final Log log = LogFactory.getLog(getClass());
+	
+	protected final static String omrsMinorVersion;
+	
+	static {
+		Properties properties = new Properties();
+		try {
+	        properties.load(ClassLoader.getSystemResourceAsStream("mds-test-config.properties"));
+        }
+        catch (IOException e) {
+	        throw new RuntimeException(e);
+        }
+		omrsMinorVersion = properties.getProperty("omrsMinorVersion");
+	}
 	
 	/**
 	 * @return class pathname to dbunit xml file
@@ -107,7 +122,11 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 	protected void beforeRunOnExportingServer() throws Exception {
 		Context.openSession();
 		deleteAllData();
-		executeDataSet("MDSCreateTest.xml");
+		String version = omrsMinorVersion;
+		if ("1.7".equals(omrsMinorVersion)) {
+			version = "1.6";
+		}
+		executeDataSet("MDSCreateTest-" + version + ".xml");
 		executeDataSet("MDSImportServer.xml");
 		
 		String initialDataset = getInitialDataset();
@@ -138,7 +157,11 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		//reload db from scratch
 		log.info("\n************************************* Reload Database *************************************");
 		deleteAllData();
-		executeDataSet("MDSCreateTest.xml");
+		String version = omrsMinorVersion;
+		if ("1.7".equals(omrsMinorVersion)) {
+			version = "1.6";
+		}
+		executeDataSet("MDSCreateTest-" + version + ".xml");
 		
 		if (xmlFileToExecute == null)
 			xmlFileToExecute = "MDSImportServer.xml";

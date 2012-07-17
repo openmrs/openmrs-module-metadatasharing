@@ -64,7 +64,7 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>1.8.3</openMRSVersion>
+		<openMRSVersion>1.6.5</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
@@ -74,7 +74,7 @@
 	</properties>
 
 	<dependencyManagement>
-		<dependencies>		
+		<dependencies>
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
@@ -179,7 +179,27 @@
 				</includes>
 			</testResource>
 		</testResources>
-	
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>parse-version</goal>
+						</goals>
+						<configuration>
+							<propertyPrefix>omrs</propertyPrefix>
+							<versionString>${openMRSVersion}</versionString>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>

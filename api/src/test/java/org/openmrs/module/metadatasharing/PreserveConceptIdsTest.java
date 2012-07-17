@@ -24,9 +24,8 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.integration.BaseShareTest;
-import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
+import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.springframework.test.annotation.NotTransactional;
 
 /**
@@ -43,7 +42,11 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 	
 	public String getImportServerDataset() {
 		// adds another concept id 20
-		return "MDSCreateTest.xml";
+		String version = omrsMinorVersion;
+		if ("1.7".equals(omrsMinorVersion)) {
+			version = "1.6";
+		}
+		return "MDSCreateTest-" + version + ".xml";
 	}
 	
 	@Test
@@ -56,7 +59,8 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 			@Override
 			public List<?> prepareExportServer() throws Exception {
 				Concept c = new Concept();
-				c.addName(new ConceptName("1234567890-1234567890", Locale.US));
+				ConceptName conceptName = new ConceptName("1234567890-1234567890", Locale.US);
+				c.addName(conceptName);
 				
 				Context.getConceptService().saveConcept(c);
 				

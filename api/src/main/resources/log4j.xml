@@ -9,8 +9,8 @@
 				value="%p - %C{1}.%M(%L) |%d{ISO8601}| %m%n" />
 		</layout>
 	</appender>
- 	
- 	<logger name="org.openmrs.module.metadatasharing">
+	
+	<logger name="org.openmrs.module.metadatasharing">
 		<level value="DEBUG" />
 		<appender-ref ref="CONSOLE" />
  	</logger>

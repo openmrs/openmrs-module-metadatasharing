@@ -38,6 +38,12 @@
 			<artifactId>openmrs-web</artifactId>
 			<classifier>tests</classifier>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.test</groupId>
+			<artifactId>openmrs-test</artifactId>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 
 	<build>
