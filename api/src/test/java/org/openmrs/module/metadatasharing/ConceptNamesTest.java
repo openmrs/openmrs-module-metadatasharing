@@ -37,6 +37,11 @@ import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
  */
 public class ConceptNamesTest extends BaseShareTest {
 	
+	@Override
+	public boolean insertInitialDataSet() {
+	    return false;
+	}
+	
 	@Test
 	public void shouldOverwritePreferredNameIfPreferTheirs() throws Exception {
 		final String conceptUuid = UUID.randomUUID().toString();

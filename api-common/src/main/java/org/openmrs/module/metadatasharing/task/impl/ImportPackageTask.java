@@ -173,7 +173,7 @@ public class ImportPackageTask extends Task {
 		log("Preparing items to save");
 		prepareItemsToSave(importedItems, incomingToExisting);
 		
-		log("Validating items");
+		/*log("Validating items");
 		Errors errors = new BindException(importedItems, "items");
 		for (ImportedItem importedItem : importedItems) {
 			Object item = null;
@@ -193,7 +193,7 @@ public class ImportPackageTask extends Task {
 		}
 		if (errors.hasErrors()) {
 			throw new ValidationException(errors);
-		}
+		}*/
 		
 		Set<ObjectWrapper<Object>> savedItems = new HashSet<ObjectWrapper<Object>>();
 		

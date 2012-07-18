@@ -40,8 +40,12 @@ public class ComparisonEngine {
 			ConceptMap incomingMap = (ConceptMap) incoming;
 			ConceptMap existingMap = (ConceptMap) existing;
 			
-			if (nullSafeEqual(incomingMap.getSource(), existingMap.getSource())) {
-				return nullSafeEqual(incomingMap.getSourceCode(), existingMap.getSourceCode());
+			if (incomingMap.getSource() != null && existingMap.getSource() != null) {
+				if (nullSafeEqual(incomingMap.getSource().getUuid(), existingMap.getSource().getUuid())) {
+					return nullSafeEqual(incomingMap.getSourceCode(), existingMap.getSourceCode());
+				}
+			} else {
+				return false;
 			}
 		} else if (incoming instanceof ConceptName) {
 			ConceptName incomingName = (ConceptName) incoming;

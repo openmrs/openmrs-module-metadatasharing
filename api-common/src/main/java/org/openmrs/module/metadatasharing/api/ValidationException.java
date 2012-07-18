@@ -51,4 +51,9 @@ public class ValidationException extends APIException {
 		return errors;
 	}
 	
+	@Override
+	public String getMessage() {
+	    return errors.toString();
+	}
+	
 }

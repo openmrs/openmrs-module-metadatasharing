@@ -1,8 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <concept_source concept_source_id="1" name="SNOMED-CT" description="snomed" hl7_code="SNOMED" creator="1" date_created="2011-11-15 15:38:31.0" retired="false" uuid="asdfasdf"/>
-  <concept_source concept_source_id="2" name="mdstest2" description="a test for mds" hl7_code="mdstest2" creator="1" date_created="2012-01-09 14:52:51.0" retired="false" uuid="e93c2dd0-414f-476e-86bc-79a12ff504e3"/>
-  <concept_source concept_source_id="4" name="mdstest" description="mds test" hl7_code="mdstest" creator="1" date_created="2012-01-05 13:34:22.0" retired="false" uuid="aab500de-8ba5-4e0a-a888-12768bc5e172"/>
-  
-  <global_property property="metadatasharing.systemConceptSource" property_value="e93c2dd0-414f-476e-86bc-79a12ff504e3" uuid="1111111111111111111111" />
+  <global_property property="metadatasharing.addLocalMappings" property_value="false" uuid="111111111111111111111" />
 </dataset>

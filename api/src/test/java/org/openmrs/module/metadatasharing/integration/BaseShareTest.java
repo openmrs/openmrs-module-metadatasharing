@@ -46,6 +46,10 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		omrsMinorVersion = properties.getProperty("omrsMinorVersion");
 	}
 	
+	public boolean insertInitialDataSet() {
+		return true;
+	}
+	
 	/**
 	 * @return class pathname to dbunit xml file
 	 */
@@ -126,7 +130,12 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		if ("1.7".equals(omrsMinorVersion)) {
 			version = "1.6";
 		}
-		executeDataSet("MDSCreateTest-" + version + ".xml");
+		
+		if (insertInitialDataSet()) {
+			executeDataSet("MDSCreateTest-" + version + ".xml");
+		} else {
+			baseSetupWithStandardDataAndAuthentication();
+		}
 		executeDataSet("MDSImportServer.xml");
 		
 		String initialDataset = getInitialDataset();
@@ -161,7 +170,12 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		if ("1.7".equals(omrsMinorVersion)) {
 			version = "1.6";
 		}
-		executeDataSet("MDSCreateTest-" + version + ".xml");
+		
+		if (insertInitialDataSet()) {
+			executeDataSet("MDSCreateTest-" + version + ".xml");
+		} else {
+			baseSetupWithStandardDataAndAuthentication();
+		}
 		
 		if (xmlFileToExecute == null)
 			xmlFileToExecute = "MDSImportServer.xml";

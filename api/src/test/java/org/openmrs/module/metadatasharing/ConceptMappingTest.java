@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
@@ -32,21 +31,16 @@ import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
-import org.springframework.test.annotation.NotTransactional;
 
-/**
- *
- */
-public class ConceptMappingPreferTheirsTest extends BaseShareTest {
+public class ConceptMappingTest extends BaseShareTest {
 	
 	@Override
 	public boolean insertInitialDataSet() {
-	    return false;
+		return false;
 	}
 	
 	@Test
-	@NotTransactional
-	public void preferTheirsShouldNotAddExistingConceptMappings() throws Exception {
+	public void shouldImportConceptWithMappingToEmptyServer() throws Exception {
 		
 		runShareTest(new ShareTestHelper() {
 			
@@ -87,53 +81,25 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 			}
 			
 			@Override
-			public void prepareImportServer() throws Exception {
-				
-				Concept c = new Concept();
-				c.addName(new ConceptName("c", Locale.ENGLISH));
-				c.setUuid("c");
-				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
-				Context.getConceptService().saveConcept(c);
-				
-				ConceptSource commonSource = new ConceptSource();
-				commonSource.setUuid("csOld");
-				commonSource.setName("Common");
-				Context.getConceptService().saveConceptSource(commonSource);
-				
-				ConceptMap commonMap = new ConceptMap();
-				commonMap.setSource(commonSource);
-				commonMap.setSourceCode("cd");
-				c.addConceptMapping(commonMap);
-				
-				Context.getConceptService().saveConcept(c);
-			}
-			
-			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
-				for (ImportedItem importedItem : importer.getImportedItems(0)) {
-					if (importedItem.getExisting() == null)
-						continue;
-					
-					Set<String> uuids = new HashSet<String>(Arrays.asList("c", "cs"));
-					if (uuids.contains(Handler.getUuid(importedItem.getIncoming()))) {
-						importedItem.setImportType(ImportType.PREFER_THEIRS);
-					}
-				}
 			}
 			
 			@Override
 			public void runOnImportServerAfterImport() throws Exception {
 				Concept concept = Context.getConceptService().getConceptByUuid("c");
+				Assert.assertEquals("c", concept.getUuid());
 				Assert.assertEquals(2, concept.getConceptMappings().size());
 				
-				Set<String> uuids = new HashSet<String>(Arrays.asList("csNew", "csOld"));
 				for (ConceptMap conceptMap : concept.getConceptMappings()) {
-					if (!uuids.contains(conceptMap.getSource().getUuid())) {
-						Assert.fail("Must be csNew or csOld");
+					if (conceptMap.getSourceCode().equals("c")) {
+						Assert.assertEquals(conceptMap.getSource().getName(), "New");
+					} else if (conceptMap.getSourceCode().equals("cd")) {
+						Assert.assertEquals(conceptMap.getSource().getName(), "Common");
+					} else {
+						Assert.fail();
 					}
-				}
+                }
 			}
 		});
 	}
-	
 }
