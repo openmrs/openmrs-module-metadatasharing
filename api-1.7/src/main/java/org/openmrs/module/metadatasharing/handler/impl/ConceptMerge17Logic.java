@@ -7,13 +7,13 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptNameType;
 import org.openmrs.module.metadatasharing.ImportType;
-import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
+import org.openmrs.module.metadatasharing.handler.impl.ConceptMergeHandler.ConceptMergeLogic;
 
-public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
+public class ConceptMerge17Logic implements ConceptMergeLogic {
 	
 	private final ObjectHandler objectHandler;
 	
-	public ConceptMerge17Handler(ObjectHandler objectHandler) {
+	public ConceptMerge17Logic(ObjectHandler objectHandler) {
 		this.objectHandler = objectHandler;
 	}
 	

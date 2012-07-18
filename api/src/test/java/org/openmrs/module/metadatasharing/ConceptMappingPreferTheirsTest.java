@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -24,6 +25,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
@@ -47,6 +49,7 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 			public List<?> prepareExportServer() throws Exception {
 				
 				Concept c = new Concept();
+				c.addName(new ConceptName("c", Locale.ENGLISH));
 				c.setUuid("c");
 				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
 				Context.getConceptService().saveConcept(c);
@@ -80,6 +83,7 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 			public void prepareImportServer() throws Exception {
 				
 				Concept c = new Concept();
+				c.addName(new ConceptName("c", Locale.ENGLISH));
 				c.setUuid("c");
 				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
 				Context.getConceptService().saveConcept(c);
