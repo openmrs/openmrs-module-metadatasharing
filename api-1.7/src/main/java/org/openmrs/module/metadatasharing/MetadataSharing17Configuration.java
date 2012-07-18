@@ -26,7 +26,7 @@ public class MetadataSharing17Configuration {
 	@Autowired
 	ObjectHandler objectHandler;
 	
-	public static boolean supportsConceptGetConceptNameType() {
+	public static boolean supportsConceptNameGetConceptNameType() {
 		try {
 			return ConceptName.class.getDeclaredMethod("getConceptNameType", new Class<?>[0]) != null;
 		}
@@ -37,7 +37,7 @@ public class MetadataSharing17Configuration {
 	
 	@Bean(name = "metadatasharing.ConceptMerge17Handler")
 	public ConceptMerge17Handler getConceptMerge17Handler() {
-		if (supportsConceptGetConceptNameType()) {
+		if (supportsConceptNameGetConceptNameType()) {
 			return  new ConceptMerge17Handler(objectHandler);
 		} else {
 			return null;
