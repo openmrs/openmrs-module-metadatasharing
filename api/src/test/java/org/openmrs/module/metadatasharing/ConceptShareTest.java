@@ -13,12 +13,9 @@
  */
 package org.openmrs.module.metadatasharing;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,12 +24,11 @@ import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
-public class ConceptMappingTest extends BaseShareTest {
+public class ConceptShareTest extends BaseShareTest {
 	
 	@Override
 	public boolean insertInitialDataSet() {
