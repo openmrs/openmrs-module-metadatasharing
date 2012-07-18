@@ -1,22 +1,46 @@
-package org.openmrs.module.metadatasharing.merger;
+/**
+ * The contents of this file are subject to the OpenMRS Public License
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://license.openmrs.org
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+ */
+package org.openmrs.module.metadatasharing.handler.impl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.User;
-import org.openmrs.module.metadatasharing.ImportedItem;
-import org.openmrs.module.metadatasharing.MetadataSharingConsts;
+import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.handler.Handler;
+import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
+import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
+import org.openmrs.module.metadatasharing.merger.ComparisonEngine;
 import org.openmrs.module.metadatasharing.visitor.ObjectVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component(MetadataSharingConsts.MODULE_ID + ".ObjectMerger")
-public class ObjectMerger {
+/**
+ * Makes sure that priority dependencies returned by the getDependencies method (if exists) on the
+ * give object are saved first.
+ */
+@Component("metadatasharing.ObjectHandler")
+public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object>, MetadataMergeHandler<Object> {
+	
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private ObjectVisitor visitor;
@@ -24,9 +48,34 @@ public class ObjectMerger {
 	@Autowired
 	private ComparisonEngine comparisonEngine;
 	
-	public void merge(final ImportedItem importedItem, final Map<OpenmrsObject, OpenmrsObject> incomingToExisting) {
-		final Object incoming = importedItem.getIncoming();
-		if (importedItem.getExisting() == null) {
+	/**
+	 * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object> getPriorityDependencies(Object object) {
+		List<Object> dependencies = new ArrayList<Object>();
+		try {
+			Method method = object.getClass().getMethod("getDependencies");
+			if (method != null) {
+				Collection<Object> items = (Collection<Object>) method.invoke(object);
+				if (items != null) {
+					dependencies.addAll(items);
+				}
+			}	
+		}
+		catch (NoSuchMethodException e) {
+			log.debug("No priority dependencies for " + object.toString());
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return dependencies;
+	}
+
+	@Override
+    public void merge(final Object existing, final Object incoming, final ImportType importType, final Map<Object, Object> incomingToExisting) {
+		if (existing == null) {
 			//Replace incoming object's fields with existing objects
 			visitor.visitFields(incoming, false, new ObjectVisitor.FieldVisitor() {
 				
@@ -56,10 +105,8 @@ public class ObjectMerger {
 				}
 			});
 		} else {
-			if (importedItem.getImportType().isPreferTheirs() || importedItem.getImportType().isPreferMine()) {
-				//Copy properties from the incoming object to the existing object
-				final Object existing = importedItem.getExisting();
-				
+			if (importType.isPreferTheirs() || importType.isPreferMine()) {
+				//Copy properties from the incoming object to the existing object				
 				Integer id = Handler.getId(existing);
 				
 				visitor.visitFields(incoming, false, new ObjectVisitor.FieldVisitor() {
@@ -92,9 +139,9 @@ public class ObjectMerger {
 									}
 								}
 							}
-						} else if (!importedItem.getImportType().isPreferMine()) {
+						} else if (!importType.isPreferMine()) {
 							if (incomingField instanceof OpenmrsObject) {
-								OpenmrsObject existingField = incomingToExisting.get(incomingField);
+								Object existingField = incomingToExisting.get(incomingField);
 								if (existingField != null) {
 									visitor.writeField(existing, fieldName, existingField, definedIn);
 								} else {
@@ -114,19 +161,6 @@ public class ObjectMerger {
 				}
 			}
 		}
-	}
+    }
 	
-	public Map<OpenmrsObject, OpenmrsObject> getIncomingToExisting(Collection<ImportedItem> importedItems) {
-		Map<OpenmrsObject, OpenmrsObject> mappings = new HashMap<OpenmrsObject, OpenmrsObject>();
-		
-		for (ImportedItem importedItem : importedItems) {
-			if (importedItem.getIncoming() instanceof OpenmrsObject) {
-				if (importedItem.getExisting() != null) {
-					mappings.put((OpenmrsObject) importedItem.getIncoming(), (OpenmrsObject) importedItem.getExisting());
-				}
-			}
-		}
-		
-		return mappings;
-	}
 }

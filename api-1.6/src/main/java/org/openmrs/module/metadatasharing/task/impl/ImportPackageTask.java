@@ -18,17 +18,16 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.hibernate.proxy.HibernateProxy;
-import org.openmrs.Concept;
-import org.openmrs.ConceptName;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
-import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.handler.SaveHandler;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.ImportedItem;
@@ -37,8 +36,8 @@ import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.Package;
 import org.openmrs.module.metadatasharing.api.ValidationException;
 import org.openmrs.module.metadatasharing.handler.Handler;
+import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.merger.ConvertUtil;
-import org.openmrs.module.metadatasharing.merger.ObjectMerger;
 import org.openmrs.module.metadatasharing.task.Task;
 import org.openmrs.module.metadatasharing.task.TaskException;
 import org.openmrs.module.metadatasharing.task.TaskType;
@@ -148,81 +147,26 @@ public class ImportPackageTask extends Task {
 			}
 		}
 		
+		log("Merging items");
+		Map<Object, Object> incomingToExisting = new LinkedHashMap<Object, Object>();
 		for (ImportedItem importedItem : importedItems) {
-			//TODO: Create MergeEngine for specific types
-			//Concept specific merge
-			if (importedItem.getExisting() instanceof Concept) {
-				Concept incomingConcept = (Concept) importedItem.getIncoming();
-				
-				//Remove preferred and fully specified tags in existing names if an incoming name is also preferred or fully specified for that locale.
-				Collection<ConceptName> existingNames = ((Concept) importedItem.getExisting()).getNames();
-				for (ConceptName existingName : existingNames) {
-					if (existingName.isPreferred()) {
-						ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-						if (incomingPreferredName != null && !incomingPreferredName.getName().equals(existingName.getName())) {
-							if (importedItem.getImportType().isPreferTheirs()) {
-								existingName.setLocalePreferred(false);
-							} else {
-								incomingPreferredName.setLocalePreferred(false);
-							}
-						}
-					}
-					
-					if (ConceptNameType.FULLY_SPECIFIED.equals(existingName.getConceptNameType())) {
-						ConceptName incomingFullySpecifiedName = incomingConcept.getFullySpecifiedName(existingName.getLocale());
-						if (incomingFullySpecifiedName != null && !incomingFullySpecifiedName.getName().equals(existingName.getName())) {
-							if (importedItem.getImportType().isPreferTheirs()) {
-								existingName.setConceptNameType(ConceptNameType.INDEX_TERM);
-							} else {
-								incomingFullySpecifiedName.setConceptNameType(ConceptNameType.INDEX_TERM);
-							}
-						}
-					}
-					
-					/*if (existingName.getTags() == null) {
-						continue;
-					}
-					
-					for (Iterator<ConceptNameTag> existingTagIt = existingName.getTags().iterator(); existingTagIt.hasNext();) {
-						ConceptNameTag existingTag = existingTagIt.next();
-						if (existingTag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
-							ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-							
-							if (incomingPreferredName != null) {
-								if (importedItem.getImportType().isPreferTheirs()) {
-									existingTagIt.remove();
-									
-								} else if (importedItem.getImportType().isPreferMine()) {
-									for (Iterator<ConceptNameTag> incomingTagIt = incomingPreferredName.getTags().iterator(); incomingTagIt
-									        .hasNext();) {
-										ConceptNameTag incomingTag = incomingTagIt.next();
-										if (incomingTag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
-											incomingTagIt.remove();
-										}
-									}
-								}
-							}
-						}
-					}*/
-				}
-				//End of Concept specific merge
+			if (importedItem.getExisting() != null) {
+				incomingToExisting.put(importedItem.getIncoming(), importedItem.getExisting());
 			}
 		}
-		
-		log("Merging items");
-		ObjectMerger merger = MetadataSharing.getInstance().getMerger();
-		Map<OpenmrsObject, OpenmrsObject> incomingToExisting = merger.getIncomingToExisting(importedItems);
 		
 		for (ImportedItem importedItem : importedItems) {
 			//Replacing in hidden items first
 			if (Handler.isHidden(importedItem.getIncoming())) {
-				merger.merge(importedItem, incomingToExisting);
+				MetadataMergeHandler<Object> merger = MetadataSharing.getInstance().getHandlerEngine().getMergeHandler(importedItem.getIncoming());
+				merger.merge(importedItem.getExisting(), importedItem.getIncoming(), importedItem.getImportType(), incomingToExisting);
 			}
 		}
 		
 		for (ImportedItem importedItem : importedItems) {
 			if (!Handler.isHidden(importedItem.getIncoming())) {
-				merger.merge(importedItem, incomingToExisting);
+				MetadataMergeHandler<Object> merger = MetadataSharing.getInstance().getHandlerEngine().getMergeHandler(importedItem.getIncoming());
+				merger.merge(importedItem.getExisting(), importedItem.getIncoming(), importedItem.getImportType(), incomingToExisting);
 			}
 		}
 		
@@ -284,9 +228,16 @@ public class ImportPackageTask extends Task {
 		}
 	}
 	
-	public void prepareItemsToSave(Collection<ImportedItem> importedItems, Map<OpenmrsObject, OpenmrsObject> mappings) {
+	public void prepareItemsToSave(Collection<ImportedItem> importedItems, Map<Object, Object> mappings) {
+		Map<OpenmrsObject, OpenmrsObject> openmrsObjectMappings = new LinkedHashMap<OpenmrsObject, OpenmrsObject>();
+		for (Entry<Object, Object> mapping : mappings.entrySet()) {
+	        if (mapping.getKey() instanceof OpenmrsObject && mapping.getValue() instanceof OpenmrsObject) {
+	        	openmrsObjectMappings.put((OpenmrsObject) mapping.getKey(), (OpenmrsObject) mapping.getValue()); 
+	        }
+        }
+		
 		for (ImportedItem importedItem : importedItems) {
-			importedItem.initIncomingToSave(mappings);
+			importedItem.initIncomingToSave(openmrsObjectMappings);
 		}
 	}
 	

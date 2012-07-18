@@ -14,7 +14,7 @@ package org.openmrs.module.metadatasharing.handler.impl;
 import java.util.ArrayList;
 import java.util.List;
 import org.openmrs.ConceptMap;
-import org.openmrs.module.metadatasharing.MetadataSharingConfiguration;
+import org.openmrs.module.metadatasharing.MetadataSharing19Configuration;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class ConceptMapHandler implements MetadataPriorityDependenciesHandler<Co
 	@Override
 	public List<Object> getPriorityDependencies(ConceptMap object) {
 		List<Object> result = new ArrayList<Object>();
-		if (MetadataSharingConfiguration.supportsConceptReferenceTerm()) {
+		if (MetadataSharing19Configuration.supportsConceptReferenceTerm()) {
 			//OpenMRS 1.9 and later
 			if (object.getConceptReferenceTerm() != null) {
 				result.add(object.getConceptReferenceTerm());

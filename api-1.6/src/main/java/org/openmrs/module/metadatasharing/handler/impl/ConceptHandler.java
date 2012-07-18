@@ -181,10 +181,9 @@ public class ConceptHandler implements MetadataSearchHandler<Concept>, MetadataT
 	public Concept getItemByUuid(Class<? extends Concept> type, String uuid) throws DAOException {
 		return Context.getConceptService().getConceptByUuid(uuid);
 	}
-
+	
 	@Override
-	public Concept getItemById(Class<? extends Concept> type, Integer id)
-			throws DAOException {
+	public Concept getItemById(Class<? extends Concept> type, Integer id) throws DAOException {
 		return Context.getConceptService().getConcept(id);
 	}
 }

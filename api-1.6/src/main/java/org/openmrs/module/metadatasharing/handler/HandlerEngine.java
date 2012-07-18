@@ -58,6 +58,8 @@ public class HandlerEngine {
 	
 	private Map<Class<?>, MetadataHandler<?>> priorityDependenciesHandlers;
 	
+	private Map<Class<?>, MetadataHandler<?>> mergeHandlers;
+	
 	private Map<Class<?>, String> classes;
 	
 	private Map<String, Class<?>> types;
@@ -272,6 +274,24 @@ public class HandlerEngine {
 	}
 	
 	/**
+	 * @see MetadataMergeHandler
+	 */
+	public <T> MetadataMergeHandler<T> getMergeHandler(T object) throws HandlerNotFoundException {
+		initHandlerEngine();
+		
+		Class<T> type = ClassUtil.getDeproxiedClass(object);
+		
+		@SuppressWarnings("unchecked")
+		MetadataMergeHandler<T> handler = (MetadataMergeHandler<T>) findBestMetadataHandler(type,
+		    mergeHandlers);
+		
+		if (handler == null) {
+			throw new HandlerNotFoundException("Handler for " + type + " not found");
+		}
+		return handler;
+	}
+	
+	/**
 	 * Finds a supported type of the given handler
 	 * 
 	 * @param handlerType
@@ -400,6 +420,7 @@ public class HandlerEngine {
 		searchHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		saveHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		priorityDependenciesHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
+		mergeHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		
 		for (MetadataHandler<?> handler : getHandlers()) {
 			if (handler instanceof MetadataTypesHandler) {
@@ -446,6 +467,16 @@ public class HandlerEngine {
 				Class<?> type = findSupportedType(MetadataPriorityDependenciesHandler.class, handler);
 				
 				MetadataHandler<?> previousHandler = priorityDependenciesHandlers.put(type, handler);
+				if (previousHandler != null) {
+					throw new IllegalStateException(type + " must not have more than one handler. Found "
+					        + handler.getClass() + " and " + previousHandler.getClass());
+				}
+			}
+			
+			if (handler instanceof MetadataMergeHandler) {
+				Class<?> type = findSupportedType(MetadataMergeHandler.class, handler);
+				
+				MetadataHandler<?> previousHandler = mergeHandlers.put(type, handler);
 				if (previousHandler != null) {
 					throw new IllegalStateException(type + " must not have more than one handler. Found "
 					        + handler.getClass() + " and " + previousHandler.getClass());

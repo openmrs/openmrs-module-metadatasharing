@@ -8,27 +8,19 @@
 		<version>1.0.8-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>metadatasharing-api-1.9</artifactId>
+	<artifactId>metadatasharing-api-1.7</artifactId>
 	<packaging>jar</packaging>
-	<name>Metadata Sharing Module API 1.9</name>
-	<description>API 1.9 project for Metadata Sharing Module</description>
+	<name>Metadata Sharing Module API 1.7</name>
+	<description>API 1.7 project for Metadata Sharing Module</description>
 
 	<properties>
-		<openMRSAPIVersion>1.9.0</openMRSAPIVersion>
+		<openMRSAPIVersion>1.7.3</openMRSAPIVersion>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api-1.6</artifactId>
-			<version>${project.parent.version}</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>${project.parent.artifactId}-api-1.7</artifactId>
 			<version>${project.parent.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>

@@ -13,15 +13,12 @@ b * The contents of this file are subject to the OpenMRS Public License
  */
 package org.openmrs.module.metadatasharing;
 
-import javax.annotation.Resource;
-
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
 import org.openmrs.module.metadatasharing.handler.HandlerEngine;
 import org.openmrs.module.metadatasharing.mapper.ConceptMapper;
-import org.openmrs.module.metadatasharing.merger.ObjectMerger;
 import org.openmrs.module.metadatasharing.model.validator.PackageContainerValidator;
 import org.openmrs.module.metadatasharing.model.validator.PackageValidator;
 import org.openmrs.module.metadatasharing.reflection.ReplaceMethodInovker;
@@ -60,9 +57,6 @@ public class MetadataSharing implements ApplicationContextAware {
 	
 	@Autowired
 	private ResolverEngine resolverEngine;
-	
-	@Resource(name = MetadataSharingConsts.MODULE_ID + ".ObjectMerger")
-	private ObjectMerger merger;
 	
 	@Autowired
 	private ObjectVisitor objectVisitor;
@@ -138,13 +132,6 @@ public class MetadataSharing implements ApplicationContextAware {
 	 */
 	public ObjectVisitor getObjectVisitor() {
 		return objectVisitor;
-	}
-	
-	/**
-	 * @return the merger
-	 */
-	public ObjectMerger getMerger() {
-		return merger;
 	}
 	
 	/**

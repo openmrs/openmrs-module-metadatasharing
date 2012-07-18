@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
-import org.openmrs.OpenmrsObject;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,7 @@ public class ComparisonEngine {
 	 * @param incomingToExisting
 	 * @return
 	 */
-	public boolean equal(Object incoming, Object existing, Map<OpenmrsObject, OpenmrsObject> incomingToExisting) {
+	public boolean equal(Object incoming, Object existing, Map<Object, Object> incomingToExisting) {
 		if (incoming instanceof ConceptMap) {
 			ConceptMap incomingMap = (ConceptMap) incoming;
 			ConceptMap existingMap = (ConceptMap) existing;

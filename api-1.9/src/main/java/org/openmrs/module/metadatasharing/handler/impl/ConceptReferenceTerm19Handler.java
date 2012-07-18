@@ -16,11 +16,11 @@ package org.openmrs.module.metadatasharing.handler.impl;
 import java.util.ArrayList;
 import java.util.List;
 import org.openmrs.ConceptReferenceTerm;
-import org.openmrs.module.metadatasharing.MetadataSharingConfiguration;
+import org.openmrs.module.metadatasharing.MetadataSharing19Configuration;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 
 /**
- * The handler is instantiated by {@link MetadataSharingConfiguration} only if 
+ * The handler is instantiated by {@link MetadataSharing19Configuration} only if 
  * ConceptReferenceTerm is present on the class path.
  */
 public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>  {
