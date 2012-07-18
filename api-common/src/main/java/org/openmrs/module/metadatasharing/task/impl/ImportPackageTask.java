@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,10 +25,10 @@ import java.util.Set;
 import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
-import org.openmrs.ConceptNameTag;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.handler.SaveHandler;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.ImportedItem;
@@ -155,10 +154,32 @@ public class ImportPackageTask extends Task {
 			if (importedItem.getExisting() instanceof Concept) {
 				Concept incomingConcept = (Concept) importedItem.getIncoming();
 				
-				//Remove preferred tags in existing names if an incoming name is also preferred for that locale.
+				//Remove preferred and fully specified tags in existing names if an incoming name is also preferred or fully specified for that locale.
 				Collection<ConceptName> existingNames = ((Concept) importedItem.getExisting()).getNames();
 				for (ConceptName existingName : existingNames) {
-					if (existingName.getTags() == null) {
+					if (existingName.isPreferred()) {
+						ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
+						if (incomingPreferredName != null && !incomingPreferredName.getName().equals(existingName.getName())) {
+							if (importedItem.getImportType().isPreferTheirs()) {
+								existingName.setLocalePreferred(false);
+							} else {
+								incomingPreferredName.setLocalePreferred(false);
+							}
+						}
+					}
+					
+					if (ConceptNameType.FULLY_SPECIFIED.equals(existingName.getConceptNameType())) {
+						ConceptName incomingFullySpecifiedName = incomingConcept.getFullySpecifiedName(existingName.getLocale());
+						if (incomingFullySpecifiedName != null && !incomingFullySpecifiedName.getName().equals(existingName.getName())) {
+							if (importedItem.getImportType().isPreferTheirs()) {
+								existingName.setConceptNameType(ConceptNameType.INDEX_TERM);
+							} else {
+								incomingFullySpecifiedName.setConceptNameType(ConceptNameType.INDEX_TERM);
+							}
+						}
+					}
+					
+					/*if (existingName.getTags() == null) {
 						continue;
 					}
 					
@@ -182,7 +203,7 @@ public class ImportPackageTask extends Task {
 								}
 							}
 						}
-					}
+					}*/
 				}
 				//End of Concept specific merge
 			}

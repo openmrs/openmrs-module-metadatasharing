@@ -24,9 +24,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
+import org.openmrs.api.ConceptNameType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
@@ -51,7 +53,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
 				concept.setPreferredName(Locale.ENGLISH, preferredName);
 				
-				ConceptName synonym = new ConceptName("A", Locale.ENGLISH);
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
 				Context.getConceptService().saveConcept(concept);
@@ -69,7 +71,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
 				concept.setPreferredName(Locale.ENGLISH, preferredName);
 				
-				ConceptName synonym = new ConceptName("A", Locale.ENGLISH);
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
 				Context.getConceptService().saveConcept(concept);
@@ -93,12 +95,17 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("A", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
+					if (!name.getName().equals("a")) {
+						Assert.assertFalse(name.getName() + " must not be preferred", name.isLocalePreferred());
+						Assert.assertFalse(name.getName() + " must not be fully specified", ConceptNameType.FULLY_SPECIFIED.equals(name.getConceptNameType()));
+					} else {
+						Assert.assertTrue(name.getName() + " must be preferred", name.isLocalePreferred());
+						Assert.assertTrue(name.getName() + " must be fully specified", ConceptNameType.FULLY_SPECIFIED.equals(name.getConceptNameType()));
+					}
 				}
-				
-				assertEquals("a", concept.getPreferredName(Locale.ENGLISH).getName());
 			}
 			
 		});
@@ -118,7 +125,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
 				concept.setPreferredName(Locale.ENGLISH, preferredName);
 				
-				ConceptName synonym = new ConceptName("A", Locale.ENGLISH);
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
 				Context.getConceptService().saveConcept(concept);
@@ -136,7 +143,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
 				concept.setPreferredName(Locale.ENGLISH, preferredName);
 				
-				ConceptName synonym = new ConceptName("A", Locale.ENGLISH);
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
 				Context.getConceptService().saveConcept(concept);
@@ -160,12 +167,17 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("A", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
+					if (!name.getName().equals("b")) {
+						Assert.assertFalse(name.getName() + " must not be preferred", name.isLocalePreferred());
+						Assert.assertFalse(name.getName() + " must not be fully specified", ConceptNameType.FULLY_SPECIFIED.equals(name.getConceptNameType()));
+					} else {
+						Assert.assertTrue(name.getName() + " must be preferred", name.isLocalePreferred());
+						Assert.assertTrue(name.getName() + " must be fully specified", ConceptNameType.FULLY_SPECIFIED.equals(name.getConceptNameType()));
+					}
 				}
-				
-				assertEquals("b", concept.getPreferredName(Locale.ENGLISH).getName());
 			}
 			
 		});
