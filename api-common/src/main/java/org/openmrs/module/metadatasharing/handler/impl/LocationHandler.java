@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class LocationHandler implements MetadataPriorityDependenciesHandler<Location> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public List<Object> getPriorityDependencies(Location object) {
 		List<Object> result = new ArrayList<Object>();
 		if (object.getTags() != null) {

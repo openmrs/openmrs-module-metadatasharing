@@ -26,6 +26,11 @@ import org.springframework.stereotype.Component;
 public class RoleHandler implements MetadataPropertiesHandler<Role> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public Integer getId(Role object) {
 		// id is not supported
 		return null;

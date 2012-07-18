@@ -48,6 +48,11 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 	@Autowired
 	private ComparisonEngine comparisonEngine;
 	
+	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
 	/**
 	 * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
 	 */

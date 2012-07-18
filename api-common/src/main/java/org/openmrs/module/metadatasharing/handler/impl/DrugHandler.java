@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class DrugHandler implements MetadataPriorityDependenciesHandler<Drug> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public List<Object> getPriorityDependencies(Drug object) {
 		List<Object> result = new ArrayList<Object>();
 		if (object.getConcept() != null) {

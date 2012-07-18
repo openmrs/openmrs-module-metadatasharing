@@ -32,6 +32,11 @@ import org.openmrs.module.metadatasharing.util.DateUtil;
 public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>  {
 
 	@Override
+    public int getPriority() {
+	    return 0;
+    }
+	
+	@Override
 	public List<Object> getPriorityDependencies(ConceptReferenceTerm object) {
 		List<Object> result = new ArrayList<Object>();
 		if (object.getConceptSource() != null) {
@@ -89,5 +94,7 @@ public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenci
     public void setUuid(ConceptReferenceTerm o, String uuid) {
 	    o.setUuid(uuid);
     }
+
+	
 	
 }

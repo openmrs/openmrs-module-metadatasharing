@@ -426,60 +426,54 @@ public class HandlerEngine {
 			if (handler instanceof MetadataTypesHandler) {
 				Class<?> type = findSupportedType(MetadataTypesHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = typesHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = typesHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					typesHandlers.put(type, handler);
 				}
 			}
 			
 			if (handler instanceof MetadataPropertiesHandler) {
 				Class<?> type = findSupportedType(MetadataPropertiesHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = propertiesHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = propertiesHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					propertiesHandlers.put(type, handler);
 				}
 			}
 			
 			if (handler instanceof MetadataSearchHandler) {
 				Class<?> type = findSupportedType(MetadataSearchHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = searchHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = searchHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					searchHandlers.put(type, handler);
 				}
 			}
 			
 			if (handler instanceof MetadataSaveHandler) {
 				Class<?> type = findSupportedType(MetadataSaveHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = saveHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = saveHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					saveHandlers.put(type, handler);
 				}
 			}
 			
 			if (handler instanceof MetadataPriorityDependenciesHandler) {
 				Class<?> type = findSupportedType(MetadataPriorityDependenciesHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = priorityDependenciesHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = priorityDependenciesHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					priorityDependenciesHandlers.put(type, handler);
 				}
 			}
 			
 			if (handler instanceof MetadataMergeHandler) {
 				Class<?> type = findSupportedType(MetadataMergeHandler.class, handler);
 				
-				MetadataHandler<?> previousHandler = mergeHandlers.put(type, handler);
-				if (previousHandler != null) {
-					throw new IllegalStateException(type + " must not have more than one handler. Found "
-					        + handler.getClass() + " and " + previousHandler.getClass());
+				MetadataHandler<?> previousHandler = mergeHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					mergeHandlers.put(type, handler);
 				}
 			}
 		}

@@ -48,6 +48,11 @@ public class ConceptHandler implements MetadataSearchHandler<Concept>, MetadataT
 	}
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public Map<Class<? extends Concept>, String> getTypes() {
 		return types;
 	}

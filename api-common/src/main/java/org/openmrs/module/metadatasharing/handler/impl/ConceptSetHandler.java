@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class ConceptSetHandler implements MetadataPriorityDependenciesHandler<ConceptSet> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public List<Object> getPriorityDependencies(ConceptSet object) {
 		List<Object> result = new ArrayList<Object>();
 		if (object.getConcept() != null) {

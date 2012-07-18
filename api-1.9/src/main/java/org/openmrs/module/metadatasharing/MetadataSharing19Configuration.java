@@ -14,6 +14,7 @@
 package org.openmrs.module.metadatasharing;
 
 import org.openmrs.module.metadatasharing.handler.MetadataHandler;
+import org.openmrs.module.metadatasharing.handler.impl.ConceptMap19Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptReferenceTerm19Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
 import org.springframework.context.annotation.Bean;
@@ -26,11 +27,19 @@ public class MetadataSharing19Configuration {
 		return ClassUtil.loadClass("org.openmrs.ConceptReferenceTerm") != null;
 	}
 	
-	@Bean(name = "metadatasharing.ConceptReferenceTermHandler")
-	public MetadataHandler<?> getConceptReferenceTermHandler() {
+	@Bean(name = "metadatasharing.ConceptReferenceTerm19Handler")
+	public MetadataHandler<?> getConceptReferenceTerm19Handler() {
 		if (supportsConceptReferenceTerm()) {
 			//1.9 and later
 			return new ConceptReferenceTerm19Handler();
+		}
+		return null;
+	}
+	
+	@Bean(name = "metadatasharing.ConceptMap19Handler")
+	public MetadataHandler<?> getConceptMap19Handler() {
+		if (supportsConceptReferenceTerm()) {
+			return new ConceptMap19Handler();
 		}
 		return null;
 	}

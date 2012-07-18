@@ -20,4 +20,12 @@ package org.openmrs.module.metadatasharing.handler;
  * @param <T> the supported type
  * @see HandlerEngine
  */
-public interface MetadataHandler<T> {}
+public interface MetadataHandler<T> {
+	
+	/**
+	 * The higher number the higher priority.
+	 * 
+	 * @return the priority
+	 */
+	int getPriority();
+}

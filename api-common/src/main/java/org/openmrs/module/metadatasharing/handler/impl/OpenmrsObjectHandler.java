@@ -37,6 +37,11 @@ public class OpenmrsObjectHandler implements MetadataPropertiesHandler<OpenmrsOb
 	private OpenmrsClassScanner scanner;
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public Integer getId(OpenmrsObject object) {
 		return object.getId();
 	}

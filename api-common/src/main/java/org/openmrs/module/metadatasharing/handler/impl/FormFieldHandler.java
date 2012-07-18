@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class FormFieldHandler implements MetadataPriorityDependenciesHandler<FormField> {
 	
 	@Override
+    public int getPriority() {
+	    return 0;
+    }
+	
+	@Override
 	public List<Object> getPriorityDependencies(FormField object) {
 		List<Object> result = new ArrayList<Object>();
 		result.add(object.getForm());

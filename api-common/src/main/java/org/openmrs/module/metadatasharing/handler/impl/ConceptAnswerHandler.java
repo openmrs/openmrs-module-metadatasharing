@@ -24,6 +24,11 @@ import org.springframework.stereotype.Component;
 public class ConceptAnswerHandler implements MetadataPriorityDependenciesHandler<ConceptAnswer> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public List<Object> getPriorityDependencies(ConceptAnswer object) {
 		List<Object> result = new ArrayList<Object>();
 		if (object.getAnswerConcept() != null) {

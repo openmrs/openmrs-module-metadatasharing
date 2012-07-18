@@ -14,8 +14,7 @@
 package org.openmrs.module.metadatasharing;
 
 import org.openmrs.ConceptName;
-import org.openmrs.module.metadatasharing.handler.impl.ConceptMerge17Logic;
-import org.openmrs.module.metadatasharing.handler.impl.ConceptMergeHandler;
+import org.openmrs.module.metadatasharing.handler.impl.ConceptMerge17Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ObjectHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +26,7 @@ public class MetadataSharing17Configuration {
 	@Autowired
 	ObjectHandler objectHandler;
 	
-	@Autowired
-	ConceptMergeHandler conceptMergeHandler;
-	
-	public static boolean isNot16() {
+	public static boolean supportsConceptGetConceptNameType() {
 		try {
 			return ConceptName.class.getDeclaredMethod("getConceptNameType", new Class<?>[0]) != null;
 		}
@@ -39,12 +35,10 @@ public class MetadataSharing17Configuration {
 		}
 	}
 	
-	@Bean(name = "metadatasharing.ConceptMerge17Logic")
-	public ConceptMerge17Logic getConceptMerge17Logic() {
-		if (isNot16()) {
-			ConceptMerge17Logic logic = new ConceptMerge17Logic(objectHandler);
-			conceptMergeHandler.setConceptMergeLogic(logic);
-			return logic;
+	@Bean(name = "metadatasharing.ConceptMerge17Handler")
+	public ConceptMerge17Handler getConceptMerge17Handler() {
+		if (supportsConceptGetConceptNameType()) {
+			return  new ConceptMerge17Handler(objectHandler);
 		} else {
 			return null;
 		}

@@ -26,6 +26,11 @@ import org.springframework.stereotype.Component;
 public class PrivilegeHandler implements MetadataPropertiesHandler<Privilege> {
 
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
     public Integer getId(Privilege object) {
 		// id is not supported
 	    return null;

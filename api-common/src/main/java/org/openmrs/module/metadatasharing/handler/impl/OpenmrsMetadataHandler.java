@@ -46,6 +46,11 @@ public class OpenmrsMetadataHandler implements MetadataTypesHandler<OpenmrsMetad
 	}
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public Map<Class<? extends OpenmrsMetadata>, String> getTypes() {
 		return types;
 	}

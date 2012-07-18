@@ -16,6 +16,11 @@ import org.springframework.stereotype.Component;
 public class ProgramWorkflowStateHandler implements MetadataPropertiesHandler<ProgramWorkflowState>, MetadataPriorityDependenciesHandler<ProgramWorkflowState> {
 	
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
 	public Integer getId(ProgramWorkflowState object) {
 		return object.getId();
 	}

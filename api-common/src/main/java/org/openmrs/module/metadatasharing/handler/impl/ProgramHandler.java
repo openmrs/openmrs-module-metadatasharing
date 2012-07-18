@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 public class ProgramHandler implements MetadataPriorityDependenciesHandler<Program> {
 
 	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	@Override
     public List<Object> getPriorityDependencies(Program object) {
 		List<Object> result = new ArrayList<Object>();
 		

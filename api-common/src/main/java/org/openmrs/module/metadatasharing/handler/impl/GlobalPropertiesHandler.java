@@ -43,6 +43,11 @@ public class GlobalPropertiesHandler implements MetadataTypesHandler<GlobalPrope
 		types = Collections.unmodifiableMap(tmpTypes);
 	}
 	
+	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
 	/**
 	 * @see org.openmrs.module.metadatasharing.handler.MetadataTypesHandler#getTypes()
 	 */

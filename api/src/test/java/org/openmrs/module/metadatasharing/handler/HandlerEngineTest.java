@@ -20,7 +20,12 @@ public class HandlerEngineTest {
 	public void findBestMetadataHandler_shouldReturnNullIfHandlerNotFound() throws Exception {
 		//given
 		Map<Class<?>, MetadataHandler<?>> handlers = new HashMap<Class<?>, MetadataHandler<?>>();
-		MetadataHandler<OpenmrsMetadata> openmrsMetadataHandler = new MetadataHandler<OpenmrsMetadata>() {};
+		MetadataHandler<OpenmrsMetadata> openmrsMetadataHandler = new MetadataHandler<OpenmrsMetadata>() {
+
+			@Override
+            public int getPriority() {
+	            return 0;
+            }};
 		handlers.put(OpenmrsMetadata.class, openmrsMetadataHandler);
 		
 		HandlerEngine engine = new HandlerEngine();
@@ -41,9 +46,24 @@ public class HandlerEngineTest {
 	public void findBestMetadataHandler_shouldReturnTheMostSpecificHandler() throws Exception {
 		//given
 		Map<Class<?>, MetadataHandler<?>> handlers = new HashMap<Class<?>, MetadataHandler<?>>();
-		MetadataHandler<OpenmrsMetadata> openmrsMetadataHandler = new MetadataHandler<OpenmrsMetadata>() {};
-		MetadataHandler<OpenmrsObject> openmrsObjectHandler = new MetadataHandler<OpenmrsObject>() {};
-		MetadataHandler<Concept> conceptHandler = new MetadataHandler<Concept>() {};
+		MetadataHandler<OpenmrsMetadata> openmrsMetadataHandler = new MetadataHandler<OpenmrsMetadata>() {
+
+			@Override
+            public int getPriority() {
+	            return 0;
+            }};
+		MetadataHandler<OpenmrsObject> openmrsObjectHandler = new MetadataHandler<OpenmrsObject>() {
+
+			@Override
+            public int getPriority() {
+	            return 0;
+            }};
+		MetadataHandler<Concept> conceptHandler = new MetadataHandler<Concept>() {
+
+			@Override
+            public int getPriority() {
+	            return 0;
+            }};
 		handlers.put(OpenmrsMetadata.class, openmrsMetadataHandler);
 		handlers.put(OpenmrsObject.class, openmrsObjectHandler);
 		handlers.put(Concept.class, conceptHandler);
