@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.metadatasharing.integration.impl;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,7 +33,7 @@ public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 		c.setUuid("1");
 		c.addName(new ConceptName("Test", Locale.US));
 		Context.getConceptService().saveConcept(c);
-		return Collections.nCopies(1, c);
+		return Arrays.asList(c);
 	}
 	
 	/**

@@ -31,6 +31,11 @@ import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 	
+	@Override
+	public boolean insertInitialDataSet() {
+	    return false;
+	}
+	
 	@Test
 	public void importPackageMappingItemsMatchedByUuids() throws Exception {
 		//TODO: create a package with items from the export server and import it to the import server which has them already choosing map for all items with same uuids.
@@ -41,17 +46,20 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 			public List<?> prepareExportServer() throws Exception {
 				//here's a drug concept
 				Concept c = new Concept();
+				c.setUuid("1");
 				c.addName(new ConceptName("DrugAnswerDrugConcept", Locale.US));
 				Context.getConceptService().saveConcept(c);
 				
 				//here's the drug
 				Drug drug = new Drug();
+				drug.setUuid("2");
 				drug.setConcept(c);
 				drug.setName("TestAnswerDrug");
 				Context.getConceptService().saveDrug(drug);
 				
 				//and, here'a a concept who's conceptAnswer references the drug through the answerDrug property
 				Concept cTest = new Concept();
+				c.setUuid("3");
 				cTest.addName(new ConceptName("TestAnswerDrugConcept", Locale.US));
 				
 				ConceptAnswer ca = new ConceptAnswer();
@@ -88,28 +96,13 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 	}
 	
 	private void assertMappedCorrectly() {
-		List<Concept> concepts = Context.getConceptService().getAllConcepts();
-		System.out.println(concepts.size());
-		boolean drugAnswerDrugConceptFound = false;
-		boolean testAnswerDrugConceptFound = false;
-		for (Concept c : concepts) {
-			if (c.getName().getName().equals("DrugAnswerDrugConcept")) {
-				drugAnswerDrugConceptFound = true;
-			}
-			if (c.getName().getName().equals("TestAnswerDrugConcept")) {
-				testAnswerDrugConceptFound = true;
-			}
-		}
-		Assert.assertTrue(drugAnswerDrugConceptFound);
-		Assert.assertTrue(testAnswerDrugConceptFound);
+		Concept concept = Context.getConceptService().getConceptByUuid("1");
+		Assert.assertEquals("DrugAnswerDrugConcept", concept.getName());
+		Concept concept2 = Context.getConceptService().getConceptByUuid("3");
+		Assert.assertEquals("TestAnswerDrugConcept", concept2.getName());
 		
-		List<Drug> drugs = Context.getConceptService().getAllDrugs();
-		boolean drugFound = false;
-		for (Drug drug : drugs) {
-			if (drug.getName().equals("TestAnswerDrug"))
-				drugFound = true;
-		}
-		Assert.assertTrue(drugFound);
+		Drug drug = Context.getConceptService().getDrugByUuid("2");
+		Assert.assertEquals("TestAnswerDrug", drug.getName());
 	}
 
 	/**

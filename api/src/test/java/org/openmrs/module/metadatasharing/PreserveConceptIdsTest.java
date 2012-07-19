@@ -33,24 +33,8 @@ import org.springframework.test.annotation.NotTransactional;
  *
  */
 public class PreserveConceptIdsTest extends BaseShareTest {
-
-	@Override
-	public String getInitialDataset() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public String getImportServerDataset() {
-		// adds another concept id 20
-		String version = omrsMinorVersion;
-		if ("1.7".equals(omrsMinorVersion)) {
-			version = "1.6";
-		}
-		return "MDSCreateTest-" + version + ".xml";
-	}
 	
 	@Test
-	@NotTransactional
 	public void shouldPreserveConceptIdAcrossServers() throws Exception {
 		runShareTest(new ShareTestHelper() {
 			

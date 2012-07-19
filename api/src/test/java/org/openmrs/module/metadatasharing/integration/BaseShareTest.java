@@ -47,7 +47,7 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 	}
 	
 	public boolean insertInitialDataSet() {
-		return true;
+		return false;
 	}
 	
 	/**

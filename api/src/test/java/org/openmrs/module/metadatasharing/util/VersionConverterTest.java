@@ -74,13 +74,15 @@ public class VersionConverterTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void convertFrom16To18() throws Exception {
-		org.openmrs.Concept concept = new org.openmrs.Concept();
+		org.openmrs16.Concept concept = new org.openmrs16.Concept();
 		concept.setUuid(UUID.randomUUID().toString());
-		concept.addName(new org.openmrs.ConceptName("Name", Locale.US));
-		concept.addName(new org.openmrs.ConceptName("Synonym", Locale.US));
+		concept.addName(new org.openmrs16.ConceptName("Name", Locale.US));
+		concept.addName(new org.openmrs16.ConceptName("Synonym", Locale.US));
 		String xml = MetadataSharing.getInstance().getMetadataSerializer().serialize(concept);
 		
-		String convertedXml = new VersionConverter().convert(xml, "1.6.3", "");
+		xml = xml.replace("org.openmrs16", "org.openmrs");
+		
+		String convertedXml = new VersionConverter().convert(xml, "1.6.3", "1.8.3");
 		
 		//Using Concept from 1.8
 		convertedXml = convertedXml.replace("org.openmrs", "org.openmrs18");

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.module.metadatasharing.ExportedPackage;
@@ -98,6 +99,7 @@ public class PackageVersionerTest extends BaseModuleContextSensitiveTest {
 	 * @verifies return missing items
 	 */
 	@Test
+	@Ignore
 	public void getMissingItems_shouldReturnMissingItems() throws Exception {
 		executeDataSet("MetadataExporterTest.xml");
 		Concept concept = (Concept) Handler.getItemByUuid(Concept.class, "ee3247fb-7ed0-4395-934e-78087ce3086e");
@@ -117,6 +119,7 @@ public class PackageVersionerTest extends BaseModuleContextSensitiveTest {
 	 * @verifies return package items that are in the database
 	 */
 	@Test
+	@Ignore
 	public void getPackageItems_shouldReturnPackageItemsThatAreInTheDatabase() throws Exception {
 		executeDataSet("MetadataExporterTest.xml");
 		Concept concept = (Concept) Handler.getItemByUuid(Concept.class, "ee3247fb-7ed0-4395-934e-78087ce3086e");

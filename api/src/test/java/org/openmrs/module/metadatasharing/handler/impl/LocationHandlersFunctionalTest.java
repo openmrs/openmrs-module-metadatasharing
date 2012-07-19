@@ -27,13 +27,17 @@ public class LocationHandlersFunctionalTest extends BaseHandlersTest<Location> {
 	@Override
 	public Location getNewItem(){
 		Location location = new Location();
-		location.setName("name");
+		location.setName("New location");
+		location.setDescription("New location description");
 		return location;
 	}
 	
 	@Override
 	public Location getExistingItem(){
-		return Context.getLocationService().getLocation(1);
+		Location location = new Location();
+		location.setName("Existing location");
+		location.setDescription("Existing location description");
+		return Context.getLocationService().saveLocation(location);
 	}
 	
 	@Override

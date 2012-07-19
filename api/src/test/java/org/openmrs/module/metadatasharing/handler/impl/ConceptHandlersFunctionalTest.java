@@ -14,10 +14,12 @@
 package org.openmrs.module.metadatasharing.handler.impl;
 
 import java.util.List;
+import java.util.Locale;
 
 import junit.framework.Assert;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.BaseHandlersTest;
 
@@ -26,12 +28,17 @@ public class ConceptHandlersFunctionalTest extends BaseHandlersTest<Concept> {
 
 	@Override
 	public Concept getNewItem(){
-		return new Concept();
+		Concept concept = new Concept();
+		concept.addName(new ConceptName("New Concept", Locale.ENGLISH));
+		return concept;
 	}
 	
 	@Override
 	public Concept getExistingItem(){
-		return Context.getConceptService().getConcept(3);
+		Concept concept = new Concept();
+		concept.setUuid("1");
+		concept.addName(new ConceptName("Existing concept", Locale.ENGLISH));
+		return Context.getConceptService().saveConcept(concept);
 	}
 	
 	@Override

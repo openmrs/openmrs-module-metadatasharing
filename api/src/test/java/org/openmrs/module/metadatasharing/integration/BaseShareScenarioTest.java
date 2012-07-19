@@ -26,7 +26,6 @@ import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
-import org.springframework.test.annotation.NotTransactional;
 
 /**
  * Base class for testing exporting & importing different types.
@@ -51,7 +50,6 @@ public abstract class BaseShareScenarioTest<T> extends BaseShareTest {
 	public abstract void assertImportedCorrectly();
 	
 	@Test
-	@NotTransactional
 	public final void shouldImportPackageToEmptyServer() throws Exception {
 		runShareTest(new ShareTestHelper() {
 			
@@ -130,6 +128,11 @@ public abstract class BaseShareScenarioTest<T> extends BaseShareTest {
 	 */
 	private void assertItemsExportedCorrectly(ExportedPackage exportedPackage) {
 		assertEquals("Should include all items", packageItems.size(), exportedPackage.getItems().size());
+	}
+	
+	@Override
+	public boolean insertInitialDataSet() {
+	    return false;
 	}
 	
 }

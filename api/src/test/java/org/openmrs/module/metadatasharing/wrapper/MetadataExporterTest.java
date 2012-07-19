@@ -1,12 +1,14 @@
 package org.openmrs.module.metadatasharing.wrapper;
 
 import java.util.Collections;
+import java.util.Locale;
 
 import junit.framework.Assert;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptName;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
@@ -25,9 +27,14 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	public void exportPackage_shouldAddExplicitItemsAndIncludedDependenciesToTheHeaderxml() throws Exception {
-		executeDataSet("MetadataExporterTest.xml");
+		Concept c = new Concept();
+		c.addName(new ConceptName("c", Locale.ENGLISH));
+		c.setUuid("c");
+		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+		Context.getConceptService().saveConcept(c);
+		
 		ExportedPackage pack = ImportExportTestUtils.exportPackage(null,
-		    Collections.singletonList(Handler.getItemByUuid(Concept.class, "ee3247fb-7ed0-4395-934e-78087ce3086e")));
+		    Collections.singletonList(Handler.getItemByUuid(Concept.class, "c")));
 		
 		String headerXml = pack.getSerializedPackage().getHeader();
 		
@@ -40,8 +47,13 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 	@Test
 	@Verifies(value = "should not create mappings to local source if the related global property is set to false", method = "exportPackage()")
 	public void exportPackage_shouldNotCreateMappingsToLocalSourceIfTheRelatedGlobalPropertyIsSetToFalse() throws Exception {
-		executeDataSet("MetadataExporterTest.xml");
-		final String conceptUUId = "ee3247fb-7ed0-4395-934e-78087ce3086e";
+		Concept c = new Concept();
+		c.addName(new ConceptName("c", Locale.ENGLISH));
+		c.setUuid("c");
+		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+		Context.getConceptService().saveConcept(c);
+		
+		final String conceptUUId = "c";
 		int initialMapCount = Context.getConceptService().getConceptByUuid(conceptUUId).getConceptMappings().size();
 		
 		//disable exporting concept mappings
@@ -67,8 +79,13 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 	@Test
 	@Verifies(value = "should create mappings to local source by default", method = "exportPackage()")
 	public void exportPackage_shouldCreateMappingsToLocalSourceByDefault() throws Exception {
-		executeDataSet("MetadataExporterTest.xml");
-		final String conceptUUId = "ee3247fb-7ed0-4395-934e-78087ce3086e";
+		Concept c = new Concept();
+		c.addName(new ConceptName("c", Locale.ENGLISH));
+		c.setUuid("c");
+		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+		Context.getConceptService().saveConcept(c);
+		
+		final String conceptUUId = "c";
 		int mapCount = Context.getConceptService().getConceptByUuid(conceptUUId).getConceptMappings().size();
 		
 		ImportExportTestUtils.exportPackage(null,

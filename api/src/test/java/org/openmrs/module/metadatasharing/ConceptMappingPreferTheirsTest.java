@@ -32,20 +32,13 @@ import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
-import org.springframework.test.annotation.NotTransactional;
 
 /**
  *
  */
 public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 	
-	@Override
-	public boolean insertInitialDataSet() {
-	    return false;
-	}
-	
 	@Test
-	@NotTransactional
 	public void preferTheirsShouldNotAddExistingConceptMappings() throws Exception {
 		
 		runShareTest(new ShareTestHelper() {
