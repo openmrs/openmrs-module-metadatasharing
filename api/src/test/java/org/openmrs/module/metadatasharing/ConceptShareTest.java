@@ -13,65 +13,32 @@
  */
 package org.openmrs.module.metadatasharing;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
-import org.openmrs.ConceptMap;
-import org.openmrs.ConceptName;
-import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.mock.ConceptMock;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 public class ConceptShareTest extends BaseShareTest {
-	
-	@Override
-	public boolean insertInitialDataSet() {
-		return false;
-	}
 	
 	@Test
 	public void shouldImportConceptWithMappingToEmptyServer() throws Exception {
 		
 		runShareTest(new ShareTestHelper() {
 			
+			private Concept exportedConcept;
+			
 			@Override
 			public List<?> prepareExportServer() throws Exception {
+				exportedConcept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH)
+				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A").saveConcept()
+				        .getConcept();
 				
-				Concept c = new Concept();
-				c.addName(new ConceptName("c", Locale.ENGLISH));
-				c.setUuid("c");
-				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
-				Context.getConceptService().saveConcept(c);
-				
-				ConceptSource newSource = new ConceptSource();
-				newSource.setUuid("csNew");
-				newSource.setName("New");
-				Context.getConceptService().saveConceptSource(newSource);
-				
-				ConceptSource commonSource = new ConceptSource();
-				commonSource.setUuid("cs");
-				commonSource.setName("Common");
-				Context.getConceptService().saveConceptSource(commonSource);
-				
-				ConceptMap newMap = new ConceptMap();
-				newMap.setSource(newSource);
-				newMap.setSourceCode("c");
-				c.addConceptMapping(newMap);
-				
-				Context.getConceptService().saveConcept(c);
-				
-				ConceptMap commonMap = new ConceptMap();
-				commonMap.setSource(commonSource);
-				commonMap.setSourceCode("cd");
-				c.addConceptMapping(commonMap);
-				
-				Context.getConceptService().saveConcept(c);
-				
-				return Collections.nCopies(1, c);
+				return Arrays.asList(exportedConcept);
 			}
 			
 			@Override
@@ -80,19 +47,44 @@ public class ConceptShareTest extends BaseShareTest {
 			
 			@Override
 			public void runOnImportServerAfterImport() throws Exception {
-				Concept concept = Context.getConceptService().getConceptByUuid("c");
-				Assert.assertEquals("c", concept.getUuid());
-				Assert.assertEquals(2, concept.getConceptMappings().size());
+				Concept concept = Context.getConceptService().getConceptByName("Yes Yes");
 				
-				for (ConceptMap conceptMap : concept.getConceptMappings()) {
-					if (conceptMap.getSourceCode().equals("c")) {
-						Assert.assertEquals(conceptMap.getSource().getName(), "New");
-					} else if (conceptMap.getSourceCode().equals("cd")) {
-						Assert.assertEquals(conceptMap.getSource().getName(), "Common");
-					} else {
-						Assert.fail();
-					}
-                }
+				ConceptMock.newInstance(concept).assertEquals(exportedConcept, false);
+			}
+		});
+	}
+	
+	@Test
+	public void shouldUpdateConceptByAddingNewMapping() throws Exception {
+		
+		runShareTest(new ShareTestHelper() {
+			
+			private Concept exportedConcept;
+			
+			@Override
+			public List<?> prepareExportServer() throws Exception {
+				exportedConcept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH)
+				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A").saveConcept()
+				        .getConcept();
+				
+				return Arrays.asList(exportedConcept);
+			}
+			
+			@Override
+			public void prepareImportServer() throws Exception {
+				ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH).addMapping("373066001", "SNOMED CT")
+				        .setDatatype("N/A").saveConcept().getConcept();
+			}
+			
+			@Override
+			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
+			}
+			
+			@Override
+			public void runOnImportServerAfterImport() throws Exception {
+				Concept concept = Context.getConceptService().getConceptByName("Yes Yes");
+				
+				ConceptMock.newInstance(concept).assertEquals(exportedConcept, true);
 			}
 		});
 	}
