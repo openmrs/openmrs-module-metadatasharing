@@ -31,11 +31,6 @@ import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 	
-	@Override
-	public boolean insertInitialDataSet() {
-	    return false;
-	}
-	
 	@Test
 	public void importPackageMappingItemsMatchedByUuids() throws Exception {
 		//TODO: create a package with items from the export server and import it to the import server which has them already choosing map for all items with same uuids.
@@ -59,7 +54,7 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 				
 				//and, here'a a concept who's conceptAnswer references the drug through the answerDrug property
 				Concept cTest = new Concept();
-				c.setUuid("3");
+				cTest.setUuid("3");
 				cTest.addName(new ConceptName("TestAnswerDrugConcept", Locale.US));
 				
 				ConceptAnswer ca = new ConceptAnswer();
@@ -97,9 +92,9 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 	
 	private void assertMappedCorrectly() {
 		Concept concept = Context.getConceptService().getConceptByUuid("1");
-		Assert.assertEquals("DrugAnswerDrugConcept", concept.getName());
+		Assert.assertEquals("DrugAnswerDrugConcept", concept.getName().getName());
 		Concept concept2 = Context.getConceptService().getConceptByUuid("3");
-		Assert.assertEquals("TestAnswerDrugConcept", concept2.getName());
+		Assert.assertEquals("TestAnswerDrugConcept", concept2.getName().getName());
 		
 		Drug drug = Context.getConceptService().getDrugByUuid("2");
 		Assert.assertEquals("TestAnswerDrug", drug.getName());

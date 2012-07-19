@@ -20,16 +20,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.ConceptReferenceTerm;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.db.DAOException;
 import org.openmrs.module.metadatasharing.MetadataSharing19Configuration;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPropertiesHandler;
+import org.openmrs.module.metadatasharing.handler.MetadataSearchHandler;
 import org.openmrs.module.metadatasharing.util.DateUtil;
 
 /**
  * The handler is instantiated by {@link MetadataSharing19Configuration} only if 
  * ConceptReferenceTerm is present on the class path.
  */
-public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>  {
+public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>, MetadataSearchHandler<ConceptReferenceTerm>  {
 
 	@Override
     public int getPriority() {
@@ -93,6 +96,28 @@ public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenci
 	@Override
     public void setUuid(ConceptReferenceTerm o, String uuid) {
 	    o.setUuid(uuid);
+    }
+
+	@Override
+    public int getItemsCount(Class<? extends ConceptReferenceTerm> type, boolean includeRetired, String phrase)
+        throws DAOException {
+	    return Context.getConceptService().getConceptReferenceTerms(phrase, null, null, null, includeRetired).size();
+    }
+
+	@Override
+    public List<ConceptReferenceTerm> getItems(Class<? extends ConceptReferenceTerm> type, boolean includeRetired,
+                                               String phrase, Integer firstResult, Integer maxResults) throws DAOException {
+	    return Context.getConceptService().getConceptReferenceTerms(phrase, null, null, null, includeRetired);
+    }
+
+	@Override
+    public ConceptReferenceTerm getItemByUuid(Class<? extends ConceptReferenceTerm> type, String uuid) throws DAOException {
+	    return Context.getConceptService().getConceptReferenceTermByUuid(uuid);
+    }
+
+	@Override
+    public ConceptReferenceTerm getItemById(Class<? extends ConceptReferenceTerm> type, Integer id) throws DAOException {
+	    return Context.getConceptService().getConceptReferenceTerm(id);
     }
 
 	

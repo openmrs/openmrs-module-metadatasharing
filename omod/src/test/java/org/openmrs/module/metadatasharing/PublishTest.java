@@ -28,14 +28,14 @@ import org.openmrs.module.metadatasharing.publish.PublishUtils;
 import org.openmrs.module.metadatasharing.web.controller.PublishController;
 import org.openmrs.module.metadatasharing.wrapper.PackageExporter;
 import org.openmrs.serialization.SerializationException;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.util.OpenmrsConstants;
+import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.xml.sax.SAXException;
 
 /**
  * Test which verifies all publishing related things
  */
-public class PublishTest extends BaseModuleContextSensitiveTest {
+public class PublishTest extends BaseModuleWebContextSensitiveTest {
 	
 	/**
 	 * @verifies that the published field is not serialized
