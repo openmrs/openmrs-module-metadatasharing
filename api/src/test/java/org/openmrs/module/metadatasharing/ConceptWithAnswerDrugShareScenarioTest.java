@@ -25,8 +25,6 @@ import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
-import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
@@ -101,7 +99,7 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 	}
 
 	/**
-     * @see org.openmrs.module.metadatasharing.integration.BaseShareTest#getInitialDataset()
+     * @see org.openmrs.module.metadatasharing.BaseShareTest#getInitialDataset()
      */
     @Override
     public String getInitialDataset() {

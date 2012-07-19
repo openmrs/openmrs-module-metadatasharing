@@ -28,8 +28,6 @@ import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatasharing.integration.BaseShareTest;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 /**
@@ -64,7 +62,7 @@ public class ConceptNamesTest extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#prepareImportServer()
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
 			 */
 			@Override
 			public void prepareImportServer() throws Exception {
@@ -81,7 +79,7 @@ public class ConceptNamesTest extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
 			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
@@ -132,7 +130,7 @@ public class ConceptNamesTest extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#prepareImportServer()
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
 			 */
 			@Override
 			public void prepareImportServer() throws Exception {
@@ -149,7 +147,7 @@ public class ConceptNamesTest extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
 			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {

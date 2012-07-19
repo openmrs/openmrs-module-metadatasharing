@@ -29,8 +29,6 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
-import org.openmrs.module.metadatasharing.integration.BaseShareTest;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 /**

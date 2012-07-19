@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.metadatasharing.integration.impl;
+package org.openmrs.module.metadatasharing;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +20,11 @@ import java.util.Locale;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatasharing.integration.BaseShareScenarioTest;
 
 public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	
 	/**
-	 * @see org.openmrs.module.metadatasharing.integration.BaseShareScenarioTest#prepareItemsToExport()
+	 * @see org.openmrs.module.metadatasharing.BaseShareScenarioTest#prepareItemsToExport()
 	 */
 	@Override
 	public List<Concept> prepareItemsToExport() {
@@ -37,7 +36,7 @@ public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	}
 	
 	/**
-	 * @see org.openmrs.module.metadatasharing.integration.BaseShareScenarioTest#prepareItemsOnImportServer()
+	 * @see org.openmrs.module.metadatasharing.BaseShareScenarioTest#prepareItemsOnImportServer()
 	 */
 	@Override
 	public void prepareItemsOnImportServer() {
@@ -45,7 +44,7 @@ public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	}
 	
 	/**
-	 * @see org.openmrs.module.metadatasharing.integration.BaseShareScenarioTest#assertImportedCorrectly(java.lang.Object,
+	 * @see org.openmrs.module.metadatasharing.BaseShareScenarioTest#assertImportedCorrectly(java.lang.Object,
 	 *      java.lang.Object)
 	 */
 	@Override

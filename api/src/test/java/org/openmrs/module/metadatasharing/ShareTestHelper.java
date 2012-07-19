@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.metadatasharing.integration;
+package org.openmrs.module.metadatasharing;
 
 import java.util.List;
 

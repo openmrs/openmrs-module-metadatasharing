@@ -24,8 +24,6 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
-import org.openmrs.module.metadatasharing.integration.BaseShareTest;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 import org.springframework.test.annotation.NotTransactional;
 
@@ -88,7 +86,7 @@ public class PreferTheirConceptNumericToConceptShareScenarioTest extends BaseSha
 	}
 
 	/**
-     * @see org.openmrs.module.metadatasharing.integration.BaseShareTest#getInitialDataset()
+     * @see org.openmrs.module.metadatasharing.BaseShareTest#getInitialDataset()
      */
     @Override
     public String getInitialDataset() {

@@ -24,8 +24,6 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.metadatasharing.integration.BaseShareTest;
-import org.openmrs.module.metadatasharing.integration.ShareTestHelper;
 import org.springframework.test.annotation.NotTransactional;
 
 /**

@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.metadatasharing.integration;
+package org.openmrs.module.metadatasharing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -60,7 +60,7 @@ public abstract class BaseShareScenarioTest<T> extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#runOnExportServerAfterExport(org.openmrs.module.metadatasharing.ExportedPackage)
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnExportServerAfterExport(org.openmrs.module.metadatasharing.ExportedPackage)
 			 */
 			@Override
 			public void runOnExportServerAfterExport(ExportedPackage exportedPackage) throws Exception {
@@ -68,7 +68,7 @@ public abstract class BaseShareScenarioTest<T> extends BaseShareTest {
 			}
 			
 			/**
-			 * @see org.openmrs.module.metadatasharing.integration.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
 			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
