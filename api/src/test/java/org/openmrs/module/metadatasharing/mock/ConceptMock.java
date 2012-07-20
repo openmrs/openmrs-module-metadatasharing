@@ -20,12 +20,14 @@ import java.util.UUID;
 import junit.framework.Assert;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
+import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
 
@@ -191,4 +193,21 @@ public class ConceptMock {
 		}
 		return this;
 	}
+
+	public ConceptMock addDrugAnswer(String drug, Concept concept) {		
+		Drug answerDrug = Context.getConceptService().getDrug(drug);
+		if (answerDrug == null) {
+			answerDrug = new Drug();
+			answerDrug.setUuid(UUID.randomUUID().toString());
+			answerDrug.setName(drug);
+		}
+		answerDrug.setConcept(concept);
+		
+		ConceptAnswer conceptAnswer = new ConceptAnswer();
+		conceptAnswer.setUuid(UUID.randomUUID().toString());
+		conceptAnswer.setAnswerDrug(answerDrug);
+		conceptAnswer.setAnswerConcept(concept);
+		this.concept.addAnswer(conceptAnswer);
+	    return this;
+    }
 }
