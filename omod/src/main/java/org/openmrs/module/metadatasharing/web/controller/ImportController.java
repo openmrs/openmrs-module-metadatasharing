@@ -540,7 +540,10 @@ public class ImportController {
 		importedItem.loadExisting();
 		
 		try {
-			ValidateUtil.validate(importedItem.getIncoming());
+			//Temporarily disabled for ConceptReferenceTerm since it requires source to be persisted, see META-228
+			if (!importedItem.getClassname().equals("org.openmrs.ConceptReferenceTerm")) {
+				ValidateUtil.validate(importedItem.getIncoming());
+			}
 		}
 		catch (Exception e) {
 			log.error(e);
