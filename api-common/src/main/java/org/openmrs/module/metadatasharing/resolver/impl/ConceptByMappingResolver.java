@@ -55,13 +55,13 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 					continue;
 				}
 				
-				if (incoming.getDatatype().getName().equals(existing.getDatatype().getName())
-				        && incoming.getConceptClass().getName().equals(existing.getConceptClass().getName())) {
+				if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+				        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
 					return existing;
 				}
 				
-				if (incoming.getDatatype().getName().equals(existing.getDatatype().getName())
-				        && incoming.getConceptClass().getName().equals(existing.getConceptClass().getName())) {
+				if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+				        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
 					return existing;
 				}
 			}
@@ -93,8 +93,8 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 				continue;
 			}
 			
-			if (incoming.getDatatype().getName().equals(existing.getDatatype().getName())
-			        && incoming.getConceptClass().getName().equals(existing.getConceptClass().getName())) {
+			if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+			        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
 				return existing;
 			}
 			

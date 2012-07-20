@@ -41,8 +41,8 @@ public class ObjectByNameResolver extends Resolver<Object> {
 			    Handler.getName(incoming), null, null);
 			
 			for (Object object : objects) {
-				if (Handler.getName(incoming).equals(Handler.getName(object))) {
-					if (Handler.getDescription(incoming).equals(Handler.getDescription(object))) {
+				if (Handler.getName(incoming).equalsIgnoreCase(Handler.getName(object))) {
+					if (Handler.getDescription(incoming).equalsIgnoreCase(Handler.getDescription(object))) {
 						return object;
 					}
 				}
@@ -62,13 +62,13 @@ public class ObjectByNameResolver extends Resolver<Object> {
 			    Handler.getName(incoming), null, null);
 			
 			for (Object object : objects) {
-				if (Handler.getName(incoming).equals(Handler.getName(object))) {
+				if (Handler.getName(incoming).equalsIgnoreCase(Handler.getName(object))) {
 					return object;
 				} else if (object instanceof Concept) {
 					Concept concept = (Concept) object;
 					Collection<ConceptName> names = concept.getNames(false);
 					for (ConceptName name : names) {
-						if (Handler.getName(incoming).equals(name.getName())) {
+						if (Handler.getName(incoming).equalsIgnoreCase(name.getName())) {
 							return object;
 						}
 					}

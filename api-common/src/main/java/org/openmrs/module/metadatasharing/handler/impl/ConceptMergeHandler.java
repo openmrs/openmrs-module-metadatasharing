@@ -35,7 +35,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 				
 				if (isPreferred(existingName)) {
 					ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-					if (incomingPreferredName != null && !incomingPreferredName.getName().equals(existingName.getName())) {
+					if (incomingPreferredName != null && !incomingPreferredName.getName().equalsIgnoreCase(existingName.getName())) {
 						if (importType.isPreferTheirs()) {
 							removePreferredTag(existingName);
 						} else {
@@ -47,7 +47,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 				if (isFullySpecified(existingName)) {
 					for (ConceptName incomingName : incomingConcept.getNames()) {
 						if (isFullySpecified(incomingName) && existingName.getLocale().equals(incomingName.getLocale())
-						        && !existingName.getName().equals(incomingName.getName())) {
+						        && !existingName.getName().equalsIgnoreCase(incomingName.getName())) {
 							if (importType.isPreferTheirs()) {
 								addSynonymTag(existingName);
 							} else {

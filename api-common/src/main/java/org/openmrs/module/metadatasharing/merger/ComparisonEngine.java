@@ -15,6 +15,7 @@ package org.openmrs.module.metadatasharing.merger;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
@@ -42,7 +43,7 @@ public class ComparisonEngine {
 			
 			if (incomingMap.getSource() != null && existingMap.getSource() != null) {
 				if (nullSafeEqual(incomingMap.getSource().getUuid(), existingMap.getSource().getUuid())) {
-					return nullSafeEqual(incomingMap.getSourceCode(), existingMap.getSourceCode());
+					return StringUtils.equalsIgnoreCase(incomingMap.getSourceCode(), existingMap.getSourceCode());
 				}
 			} else {
 				return false;
@@ -51,7 +52,7 @@ public class ComparisonEngine {
 			ConceptName incomingName = (ConceptName) incoming;
 			ConceptName existingName = (ConceptName) existing;
 			
-			if (nullSafeEqual(incomingName.getName(), existingName.getName())) {
+			if (StringUtils.equalsIgnoreCase(incomingName.getName(), existingName.getName())) {
 				return nullSafeEqual(incomingName.getLocale().getLanguage(), existingName.getLocale().getLanguage());
 			}
 		}

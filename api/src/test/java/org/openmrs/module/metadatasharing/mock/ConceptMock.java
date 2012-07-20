@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
@@ -190,6 +191,30 @@ public class ConceptMock {
 				}
 				Assert.assertTrue("map code not found", found);
 			}
+		}
+		
+		if (!assertBothOrNoneNull("names", expected.getNames(), concept.getNames())) {
+			Assert.assertEquals("names size", expected.getNames().size(), concept.getNames().size());
+			for (ConceptName conceptName : concept.getNames()) {
+				boolean found = false;
+				for (ConceptName expectedName : expected.getNames()) {
+					if (expectedName.getName().equals(conceptName.getName())) {
+						found = true;
+						if (!ignoreUuids) {
+							Assert.assertEquals("name uuid", expectedName.getUuid(), conceptName.getUuid());
+						}
+					}
+				}
+				Assert.assertTrue("name not found: " + conceptName.getName(), found);
+			}
+			
+			for (ConceptName conceptName : concept.getNames()) {
+	            ConceptName preferredName = concept.getName(conceptName.getLocale()); 
+	            ConceptName expectedPreferredName = expected.getName(conceptName.getLocale());
+	            if (!assertBothOrNoneNull("preferred name", expectedPreferredName, preferredName)) {
+	            	Assert.assertEquals("preferred name value", expectedPreferredName.getName(), preferredName.getName());
+	            }
+            }
 		}
 		return this;
 	}

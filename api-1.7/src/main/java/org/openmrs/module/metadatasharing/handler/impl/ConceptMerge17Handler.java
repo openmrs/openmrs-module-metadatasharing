@@ -31,7 +31,7 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 			for (ConceptName existingName : existingNames) {
 				if (existingName.isPreferred()) {
 					ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-					if (incomingPreferredName != null && !incomingPreferredName.getName().equals(existingName.getName())) {
+					if (incomingPreferredName != null && !incomingPreferredName.getName().equalsIgnoreCase(existingName.getName())) {
 						if (importType.isPreferTheirs()) {
 							existingName.setLocalePreferred(false);
 						} else {
@@ -43,7 +43,7 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 				if (ConceptNameType.FULLY_SPECIFIED.equals(existingName.getConceptNameType())) {
 					ConceptName incomingFullySpecifiedName = incomingConcept.getFullySpecifiedName(existingName.getLocale());
 					if (incomingFullySpecifiedName != null
-					        && !incomingFullySpecifiedName.getName().equals(existingName.getName())) {
+					        && !incomingFullySpecifiedName.getName().equalsIgnoreCase(existingName.getName())) {
 						if (importType.isPreferTheirs()) {
 							existingName.setConceptNameType(ConceptNameType.INDEX_TERM);
 						} else {
