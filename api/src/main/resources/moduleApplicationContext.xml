@@ -11,11 +11,6 @@
 
 	<context:component-scan base-package="@MODULE_PACKAGE@" />
 
-	<!-- It overwrites the conceptDAO bean from the OpenMRS core to fix an issue when working in the MANUAL flush mode -->
-	<bean id="metadatasharing.CustomConcepDAO" class="org.openmrs.module.metadatasharing.api.db.hibernate.HibernateCustomConceptDAO">
-		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-	</bean>
-
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
@@ -93,27 +88,26 @@
 					<key>
 						<value>http</value>
 					</key>
-					<value>org.openmrs.module.metadatasharing.downloader.impl.HTTPDownloader
-					</value>
+					<value>org.openmrs.module.metadatasharing.downloader.impl.HTTPDownloader</value>
 				</entry>
 				<entry>
 					<key>
 						<value>https</value>
 					</key>
-					<value>org.openmrs.module.metadatasharing.downloader.impl.HTTPDownloader
-					</value>
+					<value>org.openmrs.module.metadatasharing.downloader.impl.HTTPDownloader</value>
 				</entry>
 			</map>
 		</property>
 	</bean>
-	
+
 	<!-- Add global property listeners -->
 	<bean id="metadatasharing.EventListeners" parent="openmrsEventListeners">
 		<property name="globalPropertyListeners">
 			<list value-type="org.openmrs.api.GlobalPropertyListener">
-				<bean class="org.openmrs.module.metadatasharing.util.MetadataSharingGlobalPropertyListener" />
+				<bean
+					class="org.openmrs.module.metadatasharing.util.MetadataSharingGlobalPropertyListener" />
 			</list>
 		</property>
 	</bean>
-	
+
 </beans>
