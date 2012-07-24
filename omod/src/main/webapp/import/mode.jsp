@@ -23,40 +23,52 @@
 </h3>
 
 <springform:form>
-	<fieldset>
+	<fieldset class="choose-import-mode">
 		<legend>
 			3.
 			<spring:message code="metadatasharing.import.mode.choose" />
 		</legend>
 		<p>
-			<input type="radio" name="importMode" value="PREVIOUS" checked />&nbsp;
-			<spring:message code="metadatasharing.import.mode.previous" />
-		<div style="padding-left: 4em; font-size: 0.8em;">
-			<spring:message code="metadatasharing.import.mode.previous.description" />
-		</div>
+			<input id="mode-PREVIOUS" type="radio" name="importMode" value="PREVIOUS" checked />&nbsp;
+			<label for="mode-PREVIOUS">
+				<spring:message code="metadatasharing.import.mode.previous" />
+				<br/>
+				<span class="import-mode-description">
+					<spring:message code="metadatasharing.import.mode.previous.description" />
+				</span>
+			</label>
 		</p>
 		<p>
-			<input type="radio" name="importMode" value="PARENT_AND_CHILD" />&nbsp;
-			<spring:message code="metadatasharing.import.mode.parentAndChild" />
-		<div style="padding-left: 4em; font-size: 0.8em;">
-			<spring:message
-				code="metadatasharing.import.mode.parentAndChild.description" />
-		</div>
+			<input id="mode-PARENT_AND_CHILD" type="radio" name="importMode" value="PARENT_AND_CHILD" />&nbsp;
+			<label for="mode-PARENT_AND_CHILD">
+				<spring:message code="metadatasharing.import.mode.parentAndChild" />
+				<br/>
+				<span class="import-mode-description">
+					<spring:message
+						code="metadatasharing.import.mode.parentAndChild.description" />
+				</span>
+			</label>
 		</p>
 		<p>
-			<input type="radio" name="importMode" value="PEER_TO_PEER" />&nbsp;
-			<spring:message code="metadatasharing.import.mode.peerToPeer" />
-		<div style="padding-left: 4em; font-size: 0.8em;">
-			<spring:message
-				code="metadatasharing.import.mode.peerToPeer.description" />
-		</div>
+			<input id="mode-PEER_TO_PEER" type="radio" name="importMode" value="PEER_TO_PEER" />&nbsp;
+			<label for="mode-PEER_TO_PEER">
+				<spring:message code="metadatasharing.import.mode.peerToPeer" />
+				<br/>
+				<span class="import-mode-description">
+					<spring:message
+						code="metadatasharing.import.mode.peerToPeer.description" />
+				</span>
+			</label>
 		</p>
 		<p>
-			<input type="radio" name="importMode" value="TEST" />&nbsp;
-			<spring:message code="metadatasharing.import.mode.test" />
-		<div style="padding-left: 4em; font-size: 0.8em;">
-			<spring:message code="metadatasharing.import.mode.test.description" />
-		</div>
+			<input id="mode-TEST" type="radio" name="importMode" value="TEST" />&nbsp;
+			<label for="mode-TEST">
+				<spring:message code="metadatasharing.import.mode.test" />
+				<br/>
+				<span class="import-mode-description">
+					<spring:message code="metadatasharing.import.mode.test.description" />
+				</span>
+			</label>
 		</p>
 	</fieldset>
 	<p>
