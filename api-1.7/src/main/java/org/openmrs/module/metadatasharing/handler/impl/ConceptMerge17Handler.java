@@ -49,7 +49,9 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 					if (fullySpecifiedName != null) {
 						for (ConceptName existingName : existingConcept.getNames(locale)) {
 							if (!existingName.getName().equalsIgnoreCase(fullySpecifiedName.getName())) {
-								existingName.setConceptNameType(null); //make it synonym
+								if (existingName.isFullySpecifiedName()) {
+									existingName.setConceptNameType(null); //make it synonym
+								}
 							}
 						}
 					}
@@ -66,7 +68,9 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 					ConceptName fullySpecifiedName = existingConcept.getFullySpecifiedName(locale);
 					if (fullySpecifiedName != null) {
 						for (ConceptName incomingName : incomingConcept.getNames(locale)) {
-							incomingName.setConceptNameType(null); //make it synonym
+							if (incomingName.isFullySpecifiedName()) {
+								incomingName.setConceptNameType(null); //make it synonym
+							}
 						}
 					}
 				}
