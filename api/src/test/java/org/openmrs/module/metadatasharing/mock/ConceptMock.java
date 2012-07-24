@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
@@ -77,10 +76,37 @@ public class ConceptMock {
 		return this;
 	}
 	
+	public ConceptMock setPreferredName(String name, Locale locale) {
+		for (ConceptName conceptName : concept.getNames()) {
+			if (conceptName.getName().equals(name) && conceptName.getLocale().equals(locale)) {
+				concept.setPreferredName(locale, conceptName);
+				return this;
+			}
+		}
+		throw new IllegalStateException("Name '" + name + "' in locale '" + locale + "' must be added before");
+	}
+	
+	public ConceptMock setShortName(String name, Locale locale) {
+		for (ConceptName conceptName : concept.getNames()) {
+			if (conceptName.getName().equals(name) && conceptName.getLocale().equals(locale)) {
+				concept.setShortName(locale, conceptName);
+				return this;
+			}
+		}
+		throw new IllegalStateException("Name '" + name + "' in locale '" + locale + "' must be added before");
+	}
+	
 	public ConceptMock addPreferredName(String name, Locale locale) {
 		ConceptName conceptName = new ConceptName(name, locale);
 		conceptName.setUuid(UUID.randomUUID().toString());
 		concept.setPreferredName(locale, conceptName);
+		return this;
+	}
+	
+	public ConceptMock addShortName(String name, Locale locale) {
+		ConceptName conceptName = new ConceptName(name, locale);
+		conceptName.setUuid(UUID.randomUUID().toString());
+		concept.setShortName(locale, conceptName);
 		return this;
 	}
 	

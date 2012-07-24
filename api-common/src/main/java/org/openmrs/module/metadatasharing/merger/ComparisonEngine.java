@@ -53,7 +53,7 @@ public class ComparisonEngine {
 			ConceptName existingName = (ConceptName) existing;
 			
 			if (StringUtils.equalsIgnoreCase(incomingName.getName(), existingName.getName())) {
-				return nullSafeEqual(incomingName.getLocale().getLanguage(), existingName.getLocale().getLanguage());
+				return nullSafeEqual(incomingName.getLocale(), existingName.getLocale());
 			}
 		}
 		

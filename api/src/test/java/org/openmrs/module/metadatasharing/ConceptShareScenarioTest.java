@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.openmrs.Concept;
-import org.openmrs.ConceptName;
-import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.mock.ConceptMock;
 
 public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	
@@ -28,11 +27,9 @@ public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	 */
 	@Override
 	public List<Concept> prepareItemsToExport() {
-		Concept c = new Concept();
-		c.setUuid("1");
-		c.addName(new ConceptName("Test", Locale.US));
-		Context.getConceptService().saveConcept(c);
-		return Arrays.asList(c);
+		Concept concept = ConceptMock.newInstance().addPreferredName("Some test concept", Locale.ENGLISH).setDatatype("N/A")
+		        .saveConcept().getConcept();
+		return Arrays.asList(concept);
 	}
 	
 	/**

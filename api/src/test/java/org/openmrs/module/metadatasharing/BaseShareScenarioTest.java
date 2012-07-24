@@ -75,7 +75,9 @@ public abstract class BaseShareScenarioTest<T> extends BaseShareTest {
 				prepareImportedItems(importer);
 				
 				for (ImportedItem importedItem : importedItems) {
-					assertEquals("Should set import type", ImportType.CREATE, importedItem.getImportType());
+					if (getTestedType().isAssignableFrom(importedItem.getIncoming().getClass())) {
+						assertEquals("Should set import type", ImportType.CREATE, importedItem.getImportType());
+					}
 				}
 			}
 			

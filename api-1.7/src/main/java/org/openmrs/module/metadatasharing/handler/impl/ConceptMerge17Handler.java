@@ -1,11 +1,13 @@
 package org.openmrs.module.metadatasharing.handler.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
-import org.openmrs.api.ConceptNameType;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 
@@ -19,35 +21,52 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 	
 	@Override
 	public int getPriority() {
-	    return 1;
+		return 1;
 	}
 	
 	@Override
 	public void merge(Concept existingConcept, Concept incomingConcept, ImportType importType,
 	                  Map<Object, Object> incomingToExisting) {
 		if (existingConcept != null) {
-			//Remove preferred and fully specified tags in existing names if an incoming name is also preferred or fully specified for that locale.
-			Collection<ConceptName> existingNames = (existingConcept).getNames();
-			for (ConceptName existingName : existingNames) {
-				if (existingName.isPreferred()) {
-					ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-					if (incomingPreferredName != null && !incomingPreferredName.getName().equalsIgnoreCase(existingName.getName())) {
-						if (importType.isPreferTheirs()) {
-							existingName.setLocalePreferred(false);
-						} else {
-							incomingPreferredName.setLocalePreferred(false);
+			Set<Locale> locales = new HashSet<Locale>();
+			locales.addAll(getLocales(existingConcept.getNames()));
+			locales.addAll(getLocales(incomingConcept.getNames()));
+			
+			for (Locale locale : locales) {
+				if (importType.isPreferTheirs()) {
+					//Only one preferred name is allowed for a locale.
+					ConceptName preferredName = incomingConcept.getPreferredName(locale);
+					if (preferredName != null) {
+						for (ConceptName existingName : existingConcept.getNames(locale)) {
+							if (!existingName.getName().equalsIgnoreCase(preferredName.getName())) {
+								existingName.setLocalePreferred(false);
+							}
 						}
 					}
-				}
-				
-				if (ConceptNameType.FULLY_SPECIFIED.equals(existingName.getConceptNameType())) {
-					ConceptName incomingFullySpecifiedName = incomingConcept.getFullySpecifiedName(existingName.getLocale());
-					if (incomingFullySpecifiedName != null
-					        && !incomingFullySpecifiedName.getName().equalsIgnoreCase(existingName.getName())) {
-						if (importType.isPreferTheirs()) {
-							existingName.setConceptNameType(ConceptNameType.INDEX_TERM);
-						} else {
-							incomingFullySpecifiedName.setConceptNameType(ConceptNameType.INDEX_TERM);
+					
+					//Only one fully specified name is allowed for a locale.
+					ConceptName fullySpecifiedName = incomingConcept.getFullySpecifiedName(locale);
+					if (fullySpecifiedName != null) {
+						for (ConceptName existingName : existingConcept.getNames(locale)) {
+							if (!existingName.getName().equalsIgnoreCase(fullySpecifiedName.getName())) {
+								existingName.setConceptNameType(null); //make it synonym
+							}
+						}
+					}
+				} else {
+					//Only one preferred name is allowed for a locale.
+					ConceptName preferredName = existingConcept.getPreferredName(locale);
+					if (preferredName != null) {
+						for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+							incomingName.setLocalePreferred(false);
+						}
+					}
+					
+					//Only one fully specified name is allowed for a locale.
+					ConceptName fullySpecifiedName = existingConcept.getFullySpecifiedName(locale);
+					if (fullySpecifiedName != null) {
+						for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+							incomingName.setConceptNameType(null); //make it synonym
 						}
 					}
 				}
@@ -55,6 +74,14 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 		}
 		
 		objectHandler.merge(existingConcept, incomingConcept, importType, incomingToExisting);
+	}
+	
+	private Set<Locale> getLocales(Collection<ConceptName> names) {
+		Set<Locale> locales = new HashSet<Locale>();
+		for (ConceptName name : names) {
+			locales.add(name.getLocale());
+		}
+		return locales;
 	}
 	
 }

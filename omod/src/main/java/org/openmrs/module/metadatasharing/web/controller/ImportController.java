@@ -45,6 +45,7 @@ import org.openmrs.module.metadatasharing.downloader.Downloader;
 import org.openmrs.module.metadatasharing.downloader.DownloaderFactory;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.model.validator.PackageContainerValidator;
+import org.openmrs.module.metadatasharing.model.validator.ValidateCustomUtil;
 import org.openmrs.module.metadatasharing.subscription.SubscriptionHeader;
 import org.openmrs.module.metadatasharing.task.Task;
 import org.openmrs.module.metadatasharing.updater.SubscriptionUpdater;
@@ -57,7 +58,6 @@ import org.openmrs.module.metadatasharing.web.utils.WebUtils;
 import org.openmrs.module.metadatasharing.web.view.JsonObjectView;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 import org.openmrs.serialization.SerializationException;
-import org.openmrs.validator.ValidateUtil;
 import org.openmrs.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -540,10 +540,7 @@ public class ImportController {
 		importedItem.loadExisting();
 		
 		try {
-			//Temporarily disabled for ConceptReferenceTerm since it requires source to be persisted, see META-228
-			if (!importedItem.getClassname().equals("org.openmrs.ConceptReferenceTerm")) {
-				ValidateUtil.validate(importedItem.getIncoming());
-			}
+			ValidateCustomUtil.validate(importedItem.getIncoming());
 		}
 		catch (Exception e) {
 			log.error(e);

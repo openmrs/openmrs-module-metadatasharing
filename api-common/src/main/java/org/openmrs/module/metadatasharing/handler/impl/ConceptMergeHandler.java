@@ -1,7 +1,10 @@
 package org.openmrs.module.metadatasharing.handler.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
@@ -26,73 +29,87 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 	public void merge(Concept existingConcept, Concept incomingConcept, ImportType importType,
 	                  Map<Object, Object> incomingToExisting) {
 		if (existingConcept != null) {
-			//Remove preferred and fully specified tags in existing names if an incoming name is also preferred or fully specified for that locale.
-			Collection<ConceptName> existingNames = (existingConcept).getNames();
-			for (ConceptName existingName : existingNames) {
-				if (existingName.getTags() == null) {
-					continue;
-				}
-				
-				if (isPreferred(existingName)) {
-					ConceptName incomingPreferredName = incomingConcept.getPreferredName(existingName.getLocale());
-					if (incomingPreferredName != null && !incomingPreferredName.getName().equalsIgnoreCase(existingName.getName())) {
-						if (importType.isPreferTheirs()) {
-							removePreferredTag(existingName);
-						} else {
-							removePreferredTag(incomingPreferredName);
+			Set<Locale> locales = new HashSet<Locale>();
+			locales.addAll(getLocales(existingConcept.getNames()));
+			locales.addAll(getLocales(incomingConcept.getNames()));
+			
+			for (Locale locale : locales) {
+				if (importType.isPreferTheirs()) {
+					//Only one preferred name is allowed for a locale.
+					ConceptName preferredName = incomingConcept.getPreferredName(locale);
+					if (preferredName != null) {
+						for (ConceptName existingName : existingConcept.getNames(locale)) {
+							if (!existingName.getName().equalsIgnoreCase(preferredName.getName())) {
+								changeToNonPreferred(existingName);
+							}
 						}
 					}
-				}
-				
-				if (isFullySpecified(existingName)) {
-					for (ConceptName incomingName : incomingConcept.getNames()) {
-						if (isFullySpecified(incomingName) && existingName.getLocale().equals(incomingName.getLocale())
-						        && !existingName.getName().equalsIgnoreCase(incomingName.getName())) {
-							if (importType.isPreferTheirs()) {
-								addSynonymTag(existingName);
-							} else {
-								addSynonymTag(incomingName);
+					
+					//Only one fully specified name is allowed for a locale.
+					ConceptName fullySpecifiedName = getFullySpecifiedName(incomingConcept, locale);
+					if (fullySpecifiedName != null) {
+						for (ConceptName existingName : existingConcept.getNames(locale)) {
+							if (!existingName.getName().equalsIgnoreCase(fullySpecifiedName.getName())) {
+								changeFromFullySpecifiedToSynonym(existingName);
 							}
-							break;
+						}
+					}
+				} else {
+					//Only one preferred name is allowed for a locale.
+					ConceptName preferredName = existingConcept.getPreferredName(locale);
+					if (preferredName != null) {
+						for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+							changeToNonPreferred(incomingName);
+						}
+					}
+					
+					//Only one fully specified name is allowed for a locale.
+					ConceptName fullySpecifiedName = getFullySpecifiedName(existingConcept, locale);
+					if (fullySpecifiedName != null) {
+						for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+							changeFromFullySpecifiedToSynonym(incomingName);
 						}
 					}
 				}
 			}
+			
 		}
 		
 		objectHandler.merge(existingConcept, incomingConcept, importType, incomingToExisting);
 	}
 	
-	public static interface ConceptMergeLogic {
-		
-		void merge(Concept existingConcept, Concept incomingConcept, ImportType importType,
-		           Map<Object, Object> incomingToExisting);
+	private Set<Locale> getLocales(Collection<ConceptName> names) {
+		Set<Locale> locales = new HashSet<Locale>();
+		for (ConceptName name : names) {
+			locales.add(name.getLocale());
+		}
+		return locales;
 	}
 	
-	private void removePreferredTag(ConceptName existingName) {
-		for (ConceptNameTag tag : existingName.getTags()) {
-			if (tag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
-				existingName.removeTag(tag);
-				break;
+	private void changeToNonPreferred(ConceptName existingName) {
+		if (existingName.getTags() != null) {
+			for (ConceptNameTag tag : existingName.getTags()) {
+				if (tag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
+					existingName.removeTag(tag);
+					break;
+				}
 			}
 		}
 	}
 	
-	private boolean isPreferred(ConceptName name) {
-		for (ConceptNameTag tag : name.getTags()) {
-			if (tag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
-				return true;
+	private ConceptName getFullySpecifiedName(Concept concept, Locale locale) {
+		for (ConceptName name : concept.getNames(locale)) {
+			if (name.getTags() == null) {
+				return name;
 			}
 		}
-		return false;
+		return null;
 	}
 	
-	private boolean isFullySpecified(ConceptName name) {
-		return name.getTags() == null;
-	}
-	
-	private void addSynonymTag(ConceptName name) {
-		name.addTag(ConceptNameTag.SYNONYM);
+	private void changeFromFullySpecifiedToSynonym(ConceptName name) {
+		if (name.getTags() == null) {
+			name.addTag(ConceptNameTag.SYNONYM);
+		}
 	}
 	
 }

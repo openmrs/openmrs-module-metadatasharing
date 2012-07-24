@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.ImportedItem;
@@ -27,6 +28,7 @@ import org.openmrs.module.metadatasharing.util.MetadataSharingGlobalPropertyList
 import org.openmrs.module.metadatasharing.wrapper.PackageExporter;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.util.StringUtils;
 
 public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
@@ -176,6 +178,10 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		} else {
 			baseSetupWithStandardDataAndAuthentication();
 		}
+		
+		GlobalProperty allowedLocales = Context.getAdministrationService().getGlobalPropertyObject(OpenmrsConstants.GLOBAL_PROPERTY_LOCALE_ALLOWED_LIST);
+		allowedLocales.setPropertyValue(allowedLocales.getPropertyValue() + ",en_US");
+		Context.getAdministrationService().saveGlobalProperty(allowedLocales);
 		
 		if (xmlFileToExecute == null)
 			xmlFileToExecute = "MDSImportServer.xml";

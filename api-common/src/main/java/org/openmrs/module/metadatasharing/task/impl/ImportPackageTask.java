@@ -38,12 +38,12 @@ import org.openmrs.module.metadatasharing.api.ValidationException;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.merger.ConvertUtil;
+import org.openmrs.module.metadatasharing.model.validator.ValidateCustomUtil;
 import org.openmrs.module.metadatasharing.task.Task;
 import org.openmrs.module.metadatasharing.task.TaskException;
 import org.openmrs.module.metadatasharing.task.TaskType;
 import org.openmrs.module.metadatasharing.wrapper.ObjectWrapper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
-import org.openmrs.validator.ValidateUtil;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
@@ -173,7 +173,7 @@ public class ImportPackageTask extends Task {
 		log("Preparing items to save");
 		prepareItemsToSave(importedItems, incomingToExisting);
 		
-		/*log("Validating items");
+		log("Validating items");
 		Errors errors = new BindException(importedItems, "items");
 		for (ImportedItem importedItem : importedItems) {
 			Object item = null;
@@ -184,7 +184,7 @@ public class ImportPackageTask extends Task {
 			}
 			
 			try {
-				ValidateUtil.validate(item);
+				ValidateCustomUtil.validate(item);
 			}
 			catch (Exception e) {
 				log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
@@ -193,7 +193,7 @@ public class ImportPackageTask extends Task {
 		}
 		if (errors.hasErrors()) {
 			throw new ValidationException(errors);
-		}*/
+		}
 		
 		Set<ObjectWrapper<Object>> savedItems = new HashSet<ObjectWrapper<Object>>();
 		
