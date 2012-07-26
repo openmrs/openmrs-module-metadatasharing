@@ -354,3 +354,8 @@ span.warning,div.warning,span.correct {
 .retired {
 	text-decoration: line-through;
 }
+
+.choose-import-mode .import-mode-description {
+	padding-left: 4em;
+	font-size: 0.8em;
+}
