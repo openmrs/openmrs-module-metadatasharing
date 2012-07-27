@@ -257,7 +257,7 @@
 			: ${type}
 		</p>
 		<p>
-			<spring:message code="metadatasharing.chooseItems" />
+			<spring:message code="metadatasharing.chooseMetadata" />
 		</p>
 		<div>
 			<table id="selectItemsTable" style="width: 90%">
