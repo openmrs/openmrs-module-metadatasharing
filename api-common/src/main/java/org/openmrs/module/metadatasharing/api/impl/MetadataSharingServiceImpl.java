@@ -218,11 +218,11 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 	}
 	
 	@Override
-    public String getMetadataUuid(Class<?> type, String uuid) throws APIException {
+	public String getMetadataUuid(Class<?> type, String uuid) throws APIException {
 		ImportedItem importedItem = getImportedItemByUuid(type, uuid);
 		if (importedItem != null && importedItem.getExistingUuid() != null) {
 			return importedItem.getExistingUuid();
 		}
-	    return uuid;
-    }
+		return uuid;
+	}
 }
