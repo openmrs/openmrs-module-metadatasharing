@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>metadatasharing</id>
 	<name>Metadata Sharing</name>
-	<version>1.0.7</version>
+	<version>@MODULE_VERSION@</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Rafal Korytkowski</author>
 	<description>
