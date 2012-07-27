@@ -144,7 +144,7 @@
 		<profile>
 			<id>integration-test</id>
 			<modules>
-				<module>it</module>
+				<module>integration-test</module>
 			</modules>
 		</profile>
 	</profiles>
