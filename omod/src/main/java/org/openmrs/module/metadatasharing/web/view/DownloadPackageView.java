@@ -35,7 +35,7 @@ public class DownloadPackageView extends AbstractView {
 		
 		ExportedPackage pack = (ExportedPackage) model.get("package");
 		response.setContentType("application/zip");
-		String filename = pack.getName().replace(" ", "_") + "_" + pack.getUuid();
+		String filename = pack.getName().replace(" ", "_") + "-" + pack.getVersion();
 		response.setHeader("Content-Disposition", "attachment; filename=" + filename + ".zip");
 		response.setHeader("Pragma", "No-cache");
 		response.setDateHeader("Expires", 0);
