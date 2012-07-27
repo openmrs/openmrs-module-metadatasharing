@@ -216,4 +216,13 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 	public void purgePreviousAssessments() throws APIException {
 		dao.purgePreviousAssessments();
 	}
+	
+	@Override
+    public String getMetadataUuid(Class<?> type, String uuid) throws APIException {
+		ImportedItem importedItem = getImportedItemByUuid(type, uuid);
+		if (importedItem != null && importedItem.getExistingUuid() != null) {
+			return importedItem.getExistingUuid();
+		}
+	    return uuid;
+    }
 }

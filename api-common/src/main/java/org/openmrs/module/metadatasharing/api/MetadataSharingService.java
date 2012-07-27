@@ -284,4 +284,19 @@ public interface MetadataSharingService extends OpenmrsService {
 	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
 	@Transactional
 	void purgePreviousAssessments() throws APIException;
+	
+	/**
+	 * Returns UUID of a metadata object in the system for the given UUID.
+	 * <p>
+	 * The returned UUID may be different from the given UUID if an object has been mapped during import
+	 * or the same if it has never been mapped or imported.  
+	 * 
+	 * @param type
+	 * @param uuid
+	 * @return UUID
+	 * @throws APIException
+	 * @since 1.0.8
+	 */
+	@Transactional
+	String getMetadataUuid(Class<?> type, String uuid) throws APIException;
 }
