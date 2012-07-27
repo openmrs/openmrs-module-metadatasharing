@@ -40,7 +40,7 @@ window.setTimeout(function() {
 	<c:forEach var="log" items="${task.logs}">
 		<em>${log.date} - ${log.message}<br /></em>
 		<c:if test="${!empty log.exception}">
-			<textarea>${log.exception.fullStackTrace}</textarea><br/>
+			<pre>${log.exception.fullStackTrace}</pre><br/>
 		</c:if>
 	</c:forEach>
 </p>
