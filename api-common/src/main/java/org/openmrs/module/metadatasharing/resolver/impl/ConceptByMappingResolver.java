@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
+import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
@@ -42,27 +43,34 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 			}
 			
 			if (preferredSourceNames.contains(map.getSource().getName())) {
-				Concept existing = Context.getConceptService().getConceptByMapping(map.getSourceCode(),
-				    map.getSource().getName());
+				ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getSource().getName());
 				
-				if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null
-				        || existing.getConceptClass() == null || existing.getConceptClass().getName() == null) {
-					continue;
-				}
-				
-				if (incoming == null || incoming.getDatatype() == null || incoming.getDatatype().getName() == null
-				        || incoming.getConceptClass() == null || incoming.getConceptClass().getName() == null) {
-					continue;
-				}
-				
-				if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
-				        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
-					return existing;
-				}
-				
-				if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
-				        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
-					return existing;
+				for (ConceptMap m : Context.getConceptService().getConceptsByConceptSource(source)) {
+					if (m.getSourceCode().equals(map.getSourceCode())) {
+						Concept existing = m.getConcept();
+						
+						if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null
+						        || existing.getConceptClass() == null || existing.getConceptClass().getName() == null) {
+							continue;
+						}
+						
+						if (incoming == null || incoming.getDatatype() == null || incoming.getDatatype().getName() == null
+						        || incoming.getConceptClass() == null || incoming.getConceptClass().getName() == null) {
+							continue;
+						}
+						
+						if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+						        && incoming.getConceptClass().getName()
+						                .equalsIgnoreCase(existing.getConceptClass().getName())) {
+							return existing;
+						}
+						
+						if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+						        && incoming.getConceptClass().getName()
+						                .equalsIgnoreCase(existing.getConceptClass().getName())) {
+							return existing;
+						}
+					}
 				}
 			}
 		}
@@ -80,22 +88,26 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 				continue;
 			}
 			
-			Concept existing = Context.getConceptService().getConceptByMapping(map.getSourceCode(),
-			    map.getSource().getName());
-			
-			if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null
-			        || existing.getConceptClass() == null || existing.getConceptClass().getName() == null) {
-				continue;
-			}
-			
-			if (incoming == null || incoming.getDatatype() == null || incoming.getDatatype().getName() == null
-			        || incoming.getConceptClass() == null || incoming.getConceptClass().getName() == null) {
-				continue;
-			}
-			
-			if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
-			        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
-				return existing;
+			ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getSource().getName());
+			for (ConceptMap m : Context.getConceptService().getConceptsByConceptSource(source)) {
+				if (m.getSourceCode().equals(map.getSourceCode())) {
+					Concept existing = m.getConcept();
+					
+					if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null
+					        || existing.getConceptClass() == null || existing.getConceptClass().getName() == null) {
+						continue;
+					}
+					
+					if (incoming == null || incoming.getDatatype() == null || incoming.getDatatype().getName() == null
+					        || incoming.getConceptClass() == null || incoming.getConceptClass().getName() == null) {
+						continue;
+					}
+					
+					if (incoming.getDatatype().getName().equalsIgnoreCase(existing.getDatatype().getName())
+					        && incoming.getConceptClass().getName().equalsIgnoreCase(existing.getConceptClass().getName())) {
+						return existing;
+					}
+				}
 			}
 			
 		}
