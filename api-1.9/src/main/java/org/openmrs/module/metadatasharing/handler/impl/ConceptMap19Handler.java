@@ -21,7 +21,7 @@ public class ConceptMap19Handler implements MetadataPriorityDependenciesHandler<
 	
 	@Override
 	public int getPriority() {
-	    return 1;
+		return 1;
 	}
 	
 	@Override
@@ -30,6 +30,9 @@ public class ConceptMap19Handler implements MetadataPriorityDependenciesHandler<
 		
 		if (object.getConceptReferenceTerm() != null) {
 			result.add(object.getConceptReferenceTerm());
+		}
+		if (object.getConceptMapType() != null) {
+			result.add(object.getConceptMapType());
 		}
 		
 		return result;
