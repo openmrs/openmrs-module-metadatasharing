@@ -131,12 +131,14 @@
 				<version>1.4</version>
 				<scope>provided</scope>
 			</dependency>
+			
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>1.7.0</version>
 				<scope>provided</scope>
 			</dependency>
+			
 			<dependency>
 				<groupId>xerces</groupId>
 				<artifactId>xercesImpl</artifactId>
