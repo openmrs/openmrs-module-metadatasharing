@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -14,7 +15,7 @@
 	<description>API 1.7 project for Metadata Sharing Module</description>
 
 	<properties>
-		<openMRSAPIVersion>1.7.3</openMRSAPIVersion>
+		<openmrs.1.7.api.version>1.7.4</openmrs.1.7.api.version>
 	</properties>
 
 	<dependencies>
@@ -22,27 +23,33 @@
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api-common</artifactId>
 			<version>${project.parent.version}</version>
-			<type>jar</type>
-			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api-common</artifactId>
+			<version>${project.parent.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openMRSAPIVersion}</version><!--$NO-MVN-MAN-VER$-->
+			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openMRSAPIVersion}</version><!--$NO-MVN-MAN-VER$-->
+			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
 			<classifier>tests</classifier>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.openmrs.test</groupId>
 			<artifactId>openmrs-test</artifactId>
-			<version>${openMRSAPIVersion}</version><!--$NO-MVN-MAN-VER$-->
+			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
 			<type>pom</type>
 		</dependency>
 	</dependencies>

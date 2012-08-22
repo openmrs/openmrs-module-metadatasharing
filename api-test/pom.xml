@@ -8,34 +8,17 @@
 		<version>1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>metadatasharing-api-1.9</artifactId>
-	<packaging>jar</packaging>
-	<name>Metadata Sharing Module API 1.9</name>
-	<description>API 1.9 project for Metadata Sharing Module</description>
-
-	<properties>
-		<openmrs.1.9.api.version>1.9.1</openmrs.1.9.api.version>
-	</properties>
+	<artifactId>metadatasharing-api-test</artifactId>
+	<packaging>pom</packaging>
+	<name>Metadata Sharing Module API Test</name>
+	<description>API Test project for Metadata Sharing Module</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api-common</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>${project.parent.artifactId}-api-common</artifactId>
-			<version>${project.parent.version}</version>
 			<classifier>tests</classifier>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
-			<artifactId>${project.parent.artifactId}-api-1.7</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -43,27 +26,28 @@
 			<artifactId>${project.parent.artifactId}-api-1.7</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>tests</classifier>
-			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>${project.parent.artifactId}-api-1.9</artifactId>
+			<version>${project.parent.version}</version>
+			<classifier>tests</classifier>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openmrs.1.9.api.version}</version><!--$NO-MVN-MAN-VER$-->
-		</dependency>
-
-		<dependency>
-			<groupId>org.openmrs.api</groupId>
-			<artifactId>openmrs-api</artifactId>
-			<version>${openmrs.1.9.api.version}</version><!--$NO-MVN-MAN-VER$-->
 			<classifier>tests</classifier>
+			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.openmrs.test</groupId>
 			<artifactId>openmrs-test</artifactId>
-			<version>${openmrs.1.9.api.version}</version><!--$NO-MVN-MAN-VER$-->
 			<type>pom</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+
 </project>
