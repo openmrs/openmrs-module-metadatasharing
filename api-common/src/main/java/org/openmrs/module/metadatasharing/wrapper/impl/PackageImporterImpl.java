@@ -201,7 +201,7 @@ public class PackageImporterImpl extends PackageImporter {
 		Map<ImportedItem, ImportedItem> tmpImportItems = new LinkedHashMap<ImportedItem, ImportedItem>();
 		
 		@SuppressWarnings("unchecked")
-		List<Object> importedMetadata = MetadataSharing.getInstance().getMetadataSerializer().deserialize(xml, List.class);
+		List<Object> importedMetadata = MetadataSharing.getInstance().getMetadataSerializer().deserialize(xml, List.class, importedPackage.getOpenmrsVersion());
 		for (Object each : importedMetadata) {
 			ImportedItem importedItem = getExistingOrNewImportedItem(each);
 			tmpImportItems.put(importedItem, importedItem);

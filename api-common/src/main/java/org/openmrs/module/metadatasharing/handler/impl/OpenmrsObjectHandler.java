@@ -22,6 +22,8 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.metadatasharing.api.MetadataService;
+import org.openmrs.module.metadatasharing.handler.MetadataDeserializationHandler;
+import org.openmrs.module.metadatasharing.handler.MetadataDeserializer;
 import org.openmrs.module.metadatasharing.handler.MetadataPropertiesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataSaveHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataSearchHandler;
@@ -31,14 +33,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("metadatasharing.OpenmrsObjectHandler")
-public class OpenmrsObjectHandler implements MetadataPropertiesHandler<OpenmrsObject>, MetadataSearchHandler<OpenmrsObject>, MetadataSaveHandler<OpenmrsObject> {
+public class OpenmrsObjectHandler implements MetadataPropertiesHandler<OpenmrsObject>, MetadataSearchHandler<OpenmrsObject>, MetadataSaveHandler<OpenmrsObject>, MetadataDeserializationHandler<OpenmrsObject> {
 	
 	@Autowired
 	private OpenmrsClassScanner scanner;
 	
 	@Override
 	public int getPriority() {
-	    return 0;
+		return 0;
 	}
 	
 	@Override
@@ -63,7 +65,7 @@ public class OpenmrsObjectHandler implements MetadataPropertiesHandler<OpenmrsOb
 	
 	@Override
 	public Boolean getRetired(OpenmrsObject object) {
-	    return null;
+		return null;
 	}
 	
 	@Override
@@ -115,11 +117,15 @@ public class OpenmrsObjectHandler implements MetadataPropertiesHandler<OpenmrsOb
 			throw new DAOException("Error saving " + item.getClass().getName() + " [" + item.getUuid() + "]", e);
 		}
 	}
-
+	
 	@Override
-	public OpenmrsObject getItemById(Class<? extends OpenmrsObject> type,
-			Integer id) throws DAOException {
+	public OpenmrsObject getItemById(Class<? extends OpenmrsObject> type, Integer id) throws DAOException {
 		
 		return Context.getService(MetadataService.class).getItemById(type, id);
 	}
+	
+	@Override
+    public OpenmrsObject deserialize(MetadataDeserializer deserializer) {
+	    return null; //No custom deserialization.
+    }
 }

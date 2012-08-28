@@ -13,13 +13,15 @@
  */
 package org.openmrs.module.metadatasharing.serializer;
 
+import java.io.StringReader;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.module.metadatasharing.ExportedPackage;
-import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.Item;
+import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.serializer.converter.DateTimeConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.DoubleLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.FloatLocaleUSConverter;
@@ -31,6 +33,7 @@ import org.openmrs.module.metadatasharing.serializer.converter.ShortLocaleUSConv
 import org.openmrs.module.metadatasharing.serializer.converter.UserConverter;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernatePersistentCollectionMapper;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernateProxyMapper;
+import org.openmrs.module.metadatasharing.serializer.mapper.NonExistigFieldMapper;
 import org.openmrs.module.metadatasharing.subscription.SubscriptionHeader;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
@@ -38,6 +41,8 @@ import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.DataHolder;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -61,6 +66,8 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 @Component(MetadataSharingConsts.MODULE_ID + ".MetadataSerializer")
 public class MetadataSerializer implements OpenmrsSerializer {
 	
+	public static final String FROM_VERSION_CONTEXT = "fromVersion";
+	
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	private volatile XStream xstream;
@@ -76,6 +83,16 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	@Override
 	public <T> T deserialize(String xml, Class<? extends T> type) throws SerializationException {
 		return (T) getXstream().fromXML(xml);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T deserialize(String xml, Class<? extends T> type, String openmrsVersion) {
+		DataHolder dataHolder = getXstream().newDataHolder();
+		dataHolder.put(FROM_VERSION_CONTEXT, openmrsVersion);
+		
+		HierarchicalStreamReader reader = new DomDriver("UTF-8").createReader(new StringReader(xml));
+		
+		return (T) getXstream().unmarshal(reader, null, dataHolder);
 	}
 	
 	/**
@@ -116,6 +133,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 			
 			@Override
 			protected MapperWrapper wrapMapper(MapperWrapper next) {
+				next = new NonExistigFieldMapper(next);
 				next = new HibernateProxyMapper(next);
 				next = new HibernatePersistentCollectionMapper(next);
 				return next;

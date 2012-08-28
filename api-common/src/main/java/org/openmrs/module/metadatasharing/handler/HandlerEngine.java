@@ -60,6 +60,8 @@ public class HandlerEngine {
 	
 	private Map<Class<?>, MetadataHandler<?>> mergeHandlers;
 	
+	private Map<Class<?>, MetadataHandler<?>> deserializationHandlers;
+	
 	private Map<Class<?>, String> classes;
 	
 	private Map<String, Class<?>> types;
@@ -210,11 +212,13 @@ public class HandlerEngine {
 	public <T> MetadataSearchHandler<T> getSearchHandler(Class<? extends T> type) throws HandlerNotFoundException {
 		initHandlerEngine();
 		
+		Class<?> clazz = ClassUtil.getDeproxiedClass(type);
+		
 		@SuppressWarnings("unchecked")
-		MetadataSearchHandler<T> handler = (MetadataSearchHandler<T>) findBestMetadataHandler(type, searchHandlers);
+		MetadataSearchHandler<T> handler = (MetadataSearchHandler<T>) findBestMetadataHandler(clazz, searchHandlers);
 		
 		if (handler == null) {
-			throw new HandlerNotFoundException("Handler for " + type + " not found");
+			throw new HandlerNotFoundException("Handler for " + clazz + " not found");
 		}
 		return handler;
 	}
@@ -282,11 +286,27 @@ public class HandlerEngine {
 		Class<T> type = ClassUtil.getDeproxiedClass(object);
 		
 		@SuppressWarnings("unchecked")
-		MetadataMergeHandler<T> handler = (MetadataMergeHandler<T>) findBestMetadataHandler(type,
-		    mergeHandlers);
+		MetadataMergeHandler<T> handler = (MetadataMergeHandler<T>) findBestMetadataHandler(type, mergeHandlers);
 		
 		if (handler == null) {
 			throw new HandlerNotFoundException("Handler for " + type + " not found");
+		}
+		return handler;
+	}
+	
+	/**
+	 * @see MetadataDeserializationHandler
+	 */
+	public <T> MetadataDeserializationHandler<T> getDeserializationHandler(Class<? extends T> type) throws HandlerNotFoundException {
+		initHandlerEngine();
+		
+		Class<?> clazz = ClassUtil.getDeproxiedClass(type);
+		
+		@SuppressWarnings("unchecked")
+		MetadataDeserializationHandler<T> handler = (MetadataDeserializationHandler<T>) findBestMetadataHandler(clazz, deserializationHandlers);
+		
+		if (handler == null) {
+			throw new HandlerNotFoundException("Handler for " + clazz + " not found");
 		}
 		return handler;
 	}
@@ -391,29 +411,29 @@ public class HandlerEngine {
 		}
 	}
 	
-    /**
-     * @return the handlers
-     */
-    private Collection<MetadataHandler<?>> getHandlers() {
-    	if (handlers == null) {
-    		handlers = new ArrayList<MetadataHandler<?>>();
-    		@SuppressWarnings("rawtypes")
-            List<MetadataHandler> registeredComponents = Context.getRegisteredComponents(MetadataHandler.class);
-    		
-    		for (MetadataHandler<?> registeredComponent : registeredComponents) {
-	            handlers.add(registeredComponent);
-            }
-    	}
-    	return handlers;
-    }
-
-    /**
-     * @param handlers the handlers to set
-     */
-    void setHandlers(Collection<MetadataHandler<?>> handlers) {
-    	this.handlers = handlers;
-    }
-
+	/**
+	 * @return the handlers
+	 */
+	private Collection<MetadataHandler<?>> getHandlers() {
+		if (handlers == null) {
+			handlers = new ArrayList<MetadataHandler<?>>();
+			@SuppressWarnings("rawtypes")
+			List<MetadataHandler> registeredComponents = Context.getRegisteredComponents(MetadataHandler.class);
+			
+			for (MetadataHandler<?> registeredComponent : registeredComponents) {
+				handlers.add(registeredComponent);
+			}
+		}
+		return handlers;
+	}
+	
+	/**
+	 * @param handlers the handlers to set
+	 */
+	void setHandlers(Collection<MetadataHandler<?>> handlers) {
+		this.handlers = handlers;
+	}
+	
 	private void setupHandlers() {
 		typesHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		propertiesHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
@@ -421,6 +441,7 @@ public class HandlerEngine {
 		saveHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		priorityDependenciesHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		mergeHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
+		deserializationHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		
 		for (MetadataHandler<?> handler : getHandlers()) {
 			if (handler instanceof MetadataTypesHandler) {
@@ -474,6 +495,15 @@ public class HandlerEngine {
 				MetadataHandler<?> previousHandler = mergeHandlers.get(type);
 				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
 					mergeHandlers.put(type, handler);
+				}
+			}
+			
+			if (handler instanceof MetadataDeserializationHandler) {
+				Class<?> type = findSupportedType(MetadataDeserializationHandler.class, handler);
+				
+				MetadataHandler<?> previousHandler = deserializationHandlers.get(type);
+				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
+					deserializationHandlers.put(type, handler);
 				}
 			}
 		}
