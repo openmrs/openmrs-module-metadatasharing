@@ -14,7 +14,6 @@
 package org.openmrs.module.metadatasharing.serializer.converter;
 
 import org.openmrs.OpenmrsObject;
-import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
@@ -81,11 +80,7 @@ public class OpenmrsObjectConverter extends ReflectionConverter {
 	 */
 	@Override
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		Object obj = MetadataSharing.getInstance().getHandlerEngine().getDeserializationHandler((Class<?>) context.getRequiredType())
-		        .deserialize(new XStreamMetadataDeserializer(reader, context));
-		if (obj == null) {
-			obj = super.unmarshal(reader, context);
-		}
+		Object obj = super.unmarshal(reader, context);
 		
 		if (!persistIds(obj)) {
 			// make sure we don't try to persist this id

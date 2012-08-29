@@ -17,6 +17,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
+import org.openmrs.module.metadatasharing.converter.ConverterEngine;
 import org.openmrs.module.metadatasharing.handler.HandlerEngine;
 import org.openmrs.module.metadatasharing.mapper.ConceptMapper;
 import org.openmrs.module.metadatasharing.model.validator.PackageContainerValidator;
@@ -72,6 +73,9 @@ public class MetadataSharing implements ApplicationContextAware {
 	
 	@Autowired
 	private PackageValidator packageValidator;
+	
+	@Autowired
+	private ConverterEngine converterEngine;
 	
 	/**
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
@@ -153,6 +157,13 @@ public class MetadataSharing implements ApplicationContextAware {
 	 */
 	public PackageValidator getPackageValidator() {
 		return packageValidator;
+	}
+	
+	/**
+	 * @return the converterEngine
+	 */
+	public ConverterEngine getConverterEngine() {
+		return converterEngine;
 	}
 	
 	/**

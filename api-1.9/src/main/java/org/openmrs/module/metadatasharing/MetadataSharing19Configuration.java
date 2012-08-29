@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.metadatasharing;
 
+import org.openmrs.module.metadatasharing.converter.BaseConverter;
+import org.openmrs.module.metadatasharing.converter.ConceptMap19Converter;
 import org.openmrs.module.metadatasharing.handler.MetadataHandler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptMap19Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptReferenceTerm19Handler;
@@ -40,6 +42,14 @@ public class MetadataSharing19Configuration {
 	public MetadataHandler<?> getConceptMap19Handler() {
 		if (supportsConceptReferenceTerm()) {
 			return new ConceptMap19Handler();
+		}
+		return null;
+	}
+	
+	@Bean(name = "metadatashaing.ConceptMap19Converter")
+	public BaseConverter getConceptMap19Converter() {
+		if (supportsConceptReferenceTerm()) {
+			return new ConceptMap19Converter();
 		}
 		return null;
 	}

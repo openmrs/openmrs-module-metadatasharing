@@ -38,9 +38,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -70,6 +68,8 @@ public class VersionConverter {
 	//later quick access in case we are importing many concepts in one go
 	Map<String, String> tagNameUuidMap = null;
 	
+	Map<String, Node> references = new HashMap<String, Node>();
+	
 	/**
 	 * Converts an incoming 1.6 xml to match the 1.7+ concept name data model or vice versa,
 	 * depending on the values of the fromVersion and String toVersion arguments
@@ -83,16 +83,13 @@ public class VersionConverter {
 	 * @should convert a message down to one dot six
 	 */
 	public String convert(String xml, String fromVersion, String toVersion) throws SerializationException {
-		if (fromVersion == null && toVersion != null)
+		if (fromVersion == null || toVersion == null)
 			return xml;
+		
+		Document doc = fromXML(xml);
 		
 		if (fromVersion.startsWith("1.6.") && !toVersion.startsWith("1.6.")) {
 			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				dbf.setNamespaceAware(true);
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse(new InputSource(new StringReader(xml)));
-				
 				NodeList nameNodes = doc.getElementsByTagName(ConceptName.class.getName());
 				Map<String, Element> conceptNameTagNodesCache = new HashMap<String, Element>();
 				for (int i = 0; i < nameNodes.getLength(); i++) {
@@ -109,7 +106,8 @@ public class VersionConverter {
 								//Remember id so that we can get it later if referenced.
 								conceptNameTagNodesCache.put(conceptNameTagNode.getAttribute("id"), conceptNameTagNode);
 							} else {
-								conceptNameTagNode = conceptNameTagNodesCache.get(conceptNameTagNode.getAttribute("reference"));
+								conceptNameTagNode = conceptNameTagNodesCache.get(conceptNameTagNode
+								        .getAttribute("reference"));
 							}
 							
 							Element tagNode = getChildElement(conceptNameTagNode, "tag");
@@ -130,9 +128,9 @@ public class VersionConverter {
 						}
 					}
 					
-					conceptNameNode.appendChild(simpleElement(doc, "localePreferred", String.valueOf(isLocalePreferred)));
+					conceptNameNode.appendChild(newTextElement(doc, "localePreferred", String.valueOf(isLocalePreferred)));
 					if (conceptNameType != null) {
-						conceptNameNode.appendChild(simpleElement(doc, "conceptNameType", conceptNameType));
+						conceptNameNode.appendChild(newTextElement(doc, "conceptNameType", conceptNameType));
 					}
 					
 					// just remove tags elements
@@ -141,8 +139,6 @@ public class VersionConverter {
 						conceptNameNode.removeChild(tagsNode);
 					}
 				}
-				
-				xml = transForm(doc);
 			}
 			catch (Exception e) {
 				throw new SerializationException("Errow while converting from 1.6.x:", e);
@@ -151,11 +147,6 @@ public class VersionConverter {
 		} else if (toVersion.startsWith("1.6.") && !fromVersion.startsWith("1.6.")) {
 			tagNameUuidMap = new HashMap<String, String>();
 			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				dbf.setNamespaceAware(true);
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse(new InputSource(new StringReader(xml)));
-				
 				NodeList nameNodes = doc.getElementsByTagName(ConceptName.class.getName());
 				for (int i = 0; i < nameNodes.getLength(); ++i) {
 					Element name = (Element) nameNodes.item(i);
@@ -189,13 +180,15 @@ public class VersionConverter {
 						name.removeChild(localePreferredElement);
 				}
 				
-				xml = transForm(doc);
 			}
 			catch (Exception e) {
 				throw new SerializationException("Errow while converting to 1.6.x", e);
 			}
 			
 		}
+		
+		xml = toXML(doc);
+		
 		return xml;
 	}
 	
@@ -235,11 +228,11 @@ public class VersionConverter {
 		        : getConceptNameTagUuid(tagNameTemp));
 		tag.setAttributeNode(uuidAttr);
 		
-		tag.appendChild(simpleElement(doc, "tag", tagName));
-		tag.appendChild(simpleElement(doc, "description", tagDescription));
-		tag.appendChild(simpleElement(doc, "dateCreated",
+		tag.appendChild(newTextElement(doc, "tag", tagName));
+		tag.appendChild(newTextElement(doc, "description", tagDescription));
+		tag.appendChild(newTextElement(doc, "dateCreated",
 		    new SimpleDateFormat(MetadataSharingConsts.DATE_FORMAT).format(new Date())));
-		tag.appendChild(simpleElement(doc, "voided", "false"));
+		tag.appendChild(newTextElement(doc, "voided", "false"));
 		tags.appendChild(tag);
 	}
 	
@@ -264,14 +257,14 @@ public class VersionConverter {
 	}
 	
 	/**
-	 * Helper method to create an element like <tagName>value</tagName>
+	 * Helper method to create a text element
 	 * 
 	 * @param doc
 	 * @param tagName
 	 * @param value
 	 * @return
 	 */
-	private Node simpleElement(Document doc, String tagName, String value) {
+	private Node newTextElement(Document doc, String tagName, String value) {
 		Element el = doc.createElement(tagName);
 		el.setTextContent(value);
 		return el;
@@ -284,7 +277,7 @@ public class VersionConverter {
 	 * @param childTagName
 	 * @return
 	 */
-	private Element getChildElement(Element parent, String childTagName) {
+	private Element getChildElement(Node parent, String childTagName) {
 		NodeList children = parent.getChildNodes();
 		for (int i = 0; i < children.getLength(); ++i) {
 			Node child = children.item(i);
@@ -296,12 +289,31 @@ public class VersionConverter {
 		return null;
 	}
 	
-	private static String transForm(Document doc) throws TransformerFactoryConfigurationError, TransformerException {
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		StreamResult result = new StreamResult(new StringWriter());
-		transformer.transform(new DOMSource(doc), result);
-		return result.getWriter().toString();
+	private Document fromXML(String xml) throws SerializationException {
+	    Document doc;
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse(new InputSource(new StringReader(xml)));
+		}
+		catch (Exception e) {
+			throw new SerializationException(e);
+		}
+	    return doc;
+    }
+	
+	private static String toXML(Node doc) throws SerializationException {
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			StreamResult result = new StreamResult(new StringWriter());
+			transformer.transform(new DOMSource(doc), result);
+			return result.getWriter().toString();
+		}
+		catch (Exception e) {
+			throw new SerializationException(e);
+		}
 	}
 }

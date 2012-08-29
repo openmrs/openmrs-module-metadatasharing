@@ -13,14 +13,13 @@
  */
 package org.openmrs.module.metadatasharing.serializer;
 
-import java.io.StringReader;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
+import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.serializer.converter.DateTimeConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.DoubleLocaleUSConverter;
@@ -38,11 +37,10 @@ import org.openmrs.module.metadatasharing.subscription.SubscriptionHeader;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.DataHolder;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -86,13 +84,11 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> T deserialize(String xml, Class<? extends T> type, String openmrsVersion) {
-		DataHolder dataHolder = getXstream().newDataHolder();
-		dataHolder.put(FROM_VERSION_CONTEXT, openmrsVersion);
+	public <T> T deserialize(String xml, Class<? extends T> type, String openmrsVersion) throws SerializationException {
+		xml = MetadataSharing.getInstance().getConverterEngine()
+		        .convert(xml, openmrsVersion, OpenmrsConstants.OPENMRS_VERSION);
 		
-		HierarchicalStreamReader reader = new DomDriver("UTF-8").createReader(new StringReader(xml));
-		
-		return (T) getXstream().unmarshal(reader, null, dataHolder);
+		return (T) getXstream().fromXML(xml);
 	}
 	
 	/**

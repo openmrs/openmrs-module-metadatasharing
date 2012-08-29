@@ -60,8 +60,6 @@ public class HandlerEngine {
 	
 	private Map<Class<?>, MetadataHandler<?>> mergeHandlers;
 	
-	private Map<Class<?>, MetadataHandler<?>> deserializationHandlers;
-	
 	private Map<Class<?>, String> classes;
 	
 	private Map<String, Class<?>> types;
@@ -295,23 +293,6 @@ public class HandlerEngine {
 	}
 	
 	/**
-	 * @see MetadataDeserializationHandler
-	 */
-	public <T> MetadataDeserializationHandler<T> getDeserializationHandler(Class<? extends T> type) throws HandlerNotFoundException {
-		initHandlerEngine();
-		
-		Class<?> clazz = ClassUtil.getDeproxiedClass(type);
-		
-		@SuppressWarnings("unchecked")
-		MetadataDeserializationHandler<T> handler = (MetadataDeserializationHandler<T>) findBestMetadataHandler(clazz, deserializationHandlers);
-		
-		if (handler == null) {
-			throw new HandlerNotFoundException("Handler for " + clazz + " not found");
-		}
-		return handler;
-	}
-	
-	/**
 	 * Finds a supported type of the given handler
 	 * 
 	 * @param handlerType
@@ -441,7 +422,6 @@ public class HandlerEngine {
 		saveHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		priorityDependenciesHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		mergeHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
-		deserializationHandlers = new ConcurrentHashMap<Class<?>, MetadataHandler<?>>();
 		
 		for (MetadataHandler<?> handler : getHandlers()) {
 			if (handler instanceof MetadataTypesHandler) {
@@ -495,15 +475,6 @@ public class HandlerEngine {
 				MetadataHandler<?> previousHandler = mergeHandlers.get(type);
 				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
 					mergeHandlers.put(type, handler);
-				}
-			}
-			
-			if (handler instanceof MetadataDeserializationHandler) {
-				Class<?> type = findSupportedType(MetadataDeserializationHandler.class, handler);
-				
-				MetadataHandler<?> previousHandler = deserializationHandlers.get(type);
-				if (previousHandler == null || previousHandler.getPriority() < handler.getPriority()) {
-					deserializationHandlers.put(type, handler);
 				}
 			}
 		}
