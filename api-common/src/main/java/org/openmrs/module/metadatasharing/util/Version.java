@@ -95,19 +95,34 @@ public class Version implements Comparable<Version> {
 		return true;
 	}
 	
+	/**
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * @should compare versions correctly
+	 */
 	@Override
 	public int compareTo(Version o) {
-		if (major < o.major) {
-			return -1;
-		} else if (minor < o.minor) {
-			return -1;
-		} else if (maintenance < o.maintenance) {
-			return -1;
-		} else if (maintenance == o.maintenance) {
+		Integer majorInteger = new Integer(major);
+		Integer minorInteger = new Integer(minor);
+		Integer maintenanceInteger = new Integer(maintenance);
+		
+		Integer oMajorInteger = new Integer(o.major);
+		Integer oMinorInteger = new Integer(o.minor);
+		Integer oMaintenanceInteger = new Integer(o.maintenance);
+		
+		//perfect matches
+		if (majorInteger.compareTo(oMajorInteger) == 0 && minorInteger.compareTo(oMinorInteger) == 0
+		        && maintenanceInteger.compareTo(oMaintenanceInteger) == 0) {
 			return 0;
-		} else {
-			return -1;
 		}
+		//different maintenance versions
+		else if (majorInteger.compareTo(oMajorInteger) == 0 && minorInteger.compareTo(oMinorInteger) == 0) {
+			return maintenanceInteger.compareTo(oMaintenanceInteger);
+		}
+		//different minor versions
+		else if (majorInteger.compareTo(oMajorInteger) == 0) {
+			return minorInteger.compareTo(oMinorInteger);
+		}
+		//different majors versions
+		return majorInteger.compareTo(oMajorInteger);
 	}
-	
 }
