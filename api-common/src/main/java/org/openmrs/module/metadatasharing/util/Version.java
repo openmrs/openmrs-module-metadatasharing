@@ -101,28 +101,30 @@ public class Version implements Comparable<Version> {
 	 */
 	@Override
 	public int compareTo(Version o) {
-		Integer majorInteger = new Integer(major);
-		Integer minorInteger = new Integer(minor);
-		Integer maintenanceInteger = new Integer(maintenance);
-		
-		Integer oMajorInteger = new Integer(o.major);
-		Integer oMinorInteger = new Integer(o.minor);
-		Integer oMaintenanceInteger = new Integer(o.maintenance);
-		
 		//perfect matches
-		if (majorInteger.compareTo(oMajorInteger) == 0 && minorInteger.compareTo(oMinorInteger) == 0
-		        && maintenanceInteger.compareTo(oMaintenanceInteger) == 0) {
+		if (major == o.major && minor == o.minor && maintenance == o.maintenance) {
 			return 0;
 		}
 		//different maintenance versions
-		else if (majorInteger.compareTo(oMajorInteger) == 0 && minorInteger.compareTo(oMinorInteger) == 0) {
-			return maintenanceInteger.compareTo(oMaintenanceInteger);
+		else if (major == o.major && minor == o.minor) {
+			return compareInts(maintenance, o.maintenance);
 		}
 		//different minor versions
-		else if (majorInteger.compareTo(oMajorInteger) == 0) {
-			return minorInteger.compareTo(oMinorInteger);
+		else if (major == o.major) {
+			return compareInts(minor, o.minor);
 		}
 		//different majors versions
-		return majorInteger.compareTo(oMajorInteger);
+		return compareInts(major, o.major);
+	}
+	
+	/**
+	 * Compares two integers
+	 * 
+	 * @param int1
+	 * @param int2
+	 * @return 0 if they are equal, -1 if int1 is less or 1 if int1 is greater
+	 */
+	private int compareInts(int int1, int int2) {
+		return (int1 < int2 ? -1 : (int1 == int2 ? 0 : 1));
 	}
 }
