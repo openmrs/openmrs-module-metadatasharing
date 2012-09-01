@@ -27,9 +27,15 @@ import org.w3c.dom.NodeList;
 @Component(MetadataSharingConsts.MODULE_ID + ".ConceptMapConverter")
 public class ConceptMapConverter extends BaseConverter {
 
+	/**
+	 * @see org.openmrs.module.metadatasharing.converter.BaseConverter#convert(org.w3c.dom.Document, org.openmrs.module.metadatasharing.util.Version, org.openmrs.module.metadatasharing.util.Version, org.openmrs.module.metadatasharing.converter.BaseConverter.ConverterContext)
+	 * @should replace nothing if the from version is pre one nine
+	 * @should replace nothing if the to version is post one nine
+	 * @should convert the xml if from version is post one nine and to version is pre one nine
+	 */
 	@Override
     public void convert(Document doc, Version fromVersion, Version toVersion, ConverterContext context) {
-		if (fromVersion.compareTo(new Version("1.9")) < 0 && toVersion.compareTo(new Version("1.9")) >= 0) {
+		if (fromVersion.compareTo(new Version("1.9")) < 0 || toVersion.compareTo(new Version("1.9")) >= 0) {
 			return;
 		}
 		
