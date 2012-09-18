@@ -21,8 +21,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -113,7 +115,7 @@ public class OpenmrsClassScanner {
 	 * @throws IOException
 	 */
 	public <T> List<Class<T>> getClasses(Class<? extends T> type, boolean concrete) throws IOException {
-		List<Class<T>> types = new ArrayList<Class<T>>();
+		Set<Class<T>> types = new LinkedHashSet<Class<T>>();
 		String pattern = "classpath*:org/openmrs/**/*.class";
 		Resource[] resources = resourceResolver.getResources(pattern);
 		TypeFilter typeFilter = new AssignableTypeFilter(type);
@@ -138,7 +140,7 @@ public class OpenmrsClassScanner {
 				log.debug("Resource cannot be loaded: " + resource);
 			}
 		}
-		return types;
+		return new ArrayList<Class<T>>(types);
 	}
 	
 	/**
