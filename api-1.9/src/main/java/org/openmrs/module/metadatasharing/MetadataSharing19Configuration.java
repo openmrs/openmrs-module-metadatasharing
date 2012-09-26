@@ -13,20 +13,37 @@
  */
 package org.openmrs.module.metadatasharing;
 
+import org.openmrs.Role;
 import org.openmrs.module.metadatasharing.converter.BaseConverter;
 import org.openmrs.module.metadatasharing.converter.ConceptMap19Converter;
 import org.openmrs.module.metadatasharing.handler.MetadataHandler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptMap19Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptReferenceTerm19Handler;
+import org.openmrs.module.metadatasharing.handler.impl.ObjectHandler;
+import org.openmrs.module.metadatasharing.handler.impl.Role18Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MetadataSharing19Configuration {
 	
+	@Autowired
+	ObjectHandler objectHandler;
+	
 	public static boolean supportsConceptReferenceTerm() {
 		return ClassUtil.loadClass("org.openmrs.ConceptReferenceTerm") != null;
+	}
+	
+	public static boolean supportsChildRoles() {
+		try {
+	        Role.class.getDeclaredMethod("getChildRoles");
+	        return true;
+        }
+        catch (Exception e) {
+	        return false;
+        }
 	}
 	
 	@Bean(name = "metadatasharing.ConceptReferenceTerm19Handler")
@@ -50,6 +67,14 @@ public class MetadataSharing19Configuration {
 	public BaseConverter getConceptMap19Converter() {
 		if (supportsConceptReferenceTerm()) {
 			return new ConceptMap19Converter();
+		}
+		return null;
+	}
+	
+	@Bean(name = "metadatashaing.Role18Handler")
+	public MetadataHandler<?> getRole18Handler() {
+		if (supportsChildRoles()) {
+			return new Role18Handler(objectHandler);
 		}
 		return null;
 	}

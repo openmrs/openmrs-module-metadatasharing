@@ -13,17 +13,20 @@
  */
 package org.openmrs.module.metadatasharing.handler.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Role;
+import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPropertiesHandler;
 import org.openmrs.module.metadatasharing.util.DateUtil;
 import org.springframework.stereotype.Component;
 
 @Component("metadatasharing.RoleHandler")
-public class RoleHandler implements MetadataPropertiesHandler<Role> {
+public class RoleHandler implements MetadataPropertiesHandler<Role>, MetadataPriorityDependenciesHandler<Role> {
 	
 	@Override
 	public int getPriority() {
@@ -80,5 +83,16 @@ public class RoleHandler implements MetadataPropertiesHandler<Role> {
 	public Map<String, Object> getProperties(Role object) {
 		return Collections.emptyMap();
 	}
+
+	/**
+     * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
+     */
+    @Override
+    public List<Object> getPriorityDependencies(Role object) {
+    	if (object.getInheritedRoles() != null && !object.getInheritedRoles().isEmpty()) {
+    		return new ArrayList<Object>(object.getInheritedRoles());
+    	}
+	    return Collections.emptyList();
+    }
 	
 }
