@@ -101,8 +101,10 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	private Set<Item> relatedItems;
 	
 	/**
-	 * @since 1.0
+	 * @since 1.1
 	 */
+	private Boolean incrementalVersion;
+	
 	public Package() {
 		setUuid(UUID.randomUUID().toString());
 		dateCreated = new Date();
@@ -117,6 +119,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 		}
 		items = new LinkedHashSet<Item>();
 		relatedItems = new LinkedHashSet<Item>();
+		incrementalVersion = null;
 	}
 	
 	/**
@@ -299,6 +302,20 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	}
 	
 	/**
+	 * @since 1.1
+	 */
+	public Boolean isIncrementalVersion() {
+		return incrementalVersion;
+	}
+
+	/**
+	 * @since 1.1
+	 */
+	public void setIncrementalVersion(Boolean incrementalVersion) {
+		this.incrementalVersion = incrementalVersion;
+	}
+	
+	/**
 	 * Imperfect check to see what modules are required for the items in this package (based on
 	 * looking for java package names like org.openmrs.module.XYZ).
 	 * 
@@ -361,5 +378,6 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 		items = other.getItems();
 		relatedItems = other.getRelatedItems();
 		serializedPackage = other.getSerializedPackage();
+		incrementalVersion = other.isIncrementalVersion();
 	}
 }
