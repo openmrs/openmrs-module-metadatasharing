@@ -57,7 +57,9 @@ public class ConverterEngine {
 		ConverterContext context = new BaseConverter.ConverterContext();
 		
 		for (BaseConverter converter : converters) {
-			converter.convert(document, from, to, context);
+			if (converter != null) {
+				converter.convert(document, from, to, context);
+			}
 		}
 		
 		xml = toXML(document);

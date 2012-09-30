@@ -121,22 +121,22 @@ public class HibernateMetadataDAO implements MetadataDAO {
 			type = ClassUtil.getDeproxiedClass(type);
 			
 			if (Role.class.isAssignableFrom(type)) {
-				or.add(Restrictions.like("role", filter, MatchMode.START));
+				or.add(Restrictions.ilike("role", filter, MatchMode.START));
 				
 			} else if (Privilege.class.isAssignableFrom(type)) {
-				or.add(Restrictions.like("privilege", filter, MatchMode.START));
+				or.add(Restrictions.ilike("privilege", filter, MatchMode.START));
 				
 			} else if (RelationshipType.class.isAssignableFrom(type)) {
 				or.add(Restrictions.sqlRestriction("CONCAT(a_Is_To_B, CONCAT('/', b_Is_To_A)) like (?)", "%" + filter,
 				    new StringType()));
 			} else if (type.getSimpleName().equals("HtmlForm")) {
 				criteria.createAlias("form", "form");
-				or.add(Restrictions.like("form.name", filter, MatchMode.START));
+				or.add(Restrictions.ilike("form.name", filter, MatchMode.START));
 			} else if (OpenmrsMetadata.class.isAssignableFrom(type)) {
 				//It may happen that the name property is not defined for the specific metadata type so we need to test it.
 				String[] propertyNames = sessionFactory.getClassMetadata(type).getPropertyNames();
 				if (Arrays.asList(propertyNames).contains("name")) {
-					or.add(Restrictions.like("name", filter, MatchMode.START));
+					or.add(Restrictions.ilike("name", filter, MatchMode.START));
 				}
 			}
 		}
