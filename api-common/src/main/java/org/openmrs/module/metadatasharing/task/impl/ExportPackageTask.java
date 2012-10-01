@@ -22,6 +22,7 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -149,14 +150,7 @@ public class ExportPackageTask extends Task {
 			throw new APIException("Items failed validation");
 		}
 		
-		log("Adding mappings to Concepts");
-		if (MetadataSharing.getInstance().isAddLocalMappings()) {
-			for (Object explicitItem : explicitItems) {
-				if (explicitItem instanceof Concept) {
-					MetadataSharing.getInstance().getConceptMapper().addSystemConceptMap((Concept) explicitItem);
-				}
-			}
-		}
+		addMappingsToConcepts(explicitItems);
 		
 		log("Serializing items");
 		StringBuilder subpackage = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -169,6 +163,28 @@ public class ExportPackageTask extends Task {
 		return subpackage.toString();
 	}
 	
+	/**
+	 * Adds mappings to self concepts here if the admin so desires. <br/>
+	 * Only items in the list that are Concepts will get mappings <br/>
+	 * 
+	 * @see MetadataSharing#isAddLocalMappings()
+	 * @param packageItems the objects in the package
+	 * @should add local mapping to concept if admin desires
+	 * @should not add local mapping to concept if admin desires
+	 */
+	protected void addMappingsToConcepts(List<Object> explicitItems) {
+		log("Adding mappings to Concepts");
+		if (MetadataSharing.getInstance().isAddLocalMappings()) {
+			ConceptPubSubService pubsubService = Context.getService(ConceptPubSubService.class);
+			for (Object explicitItem : explicitItems) {
+				if (explicitItem instanceof Concept) {
+					//MetadataSharing.getInstance().getConceptMapper().addSystemConceptMap((Concept) explicitItem);
+					pubsubService.addLocalMappingToConcept((Concept) explicitItem);
+				}
+			}
+		}
+	}
+
 	private void resolveRelatedItems(final Object item) {
 		MetadataSharing.getInstance().getObjectVisitor().visitFields(item, true, new ObjectVisitor.FieldVisitor() {
 			
