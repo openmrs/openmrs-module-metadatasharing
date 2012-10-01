@@ -45,6 +45,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 	 * @should reject empty non-empty group and empty version
 	 * @should reject too long name
 	 * @should reject too long description
+	 * @should reject invalid package version
 	 */
 	@Override
 	public void validate(Object obj, Errors errors) {
@@ -66,6 +67,15 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 		if (pack.getGroupUuid() != null) {
 			ValidationUtils.rejectIfEmpty(errors, "version", "metadatasharing.error.package.field.empty");
 		}
+		
+		MetadataSharingService packageService = Context.getService(MetadataSharingService.class);
+		Package existingPackage = packageService.getImportedPackageByGroup(pack.getGroupUuid());
+		int existingVersion = existingPackage.getVersion();
+		int importedVersion = pack.getVersion();
+		
+		if ((pack.isIncrementalVersion() == true) && (existingVersion+1 != importedVersion)){
+			errors.rejectValue("version", "metadatasharing.error.package.invalidVersion", new Integer[] { importedVersion, existingVersion }, null);
+			}
 		
 		Map<String, String> missingRequiredModules = getMissingRequiredModules(pack);
 		for (Entry<String, String> missingRequiredModule : missingRequiredModules.entrySet()) {
