@@ -18,7 +18,7 @@ package org.openmrs.module.metadatasharing;
  */
 public enum ImportType {
 	CREATE("metadatasharing.import.type.create"), PREFER_MINE("metadatasharing.import.type.prefermine"), PREFER_THEIRS(
-	        "metadatasharing.import.type.prefertheirs"), OMIT("metadatasharing.import.type.omit");
+	        "metadatasharing.import.type.prefertheirs"), OMIT("metadatasharing.import.type.omit"), OVERWRITE_MINE("metadatasharing.import.type.overwritemine");
 	
 	private final String code;
 	
@@ -47,6 +47,10 @@ public enum ImportType {
     
     public boolean isOmit() {
     	return OMIT.equals(this);
+    }
+    
+    public boolean isOverwriteMine() {
+    	return OVERWRITE_MINE.equals(this);
     }
 
 }

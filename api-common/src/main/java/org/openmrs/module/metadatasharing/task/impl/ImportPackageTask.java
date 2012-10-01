@@ -113,7 +113,7 @@ public class ImportPackageTask extends Task {
 	}
 	
 	public void importItems(Collection<ImportedItem> importedItems) throws APIException, ValidationException {
-		EnumSet<ImportType> replaceable = EnumSet.of(ImportType.PREFER_MINE, ImportType.PREFER_THEIRS);
+		EnumSet<ImportType> replaceable = EnumSet.of(ImportType.PREFER_MINE, ImportType.PREFER_THEIRS, ImportType.OVERWRITE_MINE);
 		for (ImportedItem importedItem : importedItems) {
 			if (!replaceable.contains(importedItem.getImportType())) {
 				importedItem.setExisting(null);
@@ -143,7 +143,7 @@ public class ImportPackageTask extends Task {
 		for (ImportedItem importedItem : importedItems) {
 			if (importedItem.getIncoming() instanceof OpenmrsObject) {
 				OpenmrsObject incoming = (OpenmrsObject) importedItem.getIncoming();
-				RequiredDataAdvice.recursivelyHandle(SaveHandler.class, incoming, "Persisted through metadatasharing.");
+				RequiredDataAdvice.recursivelyHandle(SaveHandler.class, incoming, "Persisted through metadatasharing");
 			}
 		}
 		

@@ -110,7 +110,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 				}
 			});
 		} else {
-			if (importType.isPreferTheirs() || importType.isPreferMine()) {
+			if (importType.isPreferTheirs() || importType.isPreferMine() || importType.isOverwriteMine()) {
 				//Copy properties from the incoming object to the existing object				
 				Integer id = Handler.getId(existing);
 				
@@ -126,19 +126,41 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								@SuppressWarnings("unchecked")
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
 								
+								if (importType.isOverwriteMine()) {
+									Iterator<Object> it = existingCollection.iterator();
+									while(it.hasNext()) {
+										Object existingElement = it.next();
+										
+										boolean existingMissing = true;
+										for (Object incomingElement : incomingCollection) {
+											Object existingFound = incomingToExisting.get(incomingElement);
+											
+											if (existingFound != null || comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+												existingMissing = false;
+	                                        	break;
+	                                        }
+                                        }
+										
+										if (existingMissing) {
+											//Remove existing element if it is missing in incoming collection
+                                        	it.remove();
+										}
+									}
+								}
+								
 								for (Object incomingElement : incomingCollection) {
 									Object existing = incomingToExisting.get(incomingElement);
 									
 									if (existing == null) {
-										boolean missing = true;
+										boolean incomingMissing = true;
 										for (Object existingElement : existingCollection) {
 											if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
-												missing = false;
+												incomingMissing = false;
 												break;
 											}
 										}
 										
-										if (missing) {
+										if (incomingMissing) {
 											existingCollection.add(incomingElement);
 										}
 									}
