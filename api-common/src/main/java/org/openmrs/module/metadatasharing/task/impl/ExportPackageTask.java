@@ -88,18 +88,15 @@ public class ExportPackageTask extends Task {
 			
 			List<String> metadata = new ArrayList<String>();
 			
-			List<Item> pacakgeItems = new ArrayList<Item>(exportedPackage.getItems());
-			for (int from = 0, to = SUBPACKAGE_SIZE;; to += SUBPACKAGE_SIZE) {
-				if (to > pacakgeItems.size()) {
-					to = pacakgeItems.size();
+			List<Item> packageItems = new ArrayList<Item>(exportedPackage.getItems());
+			for (int from = 0; from < packageItems.size(); from += SUBPACKAGE_SIZE) {
+				int to = from + SUBPACKAGE_SIZE;
+				if (to > packageItems.size()) {
+					to = packageItems.size();
 				}
 				
-				log("Exporting subpackage[items from " + (from + 1) + " to " + to + "]");
-				metadata.add(exportSubpackage(pacakgeItems.subList(from, to)));
-				
-				if (to == pacakgeItems.size()) {
-					break;
-				}
+				log("Exporting subpackage [items from " + from + " to " + to + " of " + packageItems.size() + "]");
+				metadata.add(exportSubpackage(packageItems.subList(from, to)));
 			}
 			
 			log("Serialzing header");

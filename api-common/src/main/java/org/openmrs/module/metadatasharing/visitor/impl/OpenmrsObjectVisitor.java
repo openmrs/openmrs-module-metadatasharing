@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.User;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.reflection.ReplaceMethodInovker;
 import org.openmrs.module.metadatasharing.visitor.ObjectVisitor;
@@ -71,6 +72,10 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 	 */
 	@Override
 	public void visitFields(Object object, final boolean callBeforeExport, final FieldVisitor visitor) {
+		if (object instanceof User) {
+			return;
+		}
+		
 		if (object instanceof HibernateProxy) {
 			object = ((HibernateProxy) object).getHibernateLazyInitializer().getImplementation();
 		}
@@ -85,6 +90,10 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 			@Override
 			public void visit(String name, @SuppressWarnings("rawtypes") Class type,
 			                  @SuppressWarnings("rawtypes") Class definedIn, Object value) {
+				if (value instanceof User) {
+					return;
+				}
+				
 				if (value instanceof HibernateProxy) {
 					value = ((HibernateProxy) value).getHibernateLazyInitializer().getImplementation();
 				}
