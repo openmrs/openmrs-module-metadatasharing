@@ -60,15 +60,17 @@ public class MetadataZipper extends StringZipper {
 		String[] filenames = new String[files.length];
 		
 		files[0] = serializedPackage.getHeader();
-		files[1] = serializedPackage.getMetadata()[0];
-		
 		filenames[0] = HEADER_FILE;
-		filenames[1] = METADATA_FILE;
 		
-		for (int i = 2; i < files.length; i++) {
-			files[i] = serializedPackage.getMetadata()[i - 1];
-	        filenames[i] = METADATA_FILE + "." + i;
-        }
+		if (files.length > 1) {
+			files[1] = serializedPackage.getMetadata()[0];
+			filenames[1] = METADATA_FILE;
+			
+			for (int i = 2; i < files.length; i++) {
+				files[i] = serializedPackage.getMetadata()[i - 1];
+		        filenames[i] = METADATA_FILE + "." + i;
+	        }
+		}
 		
 		zip(output, filenames, files);
 	}
