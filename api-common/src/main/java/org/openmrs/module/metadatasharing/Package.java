@@ -304,8 +304,8 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	/**
 	 * @since 1.1
 	 */
-	public Boolean isIncrementalVersion() {
-		return incrementalVersion;
+	public boolean isIncrementalVersion() {
+		return (incrementalVersion != null) ? incrementalVersion : false;
 	}
 
 	/**
