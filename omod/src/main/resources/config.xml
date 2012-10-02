@@ -23,7 +23,11 @@
 	<!-- /Metadata Sharing Properties -->
 
 	<require_version>1.6</require_version>
-
+	
+	<require_modules>																										
+		<require_module version="1.0-SNAPSHOT">org.openmrs.module.conceptpubsub</require_module>
+	</require_modules>
+	
 	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.admin.list</point>

@@ -166,7 +166,7 @@ public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 	 */
 	@Override
 	public ImportedPackage saveImportedPackage(ImportedPackage importedPackage) {
-		ImportedPackage existingImportedPackage = getImportedPackageByGruop(importedPackage.getGroupUuid());
+		ImportedPackage existingImportedPackage = getImportedPackageByGroup(importedPackage.getGroupUuid());
 		if (existingImportedPackage != null && existingImportedPackage != importedPackage) {
 			importedPackage.setId(existingImportedPackage.getId());
 			sessionFactory.getCurrentSession().evict(existingImportedPackage);
@@ -195,10 +195,10 @@ public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.module.metadatasharing.api.db.SubscriptionDAO#getImportedPackageByGruop(java.lang.String)
+	 * @see org.openmrs.module.metadatasharing.api.db.SubscriptionDAO#getImportedPackageByGroup(java.lang.String)
 	 */
 	@Override
-	public ImportedPackage getImportedPackageByGruop(String group) {
+	public ImportedPackage getImportedPackageByGroup(String group) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ImportedPackage.class);
 		criteria.add(Restrictions.eq("groupUuid", group));
 		return (ImportedPackage) criteria.uniqueResult();
