@@ -173,12 +173,11 @@ public class ExportPackageTask extends Task {
 	 * @should not add local mapping to concept if admin desires
 	 */
 	protected void addMappingsToConcepts(List<Object> explicitItems) {
-		log("Adding mappings to Concepts");
 		if (MetadataSharing.getInstance().isAddLocalMappings()) {
+			log("Adding mappings to Concepts");
 			ConceptPubSubService pubsubService = Context.getService(ConceptPubSubService.class);
 			for (Object explicitItem : explicitItems) {
 				if (explicitItem instanceof Concept) {
-					//MetadataSharing.getInstance().getConceptMapper().addSystemConceptMap((Concept) explicitItem);
 					pubsubService.addLocalMappingToConcept((Concept) explicitItem);
 				}
 			}

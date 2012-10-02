@@ -98,7 +98,7 @@ public interface MetadataSharingDAO {
 	/**
 	 * @see MetadataSharingService#getImportedPackageByGroup(String)
 	 */
-	ImportedPackage getImportedPackageByGruop(String group);
+	ImportedPackage getImportedPackageByGroup(String group);
 	
 	/**
 	 * @see MetadataSharingService#saveImportedPackage(ImportedPackage)
