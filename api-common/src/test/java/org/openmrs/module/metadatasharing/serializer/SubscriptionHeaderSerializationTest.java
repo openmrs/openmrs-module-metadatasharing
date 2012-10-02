@@ -63,9 +63,26 @@ public class SubscriptionHeaderSerializationTest extends BaseModuleContextSensit
 	@Test
 	public void serialize() throws Exception {
 		String xml = serializer.serialize(header);
+		System.out.println(xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/contentUri", xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader", xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader/name", xml);
+	}
+	
+	/**
+	 * Tests if serialization ignores null values
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void serializationIgnoresNullValues() throws Exception {
+		ExportedPackage pack = header.getPackageHeader();
+		pack.setIncrementalVersion(null);
+		String xml = serializer.serialize(header);
+		XMLAssert.assertXpathExists("/subscriptionHeader/contentUri", xml);
+		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader", xml);
+		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader/name", xml);
+		XMLAssert.assertXpathNotExists("/subscriptionHeader/packageHeader/incrementalVersion", xml);
 	}
 	
 	/**

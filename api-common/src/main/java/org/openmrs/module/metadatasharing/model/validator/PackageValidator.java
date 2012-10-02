@@ -45,6 +45,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 	 * @should reject too long name
 	 * @should reject too long description
 	 * @should reject invalid package version
+	 * @should reject invalid package version
 	 */
 	@Override
 	public void validate(Object obj, Errors errors) {
@@ -70,7 +71,11 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 		if (pack.isIncrementalVersion()) {
 			MetadataSharingService packageService = Context.getService(MetadataSharingService.class);
 			Package existingPackage = packageService.getImportedPackageByGroup(pack.getGroupUuid());
-			int existingVersion = existingPackage.getVersion();
+			int existingVersion = 0;
+			
+			if(existingPackage != null)
+				existingVersion = existingPackage.getVersion();
+			
 			int importedVersion = pack.getVersion();
 			
 			if (existingVersion + 1 != importedVersion) {
