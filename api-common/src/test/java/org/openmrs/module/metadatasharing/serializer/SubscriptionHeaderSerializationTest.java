@@ -63,7 +63,6 @@ public class SubscriptionHeaderSerializationTest extends BaseModuleContextSensit
 	@Test
 	public void serialize() throws Exception {
 		String xml = serializer.serialize(header);
-		System.out.println(xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/contentUri", xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader", xml);
 		XMLAssert.assertXpathExists("/subscriptionHeader/packageHeader/name", xml);

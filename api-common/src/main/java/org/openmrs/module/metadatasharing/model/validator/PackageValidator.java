@@ -44,8 +44,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 	 * @should reject empty non-empty group and empty version
 	 * @should reject too long name
 	 * @should reject too long description
-	 * @should reject invalid package version
-	 * @should reject invalid package version
+	 * @should reject package version if not subsequent incremental version
 	 */
 	@Override
 	public void validate(Object obj, Errors errors) {
