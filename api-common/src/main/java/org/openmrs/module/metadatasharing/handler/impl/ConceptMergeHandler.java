@@ -34,7 +34,9 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 			locales.addAll(getLocales(incomingConcept.getNames()));
 			
 			for (Locale locale : locales) {
-				if (importType.isPreferTheirs()) {
+				if (importType.isOverwriteMine()) {
+					//Assume incoming is valid
+				} else if (importType.isPreferTheirs()) {
 					//Only one preferred name is allowed for a locale.
 					ConceptName preferredName = incomingConcept.getPreferredName(locale);
 					if (preferredName != null) {

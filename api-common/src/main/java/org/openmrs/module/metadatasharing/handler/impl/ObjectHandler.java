@@ -127,41 +127,32 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
 								
 								if (importType.isOverwriteMine()) {
-									Iterator<Object> it = existingCollection.iterator();
-									while(it.hasNext()) {
-										Object existingElement = it.next();
-										
-										boolean existingMissing = true;
-										for (Object incomingElement : incomingCollection) {
-											Object existingFound = incomingToExisting.get(incomingElement);
-											
-											if (existingFound != null || comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
-												existingMissing = false;
-	                                        	break;
-	                                        }
-                                        }
-										
-										if (existingMissing) {
-											//Remove existing element if it is missing in incoming collection
-                                        	it.remove();
-										}
-									}
-								}
-								
-								for (Object incomingElement : incomingCollection) {
-									Object existing = incomingToExisting.get(incomingElement);
+									existingCollection.clear();
 									
-									if (existing == null) {
-										boolean incomingMissing = true;
-										for (Object existingElement : existingCollection) {
-											if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
-												incomingMissing = false;
-												break;
-											}
-										}
+									for (Object incomingElement : incomingCollection) {
+	                                    Object existing = incomingToExisting.get(incomingElement);
+	                                    if (existing != null) {
+	                                    	existingCollection.add(existing);
+	                                    } else {
+	                                    	existingCollection.add(incomingElement);
+	                                    }
+                                    }
+								} else {
+									for (Object incomingElement : incomingCollection) {
+										Object existing = incomingToExisting.get(incomingElement);
 										
-										if (incomingMissing) {
-											existingCollection.add(incomingElement);
+										if (existing == null) {
+											boolean incomingMissing = true;
+											for (Object existingElement : existingCollection) {
+												if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+													incomingMissing = false;
+													break;
+												}
+											}
+											
+											if (incomingMissing) {
+												existingCollection.add(incomingElement);
+											}
 										}
 									}
 								}
