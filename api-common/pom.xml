@@ -25,15 +25,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<dependencies>
-	    
-	    <dependency>
-			<groupId>org.openmrs.module</groupId>
-			<artifactId>conceptpubsub-api</artifactId>
-			<type>jar</type>
-		</dependency>
-				
-	</dependencies>
 
 </project>
