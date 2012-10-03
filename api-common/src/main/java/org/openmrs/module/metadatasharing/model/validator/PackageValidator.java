@@ -67,7 +67,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 			ValidationUtils.rejectIfEmpty(errors, "version", "metadatasharing.error.package.field.empty");
 		}
 		
-		if (pack.isIncrementalVersion()) {
+		if (pack instanceof ImportedPackage && pack.isIncrementalVersion()) {
 			MetadataSharingService packageService = Context.getService(MetadataSharingService.class);
 			Package existingPackage = packageService.getImportedPackageByGroup(pack.getGroupUuid());
 			int existingVersion = 0;
