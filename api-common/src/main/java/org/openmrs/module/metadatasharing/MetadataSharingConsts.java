@@ -56,12 +56,6 @@ public class MetadataSharingConsts {
 	public static final String GP_PERSIST_IDS_FOR_CLASSES = MODULE_ID + ".persistIdsForClasses";
 	
 	/**
-	 * Global property name, specifies whether the concept mappings to the local dictionary should
-	 * be created when exporting concepts
-	 */
-	public static final String GP_ADD_LOCAL_MAPPINGS = MODULE_ID + ".addLocalMappings";
-	
-	/**
 	 * Global property name, Comma-separated list of concept source Ids for preferred sources, in
 	 * case an incoming concept has duplicate mappings to any of these sources, no confirmation will
 	 * be required unless its datatype or concept class differs from that of the existing concept
