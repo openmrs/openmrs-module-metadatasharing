@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.conceptpubsub.ConceptPubSub;
 import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.powermock.api.mockito.PowerMockito;
@@ -31,7 +32,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * Tests the {@link ExportPackageTask} class
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Context.class, MetadataSharing.class})
+@PrepareForTest({Context.class, MetadataSharing.class, ConceptPubSub.class})
 public class ExportPackageTaskTest {
 	
 	/**
@@ -45,10 +46,9 @@ public class ExportPackageTaskTest {
 		ConceptPubSubService service = PowerMockito.mock(ConceptPubSubService.class);
 		PowerMockito.when(Context.getService(ConceptPubSubService.class)).thenReturn(service);
 		
-		PowerMockito.mockStatic(MetadataSharing.class);
-		MetadataSharing mockInstance = Mockito.mock(MetadataSharing.class);
-		PowerMockito.when(MetadataSharing.getInstance()).thenReturn(mockInstance);
-		Mockito.when(mockInstance.isAddLocalMappings()).thenReturn(true); // this is the only difference from test setup below
+		PowerMockito.mockStatic(ConceptPubSub.class);
+		
+		Mockito.when(ConceptPubSub.isAddLocalMappings()).thenReturn(true); // this is the only difference from test setup below
 		
 		// do the test
 		Concept stubconcept = new Concept();
@@ -78,7 +78,10 @@ public class ExportPackageTaskTest {
 		PowerMockito.mockStatic(MetadataSharing.class);
 		MetadataSharing mockInstance = Mockito.mock(MetadataSharing.class);
 		PowerMockito.when(MetadataSharing.getInstance()).thenReturn(mockInstance);
-		Mockito.when(mockInstance.isAddLocalMappings()).thenReturn(false); // this is the only difference from test setup above
+		
+		PowerMockito.mockStatic(ConceptPubSub.class);
+		
+		Mockito.when(ConceptPubSub.isAddLocalMappings()).thenReturn(false); // this is the only difference from test setup above
 		
 		// do the test
 		Concept stubconcept = new Concept();
