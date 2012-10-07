@@ -84,12 +84,6 @@ public class ConfigureController {
 		String days = Context.getAdministrationService().getGlobalProperty(MetadataSharingConsts.GP_INTERVAL_DAYS, "1");
 		configureForm.setIntervalDays(Integer.valueOf(days));
 		
-		String addLocalMappingsString = Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS, "true");
-		configureForm
-		        .setAddLocalMappings(Boolean.valueOf((StringUtils.isNotBlank(addLocalMappingsString) ? addLocalMappingsString
-		                : "true")));
-		
 		configureForm.setWebservicesKey(Context.getAdministrationService().getGlobalProperty(
 		    MetadataSharingConsts.GP_WEBSERVICES_KEY, ""));
 		
@@ -124,8 +118,6 @@ public class ConfigureController {
 			}
 			
 			saveGlobalProperty(MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE, configureForm.getConceptSourceUuid());
-			
-			saveGlobalProperty(MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS, configureForm.getAddLocalMappings().toString());
 			
 			String[] sourceIds = ServletRequestUtils.getStringParameters(request, "preferredSourceIds");
 			

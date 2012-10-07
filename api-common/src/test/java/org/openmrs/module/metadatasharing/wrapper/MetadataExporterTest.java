@@ -45,38 +45,6 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 	 * @see {@link MetadataExporter#exportPackage()}
 	 */
 	@Test
-	@Verifies(value = "should not create mappings to local source if the related global property is set to false", method = "exportPackage()")
-	public void exportPackage_shouldNotCreateMappingsToLocalSourceIfTheRelatedGlobalPropertyIsSetToFalse() throws Exception {
-		Concept c = new Concept();
-		c.addName(new ConceptName("c", Locale.ENGLISH));
-		c.setUuid("c");
-		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
-		Context.getConceptService().saveConcept(c);
-		
-		final String conceptUUId = "c";
-		int initialMapCount = Context.getConceptService().getConceptByUuid(conceptUUId).getConceptMappings().size();
-		
-		//disable exporting concept mappings
-		AdministrationService administrationService = Context.getAdministrationService();
-		GlobalProperty property = administrationService.getGlobalPropertyObject(MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS);
-		String value = "false";
-		if (property == null) {
-			property = new GlobalProperty(MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS, value);
-		} else {
-			property.setPropertyValue(value);
-		}
-		administrationService.saveGlobalProperty(property);
-		ImportExportTestUtils.exportPackage(null,
-		    Collections.singletonList(Handler.getItemByUuid(Concept.class, conceptUUId)));
-		//The system mapping shouldn't have been created
-		Assert.assertEquals(initialMapCount, Context.getConceptService().getConceptByUuid(conceptUUId).getConceptMappings()
-		        .size());
-	}
-	
-	/**
-	 * @see {@link MetadataExporter#exportPackage()}
-	 */
-	@Test
 	@Verifies(value = "should create mappings to local source by default", method = "exportPackage()")
 	public void exportPackage_shouldCreateMappingsToLocalSourceByDefault() throws Exception {
 		Concept c = new Concept();
