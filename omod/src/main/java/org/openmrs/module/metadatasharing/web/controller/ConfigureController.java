@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.ConceptSource;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;

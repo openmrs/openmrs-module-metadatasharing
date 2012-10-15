@@ -79,10 +79,11 @@ public class SubscriptionUpdaterImpl implements SubscriptionUpdater {
 				importedPackage.setSubscriptionStatus(SubscriptionStatus.DUPLICATE_SUBSCRIPTION);
 				return header;
 			}
-		} else if (!importedPackage.getGroupUuid().equals(header.getPackageHeader().getGroupUuid())) { //the group has changed? something is wrong
-			importedPackage.setSubscriptionStatus(SubscriptionStatus.INVALID_SUBSCRIPTION);
-			return header;
 		}
+//		} else if (!importedPackage.getGroupUuid().equals(header.getPackageHeader().getGroupUuid())) { //the group has changed? something is wrong
+//			importedPackage.setSubscriptionStatus(SubscriptionStatus.INVALID_SUBSCRIPTION);
+//			return header;
+//		}
 		
 		importedPackage.setRemoteVersion(header.getPackageHeader().getVersion());
 		if (importedPackage.getDateImported() == null || importedPackage.getVersion() == null
