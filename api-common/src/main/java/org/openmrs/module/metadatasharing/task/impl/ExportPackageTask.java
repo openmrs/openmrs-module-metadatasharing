@@ -22,7 +22,6 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.conceptpubsub.ConceptPubSub;
 import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
@@ -174,7 +173,7 @@ public class ExportPackageTask extends Task {
 	 * @should not add local mapping to concept if admin desires
 	 */
 	protected void addMappingsToConcepts(List<Object> explicitItems) {
-		if (ConceptPubSub.isAddLocalMappings()) {
+		if (Context.getService(ConceptPubSubService.class).isAddLocalMappingOnExport()) {
 			log("Adding mappings to Concepts");
 			ConceptPubSubService pubsubService = Context.getService(ConceptPubSubService.class);
 			for (Object explicitItem : explicitItems) {
@@ -185,7 +184,7 @@ public class ExportPackageTask extends Task {
 		}
 		
 	}
-
+	
 	private void resolveRelatedItems(final Object item) {
 		MetadataSharing.getInstance().getObjectVisitor().visitFields(item, true, new ObjectVisitor.FieldVisitor() {
 			

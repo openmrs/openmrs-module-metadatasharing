@@ -32,23 +32,23 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * Tests the {@link ExportPackageTask} class
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Context.class, MetadataSharing.class, ConceptPubSub.class})
+@PrepareForTest({ Context.class, MetadataSharing.class, ConceptPubSub.class })
 public class ExportPackageTaskTest {
 	
 	/**
-     * @see ExportPackageTask#addMappingsToConcepts(List)
-     * @verifies add local mapping to concept if admin desires
-     */
-    @Test
-    public void addMappingsToConcepts_shouldAddLocalMappingToConceptIfAdminDesires() throws Exception {
-    	// set up the mocks for the ConceptSubPubService method
+	 * @see ExportPackageTask#addMappingsToConcepts(List)
+	 * @verifies add local mapping to concept if admin desires
+	 */
+	@Test
+	public void addMappingsToConcepts_shouldAddLocalMappingToConceptIfAdminDesires() throws Exception {
+		// set up the mocks for the ConceptSubPubService method
 		PowerMockito.mockStatic(Context.class);
 		ConceptPubSubService service = PowerMockito.mock(ConceptPubSubService.class);
 		PowerMockito.when(Context.getService(ConceptPubSubService.class)).thenReturn(service);
 		
 		PowerMockito.mockStatic(ConceptPubSub.class);
 		
-		Mockito.when(ConceptPubSub.isAddLocalMappings()).thenReturn(true); // this is the only difference from test setup below
+		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(true); // this is the only difference from test setup below
 		
 		// do the test
 		Concept stubconcept = new Concept();
@@ -62,15 +62,15 @@ public class ExportPackageTaskTest {
 		// verify that the service method was called
 		
 		Mockito.verify(service).addLocalMappingToConcept(stubconcept);
-    }
-
+	}
+	
 	/**
-     * @see ExportPackageTask#addMappingsToConcepts(List)
-     * @verifies not add local mapping to concept if admin desires
-     */
-    @Test
-    public void addMappingsToConcepts_shouldNotAddLocalMappingToConceptIfAdminDesires() throws Exception {
-    	// set up the mocks for the ConceptSubPubService method
+	 * @see ExportPackageTask#addMappingsToConcepts(List)
+	 * @verifies not add local mapping to concept if admin desires
+	 */
+	@Test
+	public void addMappingsToConcepts_shouldNotAddLocalMappingToConceptIfAdminDesires() throws Exception {
+		// set up the mocks for the ConceptSubPubService method
 		PowerMockito.mockStatic(Context.class);
 		ConceptPubSubService service = PowerMockito.mock(ConceptPubSubService.class);
 		PowerMockito.when(Context.getService(ConceptPubSubService.class)).thenReturn(service);
@@ -81,7 +81,7 @@ public class ExportPackageTaskTest {
 		
 		PowerMockito.mockStatic(ConceptPubSub.class);
 		
-		Mockito.when(ConceptPubSub.isAddLocalMappings()).thenReturn(false); // this is the only difference from test setup above
+		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(false); // this is the only difference from test setup above
 		
 		// do the test
 		Concept stubconcept = new Concept();
@@ -95,5 +95,5 @@ public class ExportPackageTaskTest {
 		// verify that the service method was called
 		
 		Mockito.verifyZeroInteractions(service);
-    }
+	}
 }

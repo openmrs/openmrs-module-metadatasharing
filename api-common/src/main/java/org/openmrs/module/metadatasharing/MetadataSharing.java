@@ -17,6 +17,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.Module;
 import org.openmrs.module.ModuleFactory;
 import org.openmrs.module.conceptpubsub.ConceptPubSub;
+import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
 import org.openmrs.module.metadatasharing.converter.ConverterEngine;
 import org.openmrs.module.metadatasharing.handler.HandlerEngine;
@@ -169,11 +170,11 @@ public class MetadataSharing implements ApplicationContextAware {
 	
 	/**
 	 * @return the boolean value of global property with name GP_CONFIGURED
+	 * 
+	 * @deprecated since 1.1 first time configuration no longer required
 	 */
 	public boolean isConfigured() {
-		Boolean configured = Boolean.valueOf(Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_CONFIGURED, "false"));
-		return configured;
+		return true;
 	}
 	
 	/**
@@ -191,26 +192,21 @@ public class MetadataSharing implements ApplicationContextAware {
 	
 	/**
 	 * @return
-	 * @Deprecated use {@link ConceptPubSub#isAddLocalMappings()}
+	 * @deprecated since 1.1, use {@link ConceptPubSub#isAddLocalMappings()}
 	 */
 	@Deprecated
 	public boolean isAddLocalMappings() {
-		return ConceptPubSub.isAddLocalMappings();
+		return Context.getService(ConceptPubSubService.class).isAddLocalMappingOnExport();
 	}
 	
 	/**
 	 * Defines if system concept source has been already configured
 	 * 
 	 * @return true if concept source is configured and exists, false otherwise
+	 * @deprecated since 1.1, use {@link ConceptPubSubService#isLocalSourceConfigured()}
 	 */
 	public boolean isConceptSourceConfigured() {
-		String conceptSourceUuid = Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE);
-		if (conceptSourceUuid == null) {
-			return false;
-		}
-		
-		return Context.getConceptService().getConceptSourceByUuid(conceptSourceUuid) != null;
+		return Context.getService(ConceptPubSubService.class).isLocalSourceConfigured();
 	}
 	
 	/**

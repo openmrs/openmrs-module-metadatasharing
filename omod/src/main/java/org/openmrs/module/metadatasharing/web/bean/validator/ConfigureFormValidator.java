@@ -5,7 +5,6 @@ import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.web.bean.ConfigureForm;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
@@ -29,10 +28,6 @@ public class ConfigureFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ConfigureForm configureForm = (ConfigureForm) target;
-		
-		if (Boolean.TRUE.equals(configureForm.getAddLocalMappings())) {
-			ValidationUtils.rejectIfEmpty(errors, "conceptSourceUuid", "metadatasharing.error.emptyConceptSource");
-		}
 		
 		if (configureForm.getNotifyAutomatically().equals(true)) {
 			Integer days = configureForm.getIntervalDays();
