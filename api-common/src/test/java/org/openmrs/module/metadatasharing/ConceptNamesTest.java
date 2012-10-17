@@ -57,6 +57,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
@@ -74,6 +77,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
 				
 				Context.getConceptService().saveConcept(concept);
 			}
@@ -96,7 +102,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "AAG", "a", "b"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
 				}
@@ -125,6 +131,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
@@ -143,6 +152,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 			}
 			
@@ -160,7 +172,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("AA", "a"));
+				expectedNames.addAll(Arrays.asList("AA", "AAG", "a"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
 				}
@@ -189,6 +201,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
@@ -206,6 +221,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
 				
 				Context.getConceptService().saveConcept(concept);
 			}
@@ -228,7 +246,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "AAG","a", "b"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
 				}
