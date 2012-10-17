@@ -94,6 +94,6 @@ public class ExportPackageTaskTest {
 		
 		// verify that the service method was called
 		
-		Mockito.verifyZeroInteractions(service);
+		Mockito.verify(service, Mockito.times(0)).addLocalMappingToConcept((Concept) Mockito.any());
 	}
 }
