@@ -17,8 +17,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptDescription;
+import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
@@ -50,20 +53,18 @@ public class ConceptMirrorTest extends BaseShareTest {
 			
 			@Override
 			public List<?> prepareExportServer() throws Exception {
-				Concept concept = new Concept();
+				Concept concept = newConcept(7);
 				concept.setUuid(conceptUuid);
 				
-				Concept concept1 = new Concept(1);
+				Concept concept1 = newConcept(1);
 				concept1.setUuid(answer1ConceptUuid);
-				concept1.setDescriptions(new HashSet<ConceptDescription>());
-				ConceptAnswer conceptAnswer1 = new ConceptAnswer(1);
+				ConceptAnswer conceptAnswer1 = newConceptAnswer(1);
 				conceptAnswer1.setAnswerConcept(concept1);
 				concept.addAnswer(conceptAnswer1);
 				
-				Concept concept2 = new Concept(2);
+				Concept concept2 = newConcept(2);
 				concept2.setUuid(answer2ConceptUuid);
-				concept2.setDescriptions(new HashSet<ConceptDescription>());
-				ConceptAnswer conceptAnswer2 = new ConceptAnswer(2);
+				ConceptAnswer conceptAnswer2 = newConceptAnswer(2);
 				conceptAnswer2.setAnswerConcept(concept2);
 				concept.addAnswer(conceptAnswer2);
 				
@@ -76,20 +77,18 @@ public class ConceptMirrorTest extends BaseShareTest {
 			 */
 			@Override
 			public void prepareImportServer() throws Exception {
-				Concept concept = new Concept();
+				Concept concept = newConcept(7);
 				concept.setUuid(conceptUuid);
 				
-				Concept concept1 = new Concept(1);
+				Concept concept1 = newConcept(1);
 				concept1.setUuid(answer1ConceptUuid);
-				concept1.setDescriptions(new HashSet<ConceptDescription>());
-				ConceptAnswer conceptAnswer1 = new ConceptAnswer(1);
+				ConceptAnswer conceptAnswer1 = newConceptAnswer(1);
 				conceptAnswer1.setAnswerConcept(concept1);
 				concept.addAnswer(conceptAnswer1);
 				
-				Concept concept2 = new Concept(2);
+				Concept concept2 = newConcept(2);
 				concept2.setUuid(answer2ConceptUuid);
-				concept2.setDescriptions(new HashSet<ConceptDescription>());
-				ConceptAnswer conceptAnswer2 = new ConceptAnswer(2);
+				ConceptAnswer conceptAnswer2 = newConceptAnswer(2);
 				conceptAnswer2.setAnswerConcept(concept2);
 				concept.addAnswer(conceptAnswer2);
 				
@@ -114,9 +113,43 @@ public class ConceptMirrorTest extends BaseShareTest {
 				Set<String> expectedAnswers = new HashSet<String>();
 				expectedAnswers.addAll(Arrays.asList(answer1ConceptUuid, answer2ConceptUuid));
 				for (ConceptAnswer answer : answers) {
-					assertTrue(answer.getAnswerConcept().getUuid() + " missing", expectedAnswers.remove(answer.getAnswerConcept().getUuid()));
+					assertTrue(answer.getAnswerConcept().getUuid() + " missing",
+					    expectedAnswers.remove(answer.getAnswerConcept().getUuid()));
 				}
 			}
 		});
+	}
+	
+	private Concept newConcept(Integer id) {
+		Concept concept = new Concept();
+		concept.setUuid(newUuid(Concept.class, id));
+		ConceptName name = new ConceptName(newName(Concept.class, id), Locale.ENGLISH);
+		name.setUuid(newUuid(ConceptName.class, id));
+		concept.addName(name);
+		ConceptDescription description = new ConceptDescription(newDescription(Concept.class, id), Locale.ENGLISH);
+		description.setUuid(newUuid(ConceptDescription.class, id));
+		concept.addDescription(description);
+		Context.getConceptService().saveConcept(concept);
+		return concept;
+	}
+	
+	private ConceptAnswer newConceptAnswer(Integer id) {
+		ConceptAnswer conceptAnswer = new ConceptAnswer(id);
+		conceptAnswer.setUuid(UUID.randomUUID().toString());
+		conceptAnswer.setDateCreated(new Date());
+		conceptAnswer.setCreator(Context.getAuthenticatedUser());
+		return conceptAnswer;
+	}
+	
+	private String newName(Class<?> type, Integer id) {
+		return type.getName() + "_" + id + "_name";
+	}
+	
+	private String newDescription(Class<?> type, Integer id) {
+		return type.getName() + "_" + id + "_description";
+	}
+	
+	private String newUuid(Class<?> type, Integer id) {
+		return type.getName() + "_" + id + "_uuid";
 	}
 }
