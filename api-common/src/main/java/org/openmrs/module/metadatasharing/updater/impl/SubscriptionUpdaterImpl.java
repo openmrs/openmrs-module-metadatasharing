@@ -80,10 +80,8 @@ public class SubscriptionUpdaterImpl implements SubscriptionUpdater {
 				return header;
 			}
 		}
-//		} else if (!importedPackage.getGroupUuid().equals(header.getPackageHeader().getGroupUuid())) { //the group has changed? something is wrong
-//			importedPackage.setSubscriptionStatus(SubscriptionStatus.INVALID_SUBSCRIPTION);
-//			return header;
-//		}
+		
+		importedPackage.setGroupUuid(header.getPackageHeader().getGroupUuid());
 		
 		importedPackage.setRemoteVersion(header.getPackageHeader().getVersion());
 		if (importedPackage.getDateImported() == null || importedPackage.getVersion() == null
@@ -91,6 +89,7 @@ public class SubscriptionUpdaterImpl implements SubscriptionUpdater {
 			importedPackage.setSubscriptionStatus(SubscriptionStatus.UPDATE_AVAILABLE);
 			importedPackage.setName(header.getPackageHeader().getName());
 			importedPackage.setDescription(header.getPackageHeader().getDescription());
+			importedPackage.setDateCreated(header.getPackageHeader().getDateCreated());
 		} else {
 			importedPackage.setSubscriptionStatus(SubscriptionStatus.UP_TO_DATE);
 		}
