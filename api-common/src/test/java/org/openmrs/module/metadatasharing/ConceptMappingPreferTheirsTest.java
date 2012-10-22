@@ -29,6 +29,8 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
+import org.openmrs.module.metadatasharing.mock.ConceptMock;
+import org.openmrs.module.metadatasharing.wrapper.PackageExporter;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 /**
@@ -125,6 +127,43 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				}
 			}
 		});
+	}
+	
+	@Test
+	public void shouldUpdateRelatedConceptSourceWhenImportedAgain() throws Exception {
+		Concept concept = ConceptMock.newInstance().addMapping("1", "source").addPreferredName("hiv", Locale.ENGLISH)
+		        .saveConcept().getConcept();
+		PackageExporter exporter = MetadataSharing.getInstance().newPackageExporter();
+		exporter.addItem(concept);
+		exporter.getExportedPackage().setName("pack");
+		exporter.getExportedPackage().setDescription("pack");
+		exporter.exportPackage();
+		ExportedPackage pack = exporter.getExportedPackage();
+		
+		ConceptSource conceptSource = Context.getConceptService().getConceptSourceByName("source");
+		conceptSource.setDescription("Updated description");
+		PackageExporter updateExporter = MetadataSharing.getInstance().newPackageExporter();
+		updateExporter.addItem(concept);
+		updateExporter.getExportedPackage().setName("updated pack");
+		updateExporter.getExportedPackage().setDescription("updated pack");
+		updateExporter.exportPackage();
+		ExportedPackage updatedPack = updateExporter.getExportedPackage();
+		
+		deleteAllData();
+		initializeInMemoryDatabase();
+		authenticate();
+		
+		PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
+		importer.loadSerializedPackage(pack.getSerializedPackage());
+		importer.importPackage();
+		
+		PackageImporter updateImporter = MetadataSharing.getInstance().newPackageImporter();
+		updateImporter.loadSerializedPackage(updatedPack.getSerializedPackage());
+		updateImporter.setImportConfig(ImportConfig.valueOf(ImportMode.PARENT_AND_CHILD));
+		updateImporter.importPackage();
+		
+		ConceptSource source = Context.getConceptService().getConceptSourceByName("source");
+		Assert.assertEquals("Updated description", source.getDescription());
 	}
 	
 }

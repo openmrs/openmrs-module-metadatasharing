@@ -89,17 +89,10 @@ public class ImportPackageTask extends Task {
 			log("Updating mappings");
 			Date dateImported = new Date();
 			for (Item item : packageImporter.getImportedPackage().getItems()) {
-				ImportedItem importedItem = MetadataSharing.getService().getImportedItemByUuid(item.getContainedClass(),
-				    item.getUuid());
-				if (importedItem != null) {
-					if (importedItem.getExisting() == null) {
-						Object existing = Handler.getItemByUuid(item.getContainedClass(), item.getUuid());
-						importedItem.setExisting(existing);
-					}
-					importedItem.setAssessed(false);
-					importedItem.setDateImported(dateImported);
-					MetadataSharing.getService().persistImportedItem(importedItem);
-				}
+				updateItemMapping(item, dateImported);
+			}
+			for (Item item : packageImporter.getImportedPackage().getRelatedItems()) {
+				updateItemMapping(item, dateImported);
 			}
 			packageImporter.getImportedPackage().setDateImported(dateImported);
 			MetadataSharing.getService().saveImportedPackage(packageImporter.getImportedPackage());
@@ -111,6 +104,20 @@ public class ImportPackageTask extends Task {
 			throw new TaskException(msg, e);
 		}
 	}
+
+	private void updateItemMapping(Item item, Date dateImported) {
+	    ImportedItem importedItem = MetadataSharing.getService().getImportedItemByUuid(item.getContainedClass(),
+	        item.getUuid());
+	    if (importedItem != null) {
+	    	if (importedItem.getExisting() == null) {
+	    		Object existing = Handler.getItemByUuid(item.getContainedClass(), item.getUuid());
+	    		importedItem.setExisting(existing);
+	    	}
+	    	importedItem.setAssessed(false);
+	    	importedItem.setDateImported(dateImported);
+	    	MetadataSharing.getService().persistImportedItem(importedItem);
+	    }
+    }
 	
 	public void importItems(Collection<ImportedItem> importedItems) throws APIException, ValidationException {
 		EnumSet<ImportType> replaceable = EnumSet.of(ImportType.PREFER_MINE, ImportType.PREFER_THEIRS, ImportType.OVERWRITE_MINE);
