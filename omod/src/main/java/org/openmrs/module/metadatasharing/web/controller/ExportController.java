@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -417,8 +417,8 @@ public class ExportController {
 	PackageExporter exporter, Errors errors, @ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, Model model, SessionStatus session) {
 		if (packageItems.getItems().get("Concept") != null) {
-			if (Context.getService(ConceptPubSubService.class).isAddLocalMappingOnExport()
-			        && !Context.getService(ConceptPubSubService.class).isLocalSourceConfigured()) {
+			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()
+			        && !Context.getService(MetadataMappingService.class).isLocalSourceConfigured()) {
 				errors.rejectValue("package", "metadatasharing.error.conceptSource.notConfigured");
 				return EDIT_PATH;
 			}

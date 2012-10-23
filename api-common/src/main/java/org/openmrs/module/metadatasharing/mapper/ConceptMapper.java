@@ -17,7 +17,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class ConceptMapper {
 	 */
 	@Deprecated
 	public ConceptSource getSystemConceptSource() throws APIException {
-		return Context.getService(ConceptPubSubService.class).getLocalSource();
+		return Context.getService(MetadataMappingService.class).getLocalSource();
 	}
 	
 	/**
@@ -53,6 +53,6 @@ public class ConceptMapper {
 	 */
 	@Deprecated
 	public void addSystemConceptMap(Concept concept) throws APIException {
-		Context.getService(ConceptPubSubService.class).addLocalMappingToConcept(concept);
+		Context.getService(MetadataMappingService.class).addLocalMappingToConcept(concept);
 	}
 }

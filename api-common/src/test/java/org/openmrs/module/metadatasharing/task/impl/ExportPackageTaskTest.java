@@ -21,8 +21,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.conceptpubsub.ConceptPubSub;
-import org.openmrs.module.conceptpubsub.api.ConceptPubSubService;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -32,7 +31,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * Tests the {@link ExportPackageTask} class
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class, MetadataSharing.class, ConceptPubSub.class })
+@PrepareForTest({ Context.class, MetadataSharing.class })
 public class ExportPackageTaskTest {
 	
 	/**
@@ -43,10 +42,8 @@ public class ExportPackageTaskTest {
 	public void addMappingsToConcepts_shouldAddLocalMappingToConceptIfAdminDesires() throws Exception {
 		// set up the mocks for the ConceptSubPubService method
 		PowerMockito.mockStatic(Context.class);
-		ConceptPubSubService service = PowerMockito.mock(ConceptPubSubService.class);
-		PowerMockito.when(Context.getService(ConceptPubSubService.class)).thenReturn(service);
-		
-		PowerMockito.mockStatic(ConceptPubSub.class);
+		MetadataMappingService service = PowerMockito.mock(MetadataMappingService.class);
+		PowerMockito.when(Context.getService(MetadataMappingService.class)).thenReturn(service);
 		
 		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(true); // this is the only difference from test setup below
 		
@@ -72,14 +69,12 @@ public class ExportPackageTaskTest {
 	public void addMappingsToConcepts_shouldNotAddLocalMappingToConceptIfAdminDesires() throws Exception {
 		// set up the mocks for the ConceptSubPubService method
 		PowerMockito.mockStatic(Context.class);
-		ConceptPubSubService service = PowerMockito.mock(ConceptPubSubService.class);
-		PowerMockito.when(Context.getService(ConceptPubSubService.class)).thenReturn(service);
+		MetadataMappingService service = PowerMockito.mock(MetadataMappingService.class);
+		PowerMockito.when(Context.getService(MetadataMappingService.class)).thenReturn(service);
 		
 		PowerMockito.mockStatic(MetadataSharing.class);
 		MetadataSharing mockInstance = Mockito.mock(MetadataSharing.class);
 		PowerMockito.when(MetadataSharing.getInstance()).thenReturn(mockInstance);
-		
-		PowerMockito.mockStatic(ConceptPubSub.class);
 		
 		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(false); // this is the only difference from test setup above
 		
