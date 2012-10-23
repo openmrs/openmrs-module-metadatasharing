@@ -127,17 +127,12 @@ public class ExportPackageTask extends Task {
 	private String exportSubpackage(List<Item> packageItems) throws SerializationException {
 		List<Object> explicitItems = new ArrayList<Object>();
 		
-		log("Preparing items to export");
+		log("Validating items");
 		for (Item packageItem : packageItems) {
 			Object item = Handler.getItemByUuid(packageItem.getContainedClass(), packageItem.getUuid());
-			
-			try {
-				ValidateUtil.validate(item);
+			if (validateItem(item)) {
+				addLocalMappingToConcept(item);
 			}
-			catch (Exception e) {
-				log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
-			}
-			
 			explicitItems.add(item);
 		}
 		
@@ -150,8 +145,6 @@ public class ExportPackageTask extends Task {
 			throw new APIException("Items failed validation");
 		}
 		
-		addMappingsToConcepts(explicitItems);
-		
 		log("Serializing items");
 		StringBuilder subpackage = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		subpackage.append(MetadataSharing.getInstance().getMetadataSerializer().serialize(explicitItems)).append("\n");
@@ -163,26 +156,33 @@ public class ExportPackageTask extends Task {
 		return subpackage.toString();
 	}
 	
+	private boolean validateItem(Object item) {
+		try {
+			ValidateUtil.validate(item);
+		}
+		catch (Exception e) {
+			log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/**
-	 * Adds mappings to self concepts here if the admin so desires. <br/>
-	 * Only items in the list that are Concepts will get mappings <br/>
+	 * Adds local mapping to concept here if the admin so desires. <br/>
+	 * Only an item which is Concept will get mapping <br/>
 	 * 
 	 * @see MetadataSharing#isAddLocalMappings()
-	 * @param packageItems the objects in the package
+	 * @param the object
 	 * @should add local mapping to concept if admin desires
 	 * @should not add local mapping to concept if admin desires
 	 */
-	protected void addMappingsToConcepts(List<Object> explicitItems) {
-		if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()) {
-			log("Adding mappings to Concepts");
-			MetadataMappingService pubsubService = Context.getService(MetadataMappingService.class);
-			for (Object explicitItem : explicitItems) {
-				if (explicitItem instanceof Concept) {
-					pubsubService.addLocalMappingToConcept((Concept) explicitItem);
-				}
+	protected void addLocalMappingToConcept(Object object) {
+		if (object instanceof Concept) {
+			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()) {
+				Context.getService(MetadataMappingService.class).addLocalMappingToConcept((Concept) object);
 			}
 		}
-		
 	}
 	
 	private void resolveRelatedItems(final Object item) {
@@ -204,12 +204,8 @@ public class ExportPackageTask extends Task {
 					Item packageItem = Item.valueOf(object);
 					if (!exportedPackage.getItems().contains(packageItem)
 					        && exportedPackage.getRelatedItems().add(packageItem)) {
-						try {
-							ValidateUtil.validate(object);
-						}
-						catch (Exception e) {
-							log(Handler.getRegisteredType(object) + " [" + Handler.getUuid(object) + "] failed validation",
-							    e);
+						if (validateItem(object)) {
+							addLocalMappingToConcept(object);
 						}
 						
 						resolveRelatedItems(object);

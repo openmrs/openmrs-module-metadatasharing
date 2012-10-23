@@ -35,7 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ExportPackageTaskTest {
 	
 	/**
-	 * @see ExportPackageTask#addMappingsToConcepts(List)
+	 * @see ExportPackageTask#addLocalMappingToConcept(List)
 	 * @verifies add local mapping to concept if admin desires
 	 */
 	@Test
@@ -52,9 +52,7 @@ public class ExportPackageTaskTest {
 		stubconcept.setId(1234); // for pre-1.9 .equals comparisons
 		stubconcept.setUuid("aaa1234567890"); // for 1.9+ .equals comparisons
 		
-		List<Object> items = new ArrayList<Object>();
-		items.add(stubconcept);
-		new ExportPackageTask(null, false).addMappingsToConcepts(items);
+		new ExportPackageTask(null, false).addLocalMappingToConcept(stubconcept);
 		
 		// verify that the service method was called
 		
@@ -62,7 +60,7 @@ public class ExportPackageTaskTest {
 	}
 	
 	/**
-	 * @see ExportPackageTask#addMappingsToConcepts(List)
+	 * @see ExportPackageTask#addLocalMappingToConcept(List)
 	 * @verifies not add local mapping to concept if admin desires
 	 */
 	@Test
@@ -85,7 +83,7 @@ public class ExportPackageTaskTest {
 		
 		List<Object> items = new ArrayList<Object>();
 		items.add(stubconcept);
-		new ExportPackageTask(null, false).addMappingsToConcepts(items);
+		new ExportPackageTask(null, false).addLocalMappingToConcept(items);
 		
 		// verify that the service method was called
 		
