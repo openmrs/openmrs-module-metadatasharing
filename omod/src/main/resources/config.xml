@@ -25,7 +25,7 @@
 	<require_version>1.6</require_version>
 	
 	<require_modules>																										
-		<require_module version="1.0-SNAPSHOT">org.openmrs.module.metadatamapping</require_module>
+		<require_module version="1.0">org.openmrs.module.metadatamapping</require_module>
 	</require_modules>
 	
 	<!-- Extensions -->

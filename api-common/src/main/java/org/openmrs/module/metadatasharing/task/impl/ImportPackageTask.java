@@ -106,6 +106,10 @@ public class ImportPackageTask extends Task {
 	}
 
 	private void updateItemMapping(Item item, Date dateImported) {
+		if (item.getContainedClass() == null) {
+			return;
+		}
+		
 	    ImportedItem importedItem = MetadataSharing.getService().getImportedItemByUuid(item.getContainedClass(),
 	        item.getUuid());
 	    if (importedItem != null) {
