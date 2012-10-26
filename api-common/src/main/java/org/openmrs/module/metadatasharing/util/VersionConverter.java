@@ -70,6 +70,8 @@ public class VersionConverter {
 	
 	Map<String, Node> references = new HashMap<String, Node>();
 	
+	Integer referenceId = Integer.MAX_VALUE;
+	
 	/**
 	 * Converts an incoming 1.6 xml to match the 1.7+ concept name data model or vice versa,
 	 * depending on the values of the fromVersion and String toVersion arguments
@@ -209,6 +211,15 @@ public class VersionConverter {
 			nameNode.appendChild(tags);
 		}
 		
+		String tagNameTemp = tagName.toLowerCase();
+		String uuid = getConceptNameTagUuid(tagNameTemp);
+		
+		Node node = references.get(uuid);
+		if (node != null) {
+			tags.appendChild(node);
+			return;
+		}
+		
 		/* Something like this:
 		 * <conceptNameTag id="31" uuid="4ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC">
 		 *     <tag>preferred</tag>
@@ -223,10 +234,10 @@ public class VersionConverter {
 		//Otherwise it will fail for null uuids and at this point the concept name tag 
 		//hasn't yet been invoked to set the existing tag that has a uuid and  matches the name
 		Attr uuidAttr = doc.createAttribute("uuid");
-		String tagNameTemp = tagName.toLowerCase();
-		uuidAttr.setTextContent((tagNameUuidMap.containsKey(tagNameTemp)) ? tagNameUuidMap.get(tagNameTemp)
-		        : getConceptNameTagUuid(tagNameTemp));
+		
+		uuidAttr.setTextContent(uuid);
 		tag.setAttributeNode(uuidAttr);
+		tag.setAttribute("id", referenceId.toString());
 		
 		tag.appendChild(newTextElement(doc, "tag", tagName));
 		tag.appendChild(newTextElement(doc, "description", tagDescription));
@@ -234,6 +245,11 @@ public class VersionConverter {
 		    new SimpleDateFormat(MetadataSharingConsts.DATE_FORMAT).format(new Date())));
 		tag.appendChild(newTextElement(doc, "voided", "false"));
 		tags.appendChild(tag);
+		
+		Element tagReference = doc.createElement("org.openmrs.ConceptNameTag");
+		tagReference.setAttribute("reference", referenceId.toString());
+		referenceId--;
+		references.put(uuid, tagReference);
 	}
 	
 	/**
@@ -244,7 +260,11 @@ public class VersionConverter {
 	 * @return uuid
 	 */
 	private String getConceptNameTagUuid(String tag) {
-		String uuid = null;
+		String uuid = tagNameUuidMap.get(tag);
+		if (uuid != null) {
+			return uuid;
+		}
+		
 		ConceptNameTag conceptNameTag = Context.getConceptService().getConceptNameTagByName(tag);
 		if (conceptNameTag != null)
 			uuid = conceptNameTag.getUuid();
