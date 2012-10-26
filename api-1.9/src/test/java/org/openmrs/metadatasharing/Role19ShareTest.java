@@ -24,12 +24,10 @@ import org.openmrs.module.metadatasharing.ImportMode;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
-
 /**
  * Test importing {@link Role}.
  */
 public class Role19ShareTest extends BaseShareTest {
-	
 	
 	@Test
 	public void shouldImportNestedRoles() throws Exception {
@@ -51,6 +49,48 @@ public class Role19ShareTest extends BaseShareTest {
 		Assert.assertEquals(8, parentRole.getChildRoles().size());
 		
 		Role childRole = userService.getRole("LacollineProvider");
+		
+		Assert.assertNotNull(childRole);
+		Assert.assertTrue(parentRole.getChildRoles().contains(childRole));
+	}
+	
+	@Test
+	public void shouldImportRolesTwice() throws Exception {
+		PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
+		importer.loadSerializedPackageStream(getClass().getResourceAsStream("/packages/Roles_and_privileges-3.zip"));
+		
+		importer.setImportConfig(ImportConfig.valueOf(ImportMode.PARENT_AND_CHILD));
+		
+		importer.importPackage();
+		
+		Context.flushSession();
+		Context.clearSession();
+		
+		UserService userService = Context.getUserService();
+		
+		Role parentRole = userService.getRole("Provider");
+		
+		Assert.assertNotNull(parentRole);
+		Assert.assertEquals(8, parentRole.getChildRoles().size());
+		
+		Role childRole = userService.getRole("LacollineProvider");
+		
+		Assert.assertNotNull(childRole);
+		Assert.assertTrue(parentRole.getChildRoles().contains(childRole));
+		
+		importer = MetadataSharing.getInstance().newPackageImporter();
+		importer.loadSerializedPackageStream(getClass().getResourceAsStream("/packages/Roles_and_privileges-3.zip"));
+		
+		importer.setImportConfig(ImportConfig.valueOf(ImportMode.PARENT_AND_CHILD));
+		
+		importer.importPackage();
+		
+		parentRole = userService.getRole("Provider");
+		
+		Assert.assertNotNull(parentRole);
+		Assert.assertEquals(8, parentRole.getChildRoles().size());
+		
+		childRole = userService.getRole("LacollineProvider");
 		
 		Assert.assertNotNull(childRole);
 		Assert.assertTrue(parentRole.getChildRoles().contains(childRole));

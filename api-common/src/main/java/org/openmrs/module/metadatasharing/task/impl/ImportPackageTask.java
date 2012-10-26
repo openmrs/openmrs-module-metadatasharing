@@ -28,6 +28,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.handler.SaveHandler;
 import org.openmrs.module.metadatasharing.ImportType;
 import org.openmrs.module.metadatasharing.ImportedItem;
@@ -113,7 +114,7 @@ public class ImportPackageTask extends Task {
 	    ImportedItem importedItem = MetadataSharing.getService().getImportedItemByUuid(item.getContainedClass(),
 	        item.getUuid());
 	    if (importedItem != null) {
-	    	if (importedItem.getExisting() == null) {
+	    	if (importedItem.getExistingUuid() == null) {
 	    		Object existing = Handler.getItemByUuid(item.getContainedClass(), item.getUuid());
 	    		importedItem.setExisting(existing);
 	    	}
@@ -124,9 +125,8 @@ public class ImportPackageTask extends Task {
     }
 	
 	public void importItems(Collection<ImportedItem> importedItems) throws APIException, ValidationException {
-		EnumSet<ImportType> replaceable = EnumSet.of(ImportType.PREFER_MINE, ImportType.PREFER_THEIRS, ImportType.OVERWRITE_MINE);
 		for (ImportedItem importedItem : importedItems) {
-			if (!replaceable.contains(importedItem.getImportType())) {
+			if (importedItem.getImportType().isCreate()) {
 				importedItem.setExisting(null);
 			}
 		}
@@ -214,6 +214,10 @@ public class ImportPackageTask extends Task {
 				saveItem(importedItem, savedItems);
 			}
 		}
+		
+		//Clean up to save memory
+		Context.flushSession();
+		Context.clearSession();
 	}
 	
 	/**

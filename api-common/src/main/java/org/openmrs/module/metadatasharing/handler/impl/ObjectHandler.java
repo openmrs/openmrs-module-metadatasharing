@@ -118,7 +118,12 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 					
 					@Override
 					public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object incomingField) {
-						if (incomingField instanceof Collection) {
+						if (Collection.class.isAssignableFrom(type)) {
+							//If the collection field is null then do nothing
+							if (incomingField == null) {
+								return;
+							}
+							
 							Object existingField = visitor.readField(existing, fieldName, definedIn);
 							if (existingField instanceof Collection) {
 								@SuppressWarnings("unchecked")
