@@ -150,7 +150,7 @@ public class PackageImporterImpl extends PackageImporter {
 	 * @see org.openmrs.module.metadatasharing.wrapper.PackageImporter#saveState()
 	 */
 	@Override
-	public void saveState() {		
+	public void saveState() {
 		//Save and move all parts to cache
 		for (Entry<Integer, List<ImportedItem>> list : importedItems.entrySet()) {
 			MetadataSharing.getService().persistImportedItems(list.getValue());
@@ -201,7 +201,8 @@ public class PackageImporterImpl extends PackageImporter {
 		Map<ImportedItem, ImportedItem> tmpImportItems = new LinkedHashMap<ImportedItem, ImportedItem>();
 		
 		@SuppressWarnings("unchecked")
-		List<Object> importedMetadata = MetadataSharing.getInstance().getMetadataSerializer().deserialize(xml, List.class, importedPackage.getOpenmrsVersion());
+		List<Object> importedMetadata = MetadataSharing.getInstance().getMetadataSerializer()
+		        .deserialize(xml, List.class, importedPackage.getOpenmrsVersion());
 		for (Object each : importedMetadata) {
 			ImportedItem importedItem = getExistingOrNewImportedItem(each);
 			tmpImportItems.put(importedItem, importedItem);
@@ -213,7 +214,8 @@ public class PackageImporterImpl extends PackageImporter {
 			resolveRelatedImportItems(unresolvedItem, tmpImportItems);
 		}
 		
-		MetadataSharing.getInstance().getResolverEngine().resolve(tmpImportItems.keySet(), importedPackage.getImportConfig());
+		MetadataSharing.getInstance().getResolverEngine()
+		        .resolve(tmpImportItems.keySet(), importedPackage.getImportConfig());
 		
 		List<ImportedItem> resolvedItems = new ArrayList<ImportedItem>(tmpImportItems.keySet());
 		
@@ -243,8 +245,8 @@ public class PackageImporterImpl extends PackageImporter {
 		for (int i = 0; i < metadata.length; i++) {
 			if (getPackage().getOpenmrsVersion() != null) {
 				try {
-					metadata[i] = converter.convert(metadata[i], getPackage()
-					        .getOpenmrsVersion(), OpenmrsConstants.OPENMRS_VERSION);
+					metadata[i] = converter.convert(metadata[i], getPackage().getOpenmrsVersion(),
+					    OpenmrsConstants.OPENMRS_VERSION);
 				}
 				catch (SerializationException e) {
 					throw new IOException(e);
@@ -296,14 +298,19 @@ public class PackageImporterImpl extends PackageImporter {
 		} else {
 			importItem.setIncoming(item);
 			
+			Object existing = null;
+			
 			if (importItem.getExistingUuid() != null) {
-				Object existing = Handler.getItemByUuid(item.getClass(), importItem.getExistingUuid());
-				if (existing != null) {
-					importItem.setExisting(existing);
-				} else {
-					importItem.setExistingUuid(null);
-					importItem.setImportType(ImportType.CREATE);
-				}
+				existing = Handler.getItemByUuid(item.getClass(), importItem.getExistingUuid());
+			} else {
+				existing = Handler.getItemByUuid(item.getClass(), Handler.getUuid(item));
+			}
+			
+			if (existing != null) {
+				importItem.setExisting(existing);
+			} else {
+				importItem.setExistingUuid(null);
+				importItem.setImportType(ImportType.CREATE);
 			}
 		}
 		return importItem;
