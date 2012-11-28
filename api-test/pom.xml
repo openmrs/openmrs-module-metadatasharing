@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>metadatasharing-api-test</artifactId>
-	<packaging>pom</packaging>
 	<name>Metadata Sharing Module API Test</name>
 	<description>API Test project for Metadata Sharing Module</description>
 
