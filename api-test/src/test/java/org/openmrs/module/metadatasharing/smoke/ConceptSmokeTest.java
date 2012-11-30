@@ -14,6 +14,7 @@ public class ConceptSmokeTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void importConceptsMVP191Small1() throws Exception {
 		executeDataSet(INITIAL_XML_DATASET_PACKAGE_PATH);
+		executeDataSet("conceptDatatypes.xml");
 		authenticate();
 		
 		PackageImporter metadataImporter = MetadataSharing.getInstance().newPackageImporter();
