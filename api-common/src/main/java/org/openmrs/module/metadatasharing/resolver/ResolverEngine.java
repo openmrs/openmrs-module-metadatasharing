@@ -14,6 +14,8 @@
 package org.openmrs.module.metadatasharing.resolver;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,8 @@ import org.openmrs.module.metadatasharing.ImportConfig;
 import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Processes items before importing with the registered resolvers.
@@ -37,6 +41,7 @@ import org.openmrs.module.metadatasharing.reflection.ClassUtil;
  * 
  * @see Resolver
  */
+@Component("metadatasharing.ResolverEngine")
 public class ResolverEngine {
 	
 	private List<Resolver<?>> resolvers;
@@ -44,8 +49,15 @@ public class ResolverEngine {
 	/**
 	 * @param resolvers the resolvers to set
 	 */
+	@Autowired
 	public void setResolvers(List<Resolver<?>> resolvers) {
 		this.resolvers = resolvers;
+		Collections.sort(resolvers, new Comparator<Resolver<?>>() {
+
+			@Override
+            public int compare(Resolver<?> o1, Resolver<?> o2) {
+	            return ((Integer) o2.getPriority()).compareTo(o1.getPriority());
+            }});
 	}
 	
 	/**

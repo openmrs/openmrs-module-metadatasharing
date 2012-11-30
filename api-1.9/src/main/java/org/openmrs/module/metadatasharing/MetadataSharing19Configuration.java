@@ -22,6 +22,10 @@ import org.openmrs.module.metadatasharing.handler.impl.ConceptReferenceTerm19Han
 import org.openmrs.module.metadatasharing.handler.impl.ObjectHandler;
 import org.openmrs.module.metadatasharing.handler.impl.Role18Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
+import org.openmrs.module.metadatasharing.resolver.ConceptReferenceTerm19Resolver;
+import org.openmrs.module.metadatasharing.resolver.Resolver;
+import org.openmrs.module.metadatasharing.resolver.impl.ObjectByNameResolver;
+import org.openmrs.module.metadatasharing.resolver.impl.ObjectByUuidResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +35,12 @@ public class MetadataSharing19Configuration {
 	
 	@Autowired
 	ObjectHandler objectHandler;
+	
+	@Autowired
+	ObjectByNameResolver objectByNameResolver;
+	
+	@Autowired
+	ObjectByUuidResolver objectByUuidResolver;
 	
 	public static boolean supportsConceptReferenceTerm() {
 		return ClassUtil.loadClass("org.openmrs.ConceptReferenceTerm") != null;
@@ -44,6 +54,15 @@ public class MetadataSharing19Configuration {
         catch (Exception e) {
 	        return false;
         }
+	}
+	
+	@Bean(name = "metadatasharing.ConceptReferenceTerm19Resolver")
+	public Resolver<?> getConceptReferenceTerm19Resolver() {
+		if (supportsConceptReferenceTerm()) {
+			//1.9 and later
+			return new ConceptReferenceTerm19Resolver(objectByNameResolver, objectByUuidResolver);
+		}
+		return null;
 	}
 	
 	@Bean(name = "metadatasharing.ConceptReferenceTerm19Handler")

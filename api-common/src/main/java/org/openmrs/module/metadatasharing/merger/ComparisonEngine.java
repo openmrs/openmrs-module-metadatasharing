@@ -36,13 +36,15 @@ public class ComparisonEngine {
 	 * @param incomingToExisting
 	 * @return
 	 */
-	public boolean equal(Object incoming, Object existing, Map<Object, Object> incomingToExisting) {
+	@SuppressWarnings("deprecation")
+    public boolean equal(Object incoming, Object existing, Map<Object, Object> incomingToExisting) {
 		if (incoming instanceof ConceptMap) {
 			ConceptMap incomingMap = (ConceptMap) incoming;
 			ConceptMap existingMap = (ConceptMap) existing;
 			
 			if (incomingMap.getSource() != null && existingMap.getSource() != null) {
-				if (nullSafeEqual(incomingMap.getSource().getUuid(), existingMap.getSource().getUuid())) {
+				Object existingSource = incomingToExisting.get(incomingMap.getSource());
+				if (incomingMap.getSource().equals(existingMap.getSource()) || existingMap.getSource().equals(existingSource)) {
 					return StringUtils.equalsIgnoreCase(incomingMap.getSourceCode(), existingMap.getSourceCode());
 				}
 			} else {

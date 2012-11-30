@@ -31,6 +31,14 @@ import org.springframework.stereotype.Component;
 public class ConceptByMappingResolver extends Resolver<Concept> {
 	
 	/**
+	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getPriority()
+	 */
+	@Override
+	public int getPriority() {
+	    return 20;
+	}
+	
+	/**
 	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getExactMatch(java.lang.Object)
 	 */
 	@Override

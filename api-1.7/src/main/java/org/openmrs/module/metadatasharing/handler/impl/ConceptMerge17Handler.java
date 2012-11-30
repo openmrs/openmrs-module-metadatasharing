@@ -55,7 +55,7 @@ public class ConceptMerge17Handler implements MetadataMergeHandler<Concept> {
 							}
 						}
 					}
-				} else {
+				} else if (!importType.isOverwriteMine()) {
 					//Only one preferred name is allowed for a locale.
 					ConceptName preferredName = existingConcept.getPreferredName(locale);
 					if (preferredName != null) {

@@ -67,18 +67,6 @@
 		</property>
 	</bean>
 
-	<bean id="metadatasharing.ResolverEngine"
-		class="org.openmrs.module.metadatasharing.resolver.ResolverEngine">
-		<property name="resolvers">
-			<list>
-				<ref bean="metadatasharing.ObjectByUuidResolver" />
-				<ref bean="metadatasharing.ConceptByMappingResolver" />
-				<ref bean="metadatasharing.ConceptNameTagByNameResolver" />
-				<ref bean="metadatasharing.ObjectByNameResolver" />
-			</list>
-		</property>
-	</bean>
-
 	<bean id="metadatasharing.DownloaderFactory"
 		class="org.openmrs.module.metadatasharing.downloader.impl.DownloaderFactoryImpl">
 		<property name="defaultTimeout" value="30" />
