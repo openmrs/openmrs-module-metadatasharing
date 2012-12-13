@@ -297,8 +297,8 @@ public class ImportPackageTask extends Task {
 		}
 		
 		List<Object> dependencies = new ArrayList<Object>();
-		dependencies.add(new ReplaceMethodInovker().callGetDependencies(item));
-		dependencies.add(Handler.getPriorityDependencies(item));
+		dependencies.addAll(new ReplaceMethodInovker().callGetMetadataSharingDependencies(item));
+		dependencies.addAll(Handler.getPriorityDependencies(item));
 		for (Object dependency : dependencies) {
 			saveItem(new ImportedItem(dependency), savedItems);
 		}
