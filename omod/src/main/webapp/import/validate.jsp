@@ -34,31 +34,31 @@
 			<tr>
 				<td class="to_right"><spring:message
 						code="metadatasharing.name" />:</td>
-				<td>${importer.package.name} <springform:errors
+				<td>${importer.importedPackage.name} <springform:errors
 						path="package.name" cssClass="error" /></td>
 			</tr>
 			<tr>
 				<td class="to_right"><spring:message
 						code="metadatasharing.description" />:</td>
-				<td>${importer.package.description} <springform:errors
+				<td>${importer.importedPackage.description} <springform:errors
 						path="package.description" cssClass="error" /></td>
 			</tr>
 			<tr>
 				<td class="to_right"><spring:message
 						code="metadatasharing.openmrsVersion" />:</td>
-				<td>${importer.package.openmrsVersion} <springform:errors
+				<td>${importer.importedPackage.openmrsVersion} <springform:errors
 						path="package.openmrsVersion" cssClass="warning" /></td>
 			</tr>
 			<tr>
 				<td class="to_right"><spring:message
 						code="metadatasharing.dateExported" />:</td>
-				<td><openmrs:formatDate date="${importer.package.dateCreated}"
+				<td><openmrs:formatDate date="${importer.importedPackage.dateCreated}"
 						format="yyyy-MM-dd HH:mm:ss" /></td>
 			</tr>
 			<tr>
 				<td class="to_right"><spring:message
 						code="metadatasharing.version" />:</td>
-				<td>${importer.package.version} <springform:errors
+				<td>${importer.importedPackage.version} <springform:errors
 						path="package.version" cssClass="warning" /></td>
 			</tr>
 			<tr>
