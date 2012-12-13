@@ -34,7 +34,7 @@ public class ReplaceMethodInovker {
 	
 	public final static String WRITE_REPLACE = "writeReplace";
 	
-	public final static String GET_DEPENDENCIES = "getMetadataSharingDependencies";
+	public final static String GET_DEPENDENCIES = "getPriorityDependenciesForMetadataSharing";
 	
 	public void callOnSave(Object object, Map<OpenmrsObject, OpenmrsObject> mappings) {
 		if (object instanceof OpenmrsObject) {
@@ -55,7 +55,7 @@ public class ReplaceMethodInovker {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public List<Object> callGetMetadataSharingDependencies(Object object) {
+    public List<Object> callGetPriorityDependenciesForMetadataSharing(Object object) {
 		Method method = getMethod(object.getClass(), GET_DEPENDENCIES);
 		if (method != null) {
 			if (List.class.isAssignableFrom(method.getReturnType())) {
