@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.task.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -41,7 +40,6 @@ import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.merger.ConvertUtil;
 import org.openmrs.module.metadatasharing.model.validator.ValidateCustomUtil;
-import org.openmrs.module.metadatasharing.reflection.ReplaceMethodInovker;
 import org.openmrs.module.metadatasharing.task.Task;
 import org.openmrs.module.metadatasharing.task.TaskException;
 import org.openmrs.module.metadatasharing.task.TaskType;
@@ -296,9 +294,7 @@ public class ImportPackageTask extends Task {
 			return;
 		}
 		
-		List<Object> dependencies = new ArrayList<Object>();
-		dependencies.addAll(new ReplaceMethodInovker().callGetPriorityDependenciesForMetadataSharing(item));
-		dependencies.addAll(Handler.getPriorityDependencies(item));
+		List<Object> dependencies = Handler.getPriorityDependencies(item);
 		for (Object dependency : dependencies) {
 			saveItem(new ImportedItem(dependency), savedItems);
 		}

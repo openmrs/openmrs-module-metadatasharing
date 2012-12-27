@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.handler.impl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,6 +28,7 @@ import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.merger.ComparisonEngine;
+import org.openmrs.module.metadatasharing.reflection.ReplaceMethodInovker;
 import org.openmrs.module.metadatasharing.visitor.ObjectVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,21 +56,14 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 	/**
 	 * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getPriorityDependencies(Object object) {
 		List<Object> dependencies = new ArrayList<Object>();
 		try {
-			Method method = object.getClass().getMethod("getDependencies");
-			if (method != null) {
-				Collection<Object> items = (Collection<Object>) method.invoke(object);
-				if (items != null) {
-					dependencies.addAll(items);
-				}
-			}	
-		}
-		catch (NoSuchMethodException e) {
-			log.debug("No priority dependencies for " + object.toString());
+			List<Object> items = new ReplaceMethodInovker().callGetPriorityDependenciesForMetadataSharing(object);
+			if (items != null) {
+				dependencies.addAll(items);
+			}
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
