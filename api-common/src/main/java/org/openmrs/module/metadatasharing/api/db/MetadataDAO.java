@@ -46,6 +46,11 @@ public interface MetadataDAO {
 	<T> T getItemById(Class<? extends T> type, String id);
 	
 	/**
+	 * @see MetadataService#saveItem(Object)
+	 */
+	<T> T saveItem(T item);
+	
+	/**
 	 * @see MetadataService#getConcepts(boolean, String, Integer, Integer)
 	 */
 	List<Concept> getConcepts(boolean includeRetired, String phrase, Integer firstResult, Integer maxResults);

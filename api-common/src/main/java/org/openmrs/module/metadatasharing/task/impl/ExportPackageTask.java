@@ -130,6 +130,7 @@ public class ExportPackageTask extends Task {
 		log("Validating items");
 		for (Item packageItem : packageItems) {
 			Object item = Handler.getItemByUuid(packageItem.getContainedClass(), packageItem.getUuid());
+			
 			if (validateItem(item)) {
 				addLocalMappingToConcept(item);
 			}

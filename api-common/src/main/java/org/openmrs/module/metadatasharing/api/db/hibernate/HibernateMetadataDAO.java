@@ -105,6 +105,15 @@ public class HibernateMetadataDAO implements MetadataDAO {
 		return result;
 	}
 	
+	/**
+	 * @see org.openmrs.module.metadatasharing.api.db.MetadataDAO#saveItem(java.lang.Object)
+	 */
+	@Override
+	public <T> T saveItem(T item) {
+		sessionFactory.getCurrentSession().saveOrUpdate(item);
+	    return item;
+	}
+	
 	private void filter(Class<?> type, Criteria criteria, boolean includeRetired, String filter) {
 		if (!includeRetired) {
 			criteria.add(Restrictions.eq("retired", includeRetired));

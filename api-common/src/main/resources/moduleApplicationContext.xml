@@ -39,23 +39,25 @@
 		<property name="moduleService">
 			<list>
 				<value>org.openmrs.module.metadatasharing.api.MetadataService</value>
-				<bean
-					class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-					<property name="transactionManager">
-						<ref bean="transactionManager" />
-					</property>
-					<property name="target">
-						<bean
-							class="org.openmrs.module.metadatasharing.api.impl.MetadataServiceImpl" />
-					</property>
-					<property name="preInterceptors">
-						<ref bean="serviceInterceptors" />
-					</property>
-					<property name="transactionAttributeSource">
-						<ref bean="transactionAttributeSource" />
-					</property>
-				</bean>
+				<ref bean="metadatasharing.MetadataService"/>
 			</list>
+		</property>
+	</bean>
+	
+	<bean id="metadatasharing.MetadataService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean
+				class="org.openmrs.module.metadatasharing.api.impl.MetadataServiceImpl" />
+		</property>
+		<property name="preInterceptors">
+			<ref bean="serviceInterceptors" />
+		</property>
+		<property name="transactionAttributeSource">
+			<ref bean="transactionAttributeSource" />
 		</property>
 	</bean>
 
