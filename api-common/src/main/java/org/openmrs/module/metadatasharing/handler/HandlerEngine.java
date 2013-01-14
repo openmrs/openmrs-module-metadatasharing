@@ -482,7 +482,7 @@ public class HandlerEngine {
 		classes = new HashMap<Class<?>, String>();
 		types = new HashMap<String, Class<?>>();
 		
-		for (MetadataHandler<?> handler : typesHandlers.values()) {
+		for (MetadataHandler<?> handler :  typesHandlers.values()) {
 			MetadataTypesHandler<?> typeHandler = (MetadataTypesHandler<?>) handler;
 			
 			for (Entry<?, String> entry : typeHandler.getTypes().entrySet()) {
@@ -499,7 +499,12 @@ public class HandlerEngine {
 					if (bestType != null) {
 						classes.put(clazz, bestType);
 					} else {
-						classes.put(clazz, type);
+						Class<?> supportedBestType = findSupportedType(MetadataTypesHandler.class, bestTypeHandler);
+						bestType = bestTypeHandler.getTypes().get(supportedBestType);
+						if (bestType == null) {
+							bestType = supportedBestType.getSimpleName();
+						}
+						classes.put(supportedBestType, bestType);
 					}
 				}
 			}
