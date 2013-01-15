@@ -143,9 +143,11 @@ public class HibernateMetadataDAO implements MetadataDAO {
 				or.add(Restrictions.ilike("form.name", filter, MatchMode.START));
 			} else if (OpenmrsMetadata.class.isAssignableFrom(type)) {
 				//It may happen that the name property is not defined for the specific metadata type so we need to test it.
-				String[] propertyNames = sessionFactory.getClassMetadata(type).getPropertyNames();
-				if (Arrays.asList(propertyNames).contains("name")) {
-					or.add(Restrictions.ilike("name", filter, MatchMode.START));
+				if (sessionFactory.getClassMetadata(type) != null) {
+					String[] propertyNames = sessionFactory.getClassMetadata(type).getPropertyNames();
+					if (Arrays.asList(propertyNames).contains("name")) {
+						or.add(Restrictions.ilike("name", filter, MatchMode.START));
+					}
 				}
 			}
 		}

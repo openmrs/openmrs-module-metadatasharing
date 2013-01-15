@@ -70,7 +70,7 @@
 		<module>api-1.9</module>
 		<module>omod</module>
 		<module>integration-test</module>
-	</modules>
+  </modules>
 
 	<properties>
 		<openMRSVersion>1.6.6</openMRSVersion>
@@ -424,7 +424,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -448,7 +448,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore />
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

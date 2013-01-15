@@ -187,6 +187,11 @@ public class ExportPackageTask extends Task {
 	}
 	
 	private void resolveRelatedItems(final Object item) {
+		List<Object> priorityDependencies = Handler.getPriorityDependencies(item);
+		for (Object priorityDependency : priorityDependencies) {
+	        visitMetadata(priorityDependency);
+        }
+		
 		MetadataSharing.getInstance().getObjectVisitor().visitFields(item, true, new ObjectVisitor.FieldVisitor() {
 			
 			@Override
@@ -200,20 +205,22 @@ public class ExportPackageTask extends Task {
 				}
 			}
 			
-			private void visitMetadata(Object object) {
-				if (object instanceof OpenmrsObject && !(object instanceof User)) {
-					Item packageItem = Item.valueOf(object);
-					if (!exportedPackage.getItems().contains(packageItem)
-					        && exportedPackage.getRelatedItems().add(packageItem)) {
-						if (validateItem(object)) {
-							addLocalMappingToConcept(object);
-						}
-						
-						resolveRelatedItems(object);
-					}
-				}
-			}
+			
 		});
+	}
+	
+	private void visitMetadata(Object object) {
+		if (object instanceof OpenmrsObject && !(object instanceof User)) {
+			Item packageItem = Item.valueOf(object);
+			if (!exportedPackage.getItems().contains(packageItem)
+			        && exportedPackage.getRelatedItems().add(packageItem)) {
+				if (validateItem(object)) {
+					addLocalMappingToConcept(object);
+				}
+				
+				resolveRelatedItems(object);
+			}
+		}
 	}
 	
 }

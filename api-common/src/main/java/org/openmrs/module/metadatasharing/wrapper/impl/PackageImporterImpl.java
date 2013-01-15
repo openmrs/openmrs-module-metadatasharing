@@ -257,6 +257,11 @@ public class PackageImporterImpl extends PackageImporter {
 	
 	private void resolveRelatedImportItems(final ImportedItem importedItem,
 	                                       final Map<ImportedItem, ImportedItem> visitedItems) {
+		List<Object> priorityDependencies = Handler.getPriorityDependencies(importedItem.getIncoming());
+		for (Object priorityDependency : priorityDependencies) {
+			addRelatedItemToImportedItem(importedItem, priorityDependency, visitedItems);
+		}
+		
 		MetadataSharing.getInstance().getObjectVisitor()
 		        .visitFields(importedItem.getIncoming(), false, new ObjectVisitor.FieldVisitor() {
 			        
@@ -272,22 +277,25 @@ public class PackageImporterImpl extends PackageImporter {
 			        }
 			        
 			        private void visitMetadata(Object object) {
-				        if (object instanceof OpenmrsObject && !(object instanceof User)) {
-					        OpenmrsObject metadata = (OpenmrsObject) object;
-					        
-					        ImportedItem item = getExistingOrNewImportedItem(metadata);
-					        
-					        ImportedItem visitedItem = visitedItems.put(item, item);
-					        if (visitedItem == null) {
-						        importedItem.addRelatedItem(item);
-						        
-						        resolveRelatedImportItems(item, visitedItems);
-					        } else {
-						        importedItem.addRelatedItem(visitedItem);
-					        }
-				        }
+				        addRelatedItemToImportedItem(importedItem, object, visitedItems);
 			        }
 		        });
+	}
+	
+	private void addRelatedItemToImportedItem(final ImportedItem importedItem, Object relatedItem,
+	                                          final Map<ImportedItem, ImportedItem> visitedItems) {
+		if (relatedItem instanceof OpenmrsObject && !(relatedItem instanceof User)) {
+			ImportedItem item = getExistingOrNewImportedItem(relatedItem);
+			
+			ImportedItem visitedItem = visitedItems.put(item, item);
+			if (visitedItem == null) {
+				importedItem.addRelatedItem(item);
+				
+				resolveRelatedImportItems(item, visitedItems);
+			} else {
+				importedItem.addRelatedItem(visitedItem);
+			}
+		}
 	}
 	
 	private ImportedItem getExistingOrNewImportedItem(Object item) {
