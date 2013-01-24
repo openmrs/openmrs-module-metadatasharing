@@ -391,6 +391,7 @@
 						<useReleaseProfile>false</useReleaseProfile>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<arguments>-Prelease</arguments>
+						<tagNameFormat>@{project.version}</tagNameFormat>
 					</configuration>
 				</plugin>
 
