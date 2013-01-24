@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
@@ -168,7 +169,7 @@ public class HandlerEngine {
 	 * @return <code>true</code> if the given object is hidden
 	 */
 	public boolean isHidden(Object object) {
-		return (getRegisteredType(object) == null);
+		return StringUtils.isBlank(getRegisteredType(object));
 	}
 	
 	/**
@@ -511,6 +512,10 @@ public class HandlerEngine {
 		}
 		
 		for (Entry<Class<?>, String> classEntry : classes.entrySet()) {
+			if (StringUtils.isBlank(classEntry.getValue())) {
+				continue;
+			}
+			
 			Class<?> previousClass = types.put(classEntry.getValue(), classEntry.getKey());
 			if (previousClass != null) {
 				throw new IllegalStateException(classEntry.getValue() + " must not represent more than one class. Found "
