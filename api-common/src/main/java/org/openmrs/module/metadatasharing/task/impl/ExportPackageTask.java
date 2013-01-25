@@ -90,7 +90,8 @@ public class ExportPackageTask extends Task {
 			List<String> metadata = new ArrayList<String>();
 			
 			List<Item> packageItems = new ArrayList<Item>(exportedPackage.getItems());
-			for (int from = 0; from < packageItems.size(); from += SUBPACKAGE_SIZE) {
+			int from = 0;
+			for (; from < packageItems.size(); from += SUBPACKAGE_SIZE) {
 				int to = from + SUBPACKAGE_SIZE;
 				if (to > packageItems.size()) {
 					to = packageItems.size();
