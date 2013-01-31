@@ -31,8 +31,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
 	@Override
-	public boolean supports(@SuppressWarnings("rawtypes")
-	Class clazz) {
+	public boolean supports(@SuppressWarnings("rawtypes") Class clazz) {
 		return Package.class.isAssignableFrom(clazz);
 	}
 	
@@ -45,6 +44,7 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 	 * @should reject empty non-empty group and empty version
 	 * @should reject too long name
 	 * @should reject too long description
+	 * @should reject package version if not subsequent incremental version
 	 */
 	@Override
 	public void validate(Object obj, Errors errors) {
@@ -65,6 +65,22 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 		
 		if (pack.getGroupUuid() != null) {
 			ValidationUtils.rejectIfEmpty(errors, "version", "metadatasharing.error.package.field.empty");
+		}
+		
+		if (pack instanceof ImportedPackage && pack.isIncrementalVersion()) {
+			MetadataSharingService packageService = Context.getService(MetadataSharingService.class);
+			Package existingPackage = packageService.getImportedPackageByGroup(pack.getGroupUuid());
+			int existingVersion = 0;
+			
+			if(existingPackage != null)
+				existingVersion = existingPackage.getVersion();
+			
+			int importedVersion = pack.getVersion();
+			
+			if (existingVersion + 1 != importedVersion) {
+				errors.rejectValue("version", "metadatasharing.error.package.invalidVersion", new Integer[] {
+				        importedVersion, existingVersion }, null);
+			}
 		}
 		
 		Map<String, String> missingRequiredModules = getMissingRequiredModules(pack);
@@ -126,8 +142,8 @@ public class PackageValidator implements ErrorsAndWarningsValidator {
 				if (localVersion != null) {
 					if (ModuleUtil.compareVersion(version, localVersion) > 0) {
 						// their version is higher: warn about this
-						e.rejectValue("modules", "metadatasharing.warning.lower.module.version", new Object[] {
-						        moduleId, localVersion, version }, null);
+						e.rejectValue("modules", "metadatasharing.warning.lower.module.version", new Object[] { moduleId,
+						        localVersion, version }, null);
 					} else if (ModuleUtil.compareVersion(version, localVersion) < 0) {
 						// my version is higher: this should generally be okay
 					} else {

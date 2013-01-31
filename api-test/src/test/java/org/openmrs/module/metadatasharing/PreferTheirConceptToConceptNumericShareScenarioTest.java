@@ -25,12 +25,10 @@ import org.openmrs.ConceptNumeric;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
-import org.springframework.test.annotation.NotTransactional;
 
 public class PreferTheirConceptToConceptNumericShareScenarioTest extends BaseShareTest {
 	
 	@Test
-	@NotTransactional
 	public void importPackageMappingItemsMatchedByUuids() throws Exception {
 		
 		runShareTest(new ShareTestHelper() {

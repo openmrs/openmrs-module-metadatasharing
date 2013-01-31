@@ -39,23 +39,25 @@
 		<property name="moduleService">
 			<list>
 				<value>org.openmrs.module.metadatasharing.api.MetadataService</value>
-				<bean
-					class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-					<property name="transactionManager">
-						<ref bean="transactionManager" />
-					</property>
-					<property name="target">
-						<bean
-							class="org.openmrs.module.metadatasharing.api.impl.MetadataServiceImpl" />
-					</property>
-					<property name="preInterceptors">
-						<ref bean="serviceInterceptors" />
-					</property>
-					<property name="transactionAttributeSource">
-						<ref bean="transactionAttributeSource" />
-					</property>
-				</bean>
+				<ref bean="metadatasharing.MetadataService"/>
 			</list>
+		</property>
+	</bean>
+	
+	<bean id="metadatasharing.MetadataService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<bean
+				class="org.openmrs.module.metadatasharing.api.impl.MetadataServiceImpl" />
+		</property>
+		<property name="preInterceptors">
+			<ref bean="serviceInterceptors" />
+		</property>
+		<property name="transactionAttributeSource">
+			<ref bean="transactionAttributeSource" />
 		</property>
 	</bean>
 
@@ -63,18 +65,6 @@
 		<property name="serializers">
 			<list>
 				<ref bean="metadatasharing.MetadataSerializer" />
-			</list>
-		</property>
-	</bean>
-
-	<bean id="metadatasharing.ResolverEngine"
-		class="org.openmrs.module.metadatasharing.resolver.ResolverEngine">
-		<property name="resolvers">
-			<list>
-				<ref bean="metadatasharing.ObjectByUuidResolver" />
-				<ref bean="metadatasharing.ConceptByMappingResolver" />
-				<ref bean="metadatasharing.ConceptNameTagByNameResolver" />
-				<ref bean="metadatasharing.ObjectByNameResolver" />
 			</list>
 		</property>
 	</bean>

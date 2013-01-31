@@ -7,26 +7,33 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ImportedPackage;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.Package;
+import org.openmrs.module.metadatasharing.api.MetadataSharingService;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 
 /**
  * Tests the {@link PackageValidator}
  */
-public class PackageValidatorTest {
+public class PackageValidatorTest extends BaseModuleContextSensitiveTest {
 	
 	private PackageValidator packageValidator = new PackageValidator();
 	
 	private Package pack;
+	
+	private ImportedPackage importedPack;
 	
 	private BindException errors;
 	
 	@Before
 	public void before() {
 		pack = PackageValidatorTest.getMockPackage();
+		importedPack = PackageValidatorTest.getMockImportedPackage();
 		errors = new BindException(pack, "pack");
 	}
 	
@@ -104,6 +111,28 @@ public class PackageValidatorTest {
 		
 	}
 	
+    /**
+     * @see PackageValidator#validate(Object,Errors)
+     * @verifies reject unacceptable version ID
+     */
+    @Test
+    public void validate_shouldRejectInvalidVersionNumber() throws Exception {
+     
+     MetadataSharingService packageService = Context.getService(MetadataSharingService.class);
+     importedPack.setIncrementalVersion(true);
+     packageService.saveImportedPackage(importedPack);
+     Package existingPackage = packageService.getImportedPackageByGroup(pack.getGroupUuid());
+     
+     Assert.assertEquals(importedPack.getVersion(),new Integer(0));
+     Assert.assertEquals(pack.getVersion(),new Integer(1));
+     
+     packageValidator.validate(existingPackage, errors);
+  
+     Assert.assertNotNull(errors.getFieldError("version"));
+     Assert.assertEquals("metadatasharing.error.package.invalidVersion", errors.getFieldError("version")
+          .getCode());
+    }
+	
 	public static ExportedPackage getMockPackage() {
 		ExportedPackage pack = new ExportedPackage();
 		pack.setName("SomeName");
@@ -114,6 +143,17 @@ public class PackageValidatorTest {
 		pack.setOpenmrsVersion("1.6");
 		return pack;
 	}
+	
+	 public static ImportedPackage getMockImportedPackage() {
+		  ImportedPackage pack = new ImportedPackage();
+		  pack.setName("SomeName");
+		  pack.setDateCreated(new Date());
+		  pack.setGroupUuid("SomeGroup");
+		  pack.setVersion(0);
+		  pack.setDescription("SomeDesc");
+		  pack.setOpenmrsVersion("1.6");
+		  return pack;
+		 }
 
 	/**
      * @see PackageValidator#getMissingRequiredModules(Package)

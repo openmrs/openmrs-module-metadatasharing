@@ -90,7 +90,7 @@ public class ImportedPackage extends Package implements Serializable {
 	}
 	
 	public boolean isImported() {
-		return dateImported != null;
+		return getDateImported() != null;
 	}
 	
 	public boolean isSubscribed() {

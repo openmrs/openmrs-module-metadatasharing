@@ -58,6 +58,14 @@ public class MetadataServiceImpl extends BaseOpenmrsService implements MetadataS
 	}
 	
 	/**
+	 * @see org.openmrs.module.metadatasharing.api.MetadataService#saveItem(java.lang.Object)
+	 */
+	@Override
+	public <T> T saveItem(T item) throws APIException {
+	    return dao.saveItem(item);
+	}
+	
+	/**
 	 * @see org.openmrs.module.metadatasharing.api.MetadataService#getConcepts(boolean,
 	 *      java.lang.String, java.lang.Integer, java.lang.Integer)
 	 */

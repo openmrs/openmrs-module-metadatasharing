@@ -14,30 +14,20 @@
 package org.openmrs.module.metadatasharing.api.db.hibernate;
 
 import org.hibernate.SessionFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
  * Exposes {@link SessionFactory} to classes in this package.
  */
 @Repository(MetadataSharingConsts.MODULE_ID + ".HibernateSessionFactory")
-public class HibernateSessionFactory {
-	
-	private static SessionFactory sessionFactory;
-	
-	/**
-	 * @param sessionFactory the sessionFactory to set
-	 */
-	@Autowired
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		HibernateSessionFactory.sessionFactory = sessionFactory;
-	}
+class HibernateSessionFactory {
 	
 	/**
 	 * @return the sessionFactory
 	 */
 	static SessionFactory getSessionFactory() {
-		return sessionFactory;
+		return Context.getRegisteredComponents(SessionFactory.class).get(0);
 	}
 }

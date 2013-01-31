@@ -92,4 +92,8 @@ public enum SubscriptionStatus {
 	private SubscriptionStatus(byte value) {
 		this.value = value;
 	}
+	
+	public boolean isUpToDate() {
+		return this.equals(UP_TO_DATE);
+	}
 }

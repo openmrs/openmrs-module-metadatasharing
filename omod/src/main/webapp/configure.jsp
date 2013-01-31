@@ -79,32 +79,6 @@
 	</fieldset>
 
 	<fieldset>
- 		<legend><spring:message code="metadatasharing.configure.exporting"/></legend>
- 		<div class="even-configuration-item">
-			<springform:checkbox path="addLocalMappings" id="addLocalMappings" onchange="toggleSourceInfo(this)" />
-			<b><label for="addLocalMappings"><spring:message code="metadatasharing.addLocalMappings" /></label></b> 
-			<springform:errors path="addLocalMappings" cssClass="error"/>
-			<div class="indented" id="sourceInfo" <c:if test="${!configureForm.addLocalMappings}">style="display: none"</c:if> >
-				<spring:message code="metadatasharing.addLocalMappings.description"/>
-				
-				<p><spring:message code="metadatasharing.conceptSource.description.line1" /></p>
-				<p>
-					<spring:message code="metadatasharing.conceptSource.description.line2" /> <br />
-					<springform:select path="conceptSourceUuid">
-						<springform:option value="" />
-						<springform:options items="${conceptSources}" itemLabel="name" itemValue="uuid" />
-					</springform:select>
-					<springform:errors path="conceptSourceUuid" cssClass="error"/> 
-				</p> 
-				<p>
-					<spring:message code="metadatasharing.ifNot" />, 
-					<a href="../../admin/maintenance/implementationid.form"><spring:message code="metadatasharing.configureImplementationId" /></a>
-				</p>
-			</div>
-		</div>
-	</fieldset>
-	
-	<fieldset>
 		<legend><spring:message code="metadatasharing.configure.subscribing"/></legend>
 		
 		<div class="even-configuration-item">
@@ -153,7 +127,7 @@
 	</fieldset>
 	
 	<p>
-		<input type="submit" value="Save" />
+		<input type="submit" value="<spring:message code="general.save"/>" />
 	</p>
 </springform:form>
 <%@ include file="/WEB-INF/template/footer.jsp"%>

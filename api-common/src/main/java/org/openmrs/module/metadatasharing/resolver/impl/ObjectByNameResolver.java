@@ -32,6 +32,14 @@ import org.springframework.stereotype.Component;
 public class ObjectByNameResolver extends Resolver<Object> {
 	
 	/**
+	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getPriority()
+	 */
+	@Override
+	public int getPriority() {
+	    return 0;
+	}
+	
+	/**
 	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getExactMatch(java.lang.Object)
 	 */
 	@Override
@@ -57,7 +65,7 @@ public class ObjectByNameResolver extends Resolver<Object> {
 	 */
 	@Override
 	public Object getPossibleMatch(Object incoming) {
-		if (!Handler.isHidden(incoming)) {
+		if (!Handler.isHidden(incoming) && !Handler.getName(incoming).isEmpty()) {
 			List<Object> objects = Handler.getItems(incoming.getClass(), true,
 			    Handler.getName(incoming), null, null);
 			

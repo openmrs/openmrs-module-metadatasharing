@@ -15,6 +15,8 @@ package org.openmrs.module.metadatasharing.reflection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -32,6 +34,8 @@ public class ReplaceMethodInovker {
 	
 	public final static String WRITE_REPLACE = "writeReplace";
 	
+	public final static String GET_DEPENDENCIES = "getPriorityDependenciesForMetadataSharing";
+	
 	public void callOnSave(Object object, Map<OpenmrsObject, OpenmrsObject> mappings) {
 		if (object instanceof OpenmrsObject) {
 			Method method = getMethod(object.getClass(), ON_SAVE, Map.class);
@@ -48,6 +52,17 @@ public class ReplaceMethodInovker {
 			return (OpenmrsObject) result;
 		}
 		return object;
+	}
+	
+	@SuppressWarnings("unchecked")
+    public List<Object> callGetPriorityDependenciesForMetadataSharing(Object object) {
+		Method method = getMethod(object.getClass(), GET_DEPENDENCIES);
+		if (method != null) {
+			if (List.class.isAssignableFrom(method.getReturnType())) {
+				return (List<Object>) invokeMethod(method, object);
+			}
+		}
+		return Collections.emptyList();
 	}
 	
 	public Object invokeMethod(Method method, Object object, Object... args) {

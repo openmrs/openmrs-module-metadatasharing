@@ -10,8 +10,8 @@
 <ol>
 	<c:forEach var="task" items="${tasks}">
 		<li><spring:message code="${task.type.code}" /> - <strong><spring:message
-					text="${task.package.name}" />:</strong> <em><spring:message
-					text="${task.package.description}" /></em> - <c:choose>
+					text="${task['package']['name']}" />:</strong> <em><spring:message
+					text="${task['package']['description']}" /></em> - <c:choose>
 				<c:when test="${!task.completed}">
 					<img src="${pageContext.request.contextPath}/moduleResources/metadatasharing/images/loading.gif" />
 					<spring:message code="metadatasharing.task.running" />

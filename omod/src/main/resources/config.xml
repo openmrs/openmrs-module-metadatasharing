@@ -23,7 +23,11 @@
 	<!-- /Metadata Sharing Properties -->
 
 	<require_version>1.6</require_version>
-
+	
+	<require_modules>																										
+		<require_module version="1.0.1">org.openmrs.module.metadatamapping</require_module>
+	</require_modules>
+	
 	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
@@ -45,19 +49,8 @@
 
 	<!-- Required Global Properties -->
 	<globalProperty>
-		<property>@MODULE_ID@.systemConceptSource</property>
-		<description>A system concept source that will be used to mark all
-			exported concepts.</description>
-	</globalProperty>
-	<globalProperty>
 		<property>@MODULE_ID@.persistIdsForClasses</property>
 		<description>A comma separated list of class package/names that denotes classes to try and persist ids for. Common options: org.openmrs.Concept,org.openmrs.Form,org.openmrs.ConceptDatatype,org.openmrs.ConceptClass,org.openmrs.EncounterType,org.openmrs.IdentifierType,org.openmrs.RelationshipType,org.openmrs.Location</description>
-	</globalProperty>
-		<globalProperty>
-		<property>@MODULE_ID@.addLocalMappings</property>
-		<description>
-			Specifies whether the concept mappings to the local dictionary should be created when exporting concepts
-		</description>
 	</globalProperty>
 	<globalProperty>
 		<property>@MODULE_ID@.preferredConceptSourceIds</property>

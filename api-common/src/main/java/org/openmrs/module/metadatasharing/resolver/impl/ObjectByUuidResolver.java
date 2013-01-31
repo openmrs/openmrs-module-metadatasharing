@@ -25,6 +25,14 @@ import org.springframework.stereotype.Component;
 public class ObjectByUuidResolver extends Resolver<Object> {
 	
 	/**
+	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getPriority()
+	 */
+	@Override
+	public int getPriority() {
+	    return 100;
+	}
+	
+	/**
 	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getExactMatch(java.lang.Object)
 	 */
 	@Override

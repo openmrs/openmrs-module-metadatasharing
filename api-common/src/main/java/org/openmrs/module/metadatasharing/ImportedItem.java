@@ -116,6 +116,28 @@ public class ImportedItem extends BaseOpenmrsObject implements Serializable, Com
 	}
 	
 	/**
+	 * @since 1.1.2
+	 * 
+	 * @return the simple class name of existing or null
+	 */
+	public String getExistingClassSimpleName() {
+		if (existing != null) {
+			return ClassUtil.getDeproxiedClass(existing).getSimpleName();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * @since 1.1.2 
+	 * 
+	 * @return the simple class name of incoming
+	 */
+	public String getIncomingClassSimpleName() {
+		return ClassUtil.getDeproxiedClass(incoming).getSimpleName();
+	}
+	
+	/**
 	 * @param incoming the incoming to set
 	 */
 	public void setIncoming(Object incoming) {

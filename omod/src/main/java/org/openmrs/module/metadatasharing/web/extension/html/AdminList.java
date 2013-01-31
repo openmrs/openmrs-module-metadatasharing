@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.openmrs.module.Extension;
-import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.web.extension.AdministrationSectionExt;
 
@@ -60,14 +59,9 @@ public class AdminList extends AdministrationSectionExt {
 		
 		map.put(MetadataSharingConsts.MODULE_PATH + "/task/list.form", MetadataSharingConsts.MODULE_ID
 	        + ".task.manageTasks");
-	
 		
-		if (MetadataSharing.getInstance().isConfigured()) {
-			map.put(MetadataSharingConsts.MODULE_PATH + "/configure.form", MetadataSharingConsts.MODULE_ID + ".configure");
-		} else {
-			map.put(MetadataSharingConsts.MODULE_PATH + "/configure.form", MetadataSharingConsts.MODULE_ID
-			        + ".configure.required");
-		}
+		map.put(MetadataSharingConsts.MODULE_PATH + "/configure.form", MetadataSharingConsts.MODULE_ID + ".configure");
+		
 		return map;
 	}
 	

@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.handler.impl;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,6 +28,7 @@ import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.merger.ComparisonEngine;
+import org.openmrs.module.metadatasharing.reflection.ReplaceMethodInovker;
 import org.openmrs.module.metadatasharing.visitor.ObjectVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -56,21 +56,14 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 	/**
 	 * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object> getPriorityDependencies(Object object) {
 		List<Object> dependencies = new ArrayList<Object>();
 		try {
-			Method method = object.getClass().getMethod("getDependencies");
-			if (method != null) {
-				Collection<Object> items = (Collection<Object>) method.invoke(object);
-				if (items != null) {
-					dependencies.addAll(items);
-				}
-			}	
-		}
-		catch (NoSuchMethodException e) {
-			log.debug("No priority dependencies for " + object.toString());
+			List<Object> items = new ReplaceMethodInovker().callGetPriorityDependenciesForMetadataSharing(object);
+			if (items != null) {
+				dependencies.addAll(items);
+			}
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);
@@ -110,7 +103,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 				}
 			});
 		} else {
-			if (importType.isPreferTheirs() || importType.isPreferMine()) {
+			if (importType.isPreferTheirs() || importType.isPreferMine() || importType.isOverwriteMine()) {
 				//Copy properties from the incoming object to the existing object				
 				Integer id = Handler.getId(existing);
 				
@@ -118,7 +111,12 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 					
 					@Override
 					public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object incomingField) {
-						if (incomingField instanceof Collection) {
+						if (Collection.class.isAssignableFrom(type)) {
+							//If the collection field is null then do nothing
+							if (incomingField == null) {
+								return;
+							}
+							
 							Object existingField = visitor.readField(existing, fieldName, definedIn);
 							if (existingField instanceof Collection) {
 								@SuppressWarnings("unchecked")
@@ -126,20 +124,33 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								@SuppressWarnings("unchecked")
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
 								
-								for (Object incomingElement : incomingCollection) {
-									Object existing = incomingToExisting.get(incomingElement);
+								if (importType.isOverwriteMine()) {
+									existingCollection.clear();
 									
-									if (existing == null) {
-										boolean missing = true;
-										for (Object existingElement : existingCollection) {
-											if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
-												missing = false;
-												break;
-											}
-										}
+									for (Object incomingElement : incomingCollection) {
+	                                    Object existing = incomingToExisting.get(incomingElement);
+	                                    if (existing != null) {
+	                                    	existingCollection.add(existing);
+	                                    } else {
+	                                    	existingCollection.add(incomingElement);
+	                                    }
+                                    }
+								} else {
+									for (Object incomingElement : incomingCollection) {
+										Object existing = incomingToExisting.get(incomingElement);
 										
-										if (missing) {
-											existingCollection.add(incomingElement);
+										if (existing == null) {
+											boolean incomingMissing = true;
+											for (Object existingElement : existingCollection) {
+												if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+													incomingMissing = false;
+													break;
+												}
+											}
+											
+											if (incomingMissing) {
+												existingCollection.add(incomingElement);
+											}
 										}
 									}
 								}

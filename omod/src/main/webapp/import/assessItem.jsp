@@ -143,10 +143,10 @@
 					<table>
 						<c:if test="${not empty item.existing}">
 							<c:if
-								test="${item.incoming.class.simpleName != item.existing.class.simpleName}">
+								test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 								<tr>
 									<td class="to_right">Type:</td>
-									<td><span id="incomingType">${item.incoming.class.simpleName}</span></td>
+									<td><span id="incomingType">${item.incomingClassSimpleName}</span></td>
 								</tr>
 							</c:if>
 						</c:if>
@@ -190,10 +190,10 @@
 						<table>
 							<c:if test="${not empty item.existing}">
 								<c:if
-									test="${item.incoming.class.simpleName != item.existing.class.simpleName}">
+									test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 									<tr>
 										<td class="to_right">Type:</td>
-										<td><span id="existingType">${item.existing.class.simpleName}</span></td>
+										<td><span id="existingType">${item.existingClassSimpleName}</span></td>
 									</tr>
 								</c:if>
 							</c:if>

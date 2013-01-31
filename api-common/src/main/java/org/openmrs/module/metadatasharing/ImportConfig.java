@@ -160,6 +160,14 @@ public class ImportConfig {
 				config.confirmPossibleMatch = false;
 				config.confirmNoMatch = false;
 				return config;
+			case MIRROR:
+				config.exactMatch = ImportType.OVERWRITE_MINE;
+				config.possibleMatch = ImportType.OVERWRITE_MINE;
+				config.noMatch = ImportType.CREATE;
+				config.confirmExactMatch = false;
+				config.confirmPossibleMatch = false;
+				config.confirmNoMatch = false;
+				return config;
 			default:
 				return config;
 		}

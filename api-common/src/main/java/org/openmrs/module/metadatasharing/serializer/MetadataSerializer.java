@@ -25,6 +25,7 @@ import org.openmrs.module.metadatasharing.serializer.converter.DateTimeConverter
 import org.openmrs.module.metadatasharing.serializer.converter.DoubleLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.FloatLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.HibernatePersistentCollectionConverter;
+import org.openmrs.module.metadatasharing.serializer.converter.HibernateProxyConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.IntLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.LongLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.OpenmrsObjectConverter;
@@ -138,8 +139,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		
 		xstream.addImmutableType(User.class);
 		xstream.registerConverter(new UserConverter(), XStream.PRIORITY_VERY_HIGH);
-		//		xstream.registerConverter(new HibernateProxyConverter(xstream.getConverterLookup()),
-		//		    XStream.PRIORITY_NORMAL);
+		xstream.registerConverter(new HibernateProxyConverter(xstream.getConverterLookup()), XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new HibernatePersistentCollectionConverter(xstream.getConverterLookup()),
 		    XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new OpenmrsObjectConverter(xstream.getMapper(), xstream.getReflectionProvider()),

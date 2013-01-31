@@ -20,15 +20,11 @@ import org.openmrs.module.metadatasharing.web.controller.ConfigureController;
  */
 public class ConfigureForm {
 	
-	private String conceptSourceUuid;
-	
 	private String urlPrefix;
 	
 	private Boolean notifyAutomatically;
 	
 	private Integer intervalDays;
-	
-	private Boolean addLocalMappings;
 	
 	private Boolean enableOnTheFlyPackages;
 	
@@ -85,33 +81,6 @@ public class ConfigureForm {
 		return intervalDays;
 	}
 	
-	/**
-	 * @param conceptSourceUuid the conceptSourceUuid to set
-	 */
-	public void setConceptSourceUuid(String conceptSourceUuid) {
-		this.conceptSourceUuid = conceptSourceUuid;
-	}
-	
-	/**
-	 * @return the conceptSourceUuid
-	 */
-	public String getConceptSourceUuid() {
-		return conceptSourceUuid;
-	}
-	
-	/**
-	 * @return the addLocalMappings
-	 */
-	public Boolean getAddLocalMappings() {
-		return addLocalMappings;
-	}
-	
-	/**
-	 * @param addLocalMappings the addLocalMappings to set
-	 */
-	public void setAddLocalMappings(Boolean addLocalMappings) {
-		this.addLocalMappings = addLocalMappings;
-	}
 	
 	/**
 	 * @return the enableOnTheFlyPackages

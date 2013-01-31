@@ -21,6 +21,10 @@ package org.openmrs.module.metadatasharing.resolver;
  */
 public abstract class Resolver<T> {
 	
+	public int getPriority() {
+		return 50;
+	}
+	
 	public abstract T getExactMatch(T incoming);
 	
 	public abstract T getPossibleMatch(T incoming);

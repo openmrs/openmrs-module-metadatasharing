@@ -6,6 +6,7 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
@@ -52,6 +53,7 @@ public class SubscriptionUpdaterTest extends BaseModuleContextSensitiveTest {
 	 * @verifies handle service unavailable exception
 	 */
 	@Test
+	@Ignore
 	public void checkForUpdates_shouldHandleServiceUnavailableException() throws Exception {
 		ImportedPackage subscription = getMockSubscription("http://test.test");
 		updater.checkForUpdates(subscription);

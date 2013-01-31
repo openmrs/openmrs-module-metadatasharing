@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.handler.impl;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,19 +48,11 @@ public class Role18Handler implements MetadataMergeHandler<Role> {
 	 */
 	@Override
 	public void merge(Role existing, Role incoming, ImportType importType, Map<Object, Object> incomingToExisting) {
-		Set<Role> existingChildRoles = new HashSet<Role>();
-		if (existing != null && existing.getChildRoles() != null) {
-			existingChildRoles.addAll(existing.getChildRoles());
+		if (incoming.getChildRoles() != null) {
+			incoming.setChildRoles(null);
 		}
 		
 		objectHandler.merge(existing, incoming, importType, incomingToExisting);
-		
-		if (existing != null && existing.getChildRoles() != null) {
-			existing.getChildRoles().retainAll(existingChildRoles);
-		}
-		if (incoming != null && incoming.getChildRoles() != null) {
-			incoming.getChildRoles().retainAll(existingChildRoles);
-		}
 	}
 	
 }

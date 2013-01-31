@@ -22,6 +22,7 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -88,18 +89,15 @@ public class ExportPackageTask extends Task {
 			
 			List<String> metadata = new ArrayList<String>();
 			
-			List<Item> pacakgeItems = new ArrayList<Item>(exportedPackage.getItems());
-			for (int from = 0, to = SUBPACKAGE_SIZE;; to += SUBPACKAGE_SIZE) {
-				if (to > pacakgeItems.size()) {
-					to = pacakgeItems.size();
+			List<Item> packageItems = new ArrayList<Item>(exportedPackage.getItems());
+			for (int from = 0; from < packageItems.size(); from += SUBPACKAGE_SIZE) {
+				int to = from + SUBPACKAGE_SIZE;
+				if (to > packageItems.size()) {
+					to = packageItems.size();
 				}
 				
-				log("Exporting subpackage[items from " + (from + 1) + " to " + to + "]");
-				metadata.add(exportSubpackage(pacakgeItems.subList(from, to)));
-				
-				if (to == pacakgeItems.size()) {
-					break;
-				}
+				log("Exporting subpackage [items from " + from + " to " + to + " of " + packageItems.size() + "]");
+				metadata.add(exportSubpackage(packageItems.subList(from, to)));
 			}
 			
 			log("Serialzing header");
@@ -129,17 +127,13 @@ public class ExportPackageTask extends Task {
 	private String exportSubpackage(List<Item> packageItems) throws SerializationException {
 		List<Object> explicitItems = new ArrayList<Object>();
 		
-		log("Preparing items to export");
+		log("Validating items");
 		for (Item packageItem : packageItems) {
 			Object item = Handler.getItemByUuid(packageItem.getContainedClass(), packageItem.getUuid());
 			
-			try {
-				ValidateUtil.validate(item);
+			if (validateItem(item)) {
+				addLocalMappingToConcept(item);
 			}
-			catch (Exception e) {
-				log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
-			}
-			
 			explicitItems.add(item);
 		}
 		
@@ -150,15 +144,6 @@ public class ExportPackageTask extends Task {
 		
 		if (!getErrors().isEmpty()) {
 			throw new APIException("Items failed validation");
-		}
-		
-		log("Adding mappings to Concepts");
-		if (MetadataSharing.getInstance().isAddLocalMappings()) {
-			for (Object explicitItem : explicitItems) {
-				if (explicitItem instanceof Concept) {
-					MetadataSharing.getInstance().getConceptMapper().addSystemConceptMap((Concept) explicitItem);
-				}
-			}
 		}
 		
 		log("Serializing items");
@@ -172,7 +157,41 @@ public class ExportPackageTask extends Task {
 		return subpackage.toString();
 	}
 	
+	private boolean validateItem(Object item) {
+		try {
+			ValidateUtil.validate(item);
+		}
+		catch (Exception e) {
+			log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Adds local mapping to concept here if the admin so desires. <br/>
+	 * Only an item which is Concept will get mapping <br/>
+	 * 
+	 * @see MetadataSharing#isAddLocalMappings()
+	 * @param the object
+	 * @should add local mapping to concept if admin desires
+	 * @should not add local mapping to concept if admin desires
+	 */
+	protected void addLocalMappingToConcept(Object object) {
+		if (object instanceof Concept) {
+			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()) {
+				Context.getService(MetadataMappingService.class).addLocalMappingToConcept((Concept) object);
+			}
+		}
+	}
+	
 	private void resolveRelatedItems(final Object item) {
+		List<Object> priorityDependencies = Handler.getPriorityDependencies(item);
+		for (Object priorityDependency : priorityDependencies) {
+	        visitMetadata(priorityDependency);
+        }
+		
 		MetadataSharing.getInstance().getObjectVisitor().visitFields(item, true, new ObjectVisitor.FieldVisitor() {
 			
 			@Override
@@ -186,24 +205,22 @@ public class ExportPackageTask extends Task {
 				}
 			}
 			
-			private void visitMetadata(Object object) {
-				if (object instanceof OpenmrsObject && !(object instanceof User)) {
-					Item packageItem = Item.valueOf(object);
-					if (!exportedPackage.getItems().contains(packageItem)
-					        && exportedPackage.getRelatedItems().add(packageItem)) {
-						try {
-							ValidateUtil.validate(object);
-						}
-						catch (Exception e) {
-							log(Handler.getRegisteredType(object) + " [" + Handler.getUuid(object) + "] failed validation",
-							    e);
-						}
-						
-						resolveRelatedItems(object);
-					}
-				}
-			}
+			
 		});
+	}
+	
+	private void visitMetadata(Object object) {
+		if (object instanceof OpenmrsObject && !(object instanceof User)) {
+			Item packageItem = Item.valueOf(object);
+			if (!exportedPackage.getItems().contains(packageItem)
+			        && exportedPackage.getRelatedItems().add(packageItem)) {
+				if (validateItem(object)) {
+					addLocalMappingToConcept(object);
+				}
+				
+				resolveRelatedItems(object);
+			}
+		}
 	}
 	
 }

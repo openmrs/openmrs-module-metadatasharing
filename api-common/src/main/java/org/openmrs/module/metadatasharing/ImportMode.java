@@ -18,7 +18,7 @@ package org.openmrs.module.metadatasharing;
  */
 public enum ImportMode {
 	PARENT_AND_CHILD("metadatasharing.import.mode.parentAndChild"), PEER_TO_PEER("metadatasharing.import.mode.peerToPeer"), TEST(
-	        "metadatasharing.import.mode.test"), PREVIOUS("metadatasharing.import.mode.previous");
+	        "metadatasharing.import.mode.test"), PREVIOUS("metadatasharing.import.mode.previous"), MIRROR("metadatasharing.import.mode.mirror");
 	
 	private final String code;
 	
@@ -47,5 +47,9 @@ public enum ImportMode {
 	
 	public boolean isPrevious() {
 		return PREVIOUS.equals(this);
+	}
+	
+	public boolean isMirror() {
+		return MIRROR.equals(this);
 	}
 }

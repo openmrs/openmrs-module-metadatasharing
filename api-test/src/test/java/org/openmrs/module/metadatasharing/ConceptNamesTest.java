@@ -57,6 +57,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
@@ -74,6 +77,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
 				
 				Context.getConceptService().saveConcept(concept);
 			}
@@ -96,7 +102,77 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "AAG", "a", "b"));
+				for (ConceptName name : names) {
+					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
+				}
+				
+				ConceptName preferredName = concept.getPreferredName(Locale.ENGLISH);
+				Assert.assertEquals("a must be preferred", "a", preferredName.getName());
+			}
+			
+		});
+	}
+	
+	@Test
+	public void shouldRemoveExistingNamesIfNotInIncomingInMirrorMode() throws Exception {
+		final String conceptUuid = UUID.randomUUID().toString();
+		
+		runShareTest(new ShareTestHelper() {
+			
+			@Override
+			public List<?> prepareExportServer() throws Exception {
+				Concept concept = new Concept();
+				concept.setUuid(conceptUuid);
+				
+				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
+				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
+				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
+				Context.getConceptService().saveConcept(concept);
+				return Arrays.asList(concept);
+			}
+			
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
+			 */
+			@Override
+			public void prepareImportServer() throws Exception {
+				Concept concept = new Concept();
+				concept.setUuid(conceptUuid);
+				
+				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
+				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
+				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
+				Context.getConceptService().saveConcept(concept);
+			}
+			
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 */
+			@Override
+			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
+				importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
+			}
+			
+			@Override
+			public void runOnImportServerAfterImport() throws Exception {				
+				Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
+				
+				Collection<ConceptName> names = concept.getNames();
+				Set<String> expectedNames = new HashSet<String>();
+				expectedNames.addAll(Arrays.asList("AA", "AAG", "a"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
 				}
@@ -125,6 +201,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
 				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
+				
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
@@ -142,6 +221,9 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
+				
+				ConceptName synonym2 = new ConceptName("AAG", Locale.GERMAN);
+				concept.addName(synonym2);
 				
 				Context.getConceptService().saveConcept(concept);
 			}
@@ -164,7 +246,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Collection<ConceptName> names = concept.getNames();
 				Set<String> expectedNames = new HashSet<String>();
-				expectedNames.addAll(Arrays.asList("AA", "a", "b"));
+				expectedNames.addAll(Arrays.asList("AA", "AAG","a", "b"));
 				for (ConceptName name : names) {
 					assertTrue(name.getName() + " missing", expectedNames.remove(name.getName()));
 				}

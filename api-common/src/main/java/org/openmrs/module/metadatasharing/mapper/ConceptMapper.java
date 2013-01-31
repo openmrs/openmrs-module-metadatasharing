@@ -14,76 +14,45 @@
 package org.openmrs.module.metadatasharing.mapper;
 
 import org.openmrs.Concept;
-import org.openmrs.ConceptMap;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.springframework.stereotype.Component;
 
 @Component(MetadataSharingConsts.MODULE_ID + ".ConceptMapper")
 public class ConceptMapper {
 	
+	/**
+	 * @deprecated use ConceptPubSub
+	 */
+	@Deprecated
 	public boolean hasSystemConceptSource() {
-		String conceptSourceUuid = Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE);
-		if (conceptSourceUuid != null) {
-			ConceptSource conceptSource = Context.getConceptService().getConceptSourceByUuid(conceptSourceUuid);
-			if (conceptSource != null) {
-				return true;
-			}
+		try {
+			return getSystemConceptSource() != null;
 		}
-		return false;
+		catch (APIException e) {
+			return false;
+		}
 	}
 	
+	/**
+	 * @deprecated use {@link ConceptPubSubService#getLocalSource()}
+	 */
+	@Deprecated
 	public ConceptSource getSystemConceptSource() throws APIException {
-		String conceptSourceUuid = Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE);
-		if (conceptSourceUuid == null) {
-			throw new APIException("The global property " + MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE
-			        + " was not found!");
-		}
-		
-		ConceptSource conceptSource = Context.getConceptService().getConceptSourceByUuid(conceptSourceUuid);
-		if (conceptSource == null) {
-			throw new APIException("The concept source uuid (" + conceptSourceUuid + ") specified in the global property "
-			        + MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE + " was not found!");
-		}
-		
-		return conceptSource;
+		return Context.getService(MetadataMappingService.class).getLocalSource();
 	}
 	
 	/**
 	 * Adds a system mapping to the given concept if necessary.
 	 * 
 	 * @param concept
+	 * @deprecated use {@link ConceptPubSubService#addLocalMappingToConcept(Concept)}
 	 */
+	@Deprecated
 	public void addSystemConceptMap(Concept concept) throws APIException {
-		if (concept.getId() == null) {
-			//The concept is not saved in the db.
-			return;
-		}
-		
-		ConceptSource systemConceptSource = getSystemConceptSource();
-		
-		boolean found = false;
-		for (ConceptMap map : concept.getConceptMappings()) {
-			if (map.getSource().equals(systemConceptSource)) {
-				if (map.getSourceCode().equals(concept.getId().toString())) {
-					found = true;
-					break;
-				}
-			}
-		}
-		
-		if (!found) {
-			ConceptMap mapping = new ConceptMap();
-			mapping.setConcept(concept);
-			mapping.setSource(systemConceptSource);
-			mapping.setSourceCode(concept.getId().toString());
-			
-			concept.addConceptMapping(mapping);
-			Context.getConceptService().saveConcept(concept);
-		}
+		Context.getService(MetadataMappingService.class).addLocalMappingToConcept(concept);
 	}
 }

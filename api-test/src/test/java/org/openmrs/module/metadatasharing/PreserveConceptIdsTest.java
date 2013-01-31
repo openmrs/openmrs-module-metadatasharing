@@ -24,7 +24,6 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
-import org.springframework.test.annotation.NotTransactional;
 
 /**
  * Tests the exporting of ids on objects and makes sure the importing server persists them
@@ -72,7 +71,6 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 	}
 	
 	@Test
-	@NotTransactional
 	public void shouldNotPreserveConceptIdAcrossServersIfImportingServerDoesntRequestIt() throws Exception {
 		runShareTest(new ShareTestHelper() {
 			

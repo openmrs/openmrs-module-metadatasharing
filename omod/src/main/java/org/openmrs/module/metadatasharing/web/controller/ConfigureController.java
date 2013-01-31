@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.openmrs.ConceptSource;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
@@ -73,9 +72,6 @@ public class ConfigureController {
 		AdministrationService adminService = Context.getAdministrationService();
 		ConfigureForm configureForm = new ConfigureForm();
 		
-		String conceptSourceUuid = adminService.getGlobalProperty(MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE);
-		configureForm.setConceptSourceUuid(conceptSourceUuid);
-		
 		configureForm.setUrlPrefix(adminService.getGlobalProperty(MetadataSharingConsts.GP_URL_PREFIX));
 		
 		String notify = Context.getAdministrationService().getGlobalProperty(MetadataSharingConsts.GP_NOTIFY, "false");
@@ -83,12 +79,6 @@ public class ConfigureController {
 		
 		String days = Context.getAdministrationService().getGlobalProperty(MetadataSharingConsts.GP_INTERVAL_DAYS, "1");
 		configureForm.setIntervalDays(Integer.valueOf(days));
-		
-		String addLocalMappingsString = Context.getAdministrationService().getGlobalProperty(
-		    MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS, "true");
-		configureForm
-		        .setAddLocalMappings(Boolean.valueOf((StringUtils.isNotBlank(addLocalMappingsString) ? addLocalMappingsString
-		                : "true")));
 		
 		configureForm.setWebservicesKey(Context.getAdministrationService().getGlobalProperty(
 		    MetadataSharingConsts.GP_WEBSERVICES_KEY, ""));
@@ -106,12 +96,6 @@ public class ConfigureController {
 		if (!errors.hasErrors()) {
 			MetadataSharingService subscriptionService = Context.getService(MetadataSharingService.class);
 			
-			if (configureForm.getConceptSourceUuid() != null) { //we only require to configure the concept source.
-				saveGlobalProperty(MetadataSharingConsts.GP_CONFIGURED, Boolean.TRUE.toString());
-			} else {
-				saveGlobalProperty(MetadataSharingConsts.GP_CONFIGURED, Boolean.FALSE.toString());
-			}
-			
 			saveGlobalProperty(MetadataSharingConsts.GP_URL_PREFIX, configureForm.getUrlPrefix());
 			saveGlobalProperty(MetadataSharingConsts.GP_NOTIFY, configureForm.getNotifyAutomatically().toString());
 			
@@ -122,10 +106,6 @@ public class ConfigureController {
 				subscriptionService.getSubscriptionUpdater().scheduleCheckForUpdatesTask(
 				    (long) (configureForm.getIntervalDays() * 3600 * 24));
 			}
-			
-			saveGlobalProperty(MetadataSharingConsts.GP_SYSTEM_CONCEPT_SOURCE, configureForm.getConceptSourceUuid());
-			
-			saveGlobalProperty(MetadataSharingConsts.GP_ADD_LOCAL_MAPPINGS, configureForm.getAddLocalMappings().toString());
 			
 			String[] sourceIds = ServletRequestUtils.getStringParameters(request, "preferredSourceIds");
 			

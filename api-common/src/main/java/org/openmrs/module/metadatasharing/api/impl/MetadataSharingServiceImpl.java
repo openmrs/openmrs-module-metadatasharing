@@ -154,7 +154,7 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 	 */
 	@Override
 	public ImportedPackage getImportedPackageByGroup(String group) throws APIException {
-		return dao.getImportedPackageByGruop(group);
+		return dao.getImportedPackageByGroup(group);
 	}
 	
 	/**

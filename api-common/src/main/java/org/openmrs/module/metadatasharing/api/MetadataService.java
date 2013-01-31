@@ -22,6 +22,7 @@ import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptHandler;
 import org.openmrs.module.metadatasharing.handler.impl.OpenmrsObjectHandler;
+import org.openmrs.module.metadatasharing.handler.impl.SerializedObjectHandler;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -64,6 +65,15 @@ public interface MetadataService extends OpenmrsService {
 	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
 	<T> int getItemsCount(Class<? extends T> type, boolean includeRetired, String phrase) throws APIException;
+	
+	/**
+	 * Access method for {@link SerializedObjectHandler}.
+	 * 
+	 * @param item
+	 * @return the saved item
+	 * @throws APIException
+	 */
+	<T> T saveItem(T item) throws APIException;
 	
 	/**
 	 * Access method for {@link ConceptHandler#getItems(Class, boolean, String, Integer, Integer)}.
