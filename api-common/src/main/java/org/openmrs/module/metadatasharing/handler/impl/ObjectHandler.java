@@ -16,11 +16,13 @@ package org.openmrs.module.metadatasharing.handler.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.ConceptName;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.User;
 import org.openmrs.module.metadatasharing.ImportType;
@@ -125,15 +127,46 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
 								
 								if (importType.isOverwriteMine()) {
-									existingCollection.clear();
+									//We'll be skipping incoming elements if they exist.
+									List<Object> incomingDiffCollection = new LinkedList<Object>(incomingCollection);
 									
-									for (Object incomingElement : incomingCollection) {
-	                                    Object existing = incomingToExisting.get(incomingElement);
-	                                    if (existing != null) {
-	                                    	existingCollection.add(existing);
-	                                    } else {
-	                                    	existingCollection.add(incomingElement);
-	                                    }
+									Iterator<Object> existingCollectionIt = existingCollection.iterator();
+									while(existingCollectionIt.hasNext()) {
+										Object existingElement = existingCollectionIt.next();
+										
+										boolean existingMissing = true;
+										Iterator<Object> incomingDiffCollectionIt = incomingDiffCollection.iterator();
+										while(incomingDiffCollectionIt.hasNext()) {
+											Object incomingElement = incomingDiffCollectionIt.next();
+											
+											Object existing = incomingToExisting.get(incomingElement);
+											
+											if (existing != null) {
+												incomingDiffCollectionIt.remove();
+												existingMissing = false;
+												break;
+											} else { //Let's try equals for hidden types.
+												if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+													incomingDiffCollectionIt.remove();
+													existingMissing = false;
+													break;
+												}
+											}
+										}
+										
+										if (existingMissing) {
+											if (existingElement instanceof ConceptName) {
+												//ConceptNames must not be purged, but voided. See META-324.
+												((ConceptName) existingElement).setVoided(true);
+											} else {
+												existingCollectionIt.remove();
+											}
+										}
+									}
+									
+									//Let's add completely new incoming elements.
+									for (Object incomingElement : incomingDiffCollection) {
+	                                    existingCollection.add(incomingElement);
                                     }
 								} else {
 									for (Object incomingElement : incomingCollection) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.openmrs.module</groupId>
@@ -70,7 +71,7 @@
 		<module>api-1.9</module>
 		<module>omod</module>
 		<module>integration-test</module>
-  </modules>
+	</modules>
 
 	<properties>
 		<openMRSVersion>1.6.6</openMRSVersion>
@@ -84,15 +85,15 @@
 
 	<dependencyManagement>
 		<dependencies>
-		    
-		    <dependency>
+
+			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>metadatamapping-api</artifactId>
 				<version>1.0.1</version>
 				<type>jar</type>
 				<scope>provided</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.openmrs.api</groupId>
 				<artifactId>openmrs-api</artifactId>
@@ -159,9 +160,15 @@
 
 			<!-- Extra dependencies -->
 			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-all</artifactId>
-				<version>1.9.0</version>
+				<version>1.8.5</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -176,6 +183,12 @@
 				<version>1.4.10</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>1.3</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -184,7 +197,7 @@
 			<groupId>org.openmrs.module</groupId>
 			<artifactId>metadatamapping-api</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
@@ -216,15 +229,17 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
 		</dependency>
 	</dependencies>
 

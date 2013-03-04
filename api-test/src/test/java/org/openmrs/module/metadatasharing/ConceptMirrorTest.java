@@ -13,7 +13,9 @@
  */
 package org.openmrs.module.metadatasharing;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +26,9 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
@@ -34,7 +39,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 
 /**
- * Test if ConceptAnswers are overwritten correctly
+ * Tests if MIRROR mode works correctly for Concept.
  */
 public class ConceptMirrorTest extends BaseShareTest {
 	
@@ -118,6 +123,65 @@ public class ConceptMirrorTest extends BaseShareTest {
 				}
 			}
 		});
+	}
+	
+	@Test
+	public void shouldVoidConceptNamesIfNotInIncoming() throws Exception {
+		final String conceptUuid = UUID.randomUUID().toString();
+		
+		runShareTest(new ShareTestHelper() {
+			
+			@Override
+			public List<?> prepareExportServer() throws Exception {
+				Concept concept = newConcept(1);
+				concept.setUuid(conceptUuid);
+				
+				concept.addName(new ConceptName("name to add", Locale.ENGLISH));
+				
+				Context.getConceptService().saveConcept(concept);
+				return Arrays.asList(concept);
+			}
+			
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
+			 */
+			@Override
+			public void prepareImportServer() throws Exception {
+				Concept concept = newConcept(1);
+				concept.setUuid(conceptUuid);
+				
+				concept.addName(new ConceptName("name to void", Locale.ENGLISH));
+				
+				Context.getConceptService().saveConcept(concept);
+			}
+			
+			@SuppressWarnings({ "unchecked" })
+			@Override
+			public void runOnImportServerAfterImport() throws Exception {
+				Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
+				assertThat(concept.getNames(),
+				    hasItems(hasName("name to void"), hasName("name to add"), hasName("org.openmrs.Concept_1_name")));
+				
+				assertThat(concept.getNames(false), hasItems(hasName("name to add"), hasName("org.openmrs.Concept_1_name")));
+			}
+			
+		});
+		
+	}
+	
+	private Matcher<ConceptName> hasName(final String name) {
+		return new TypeSafeMatcher<ConceptName>() {
+			
+			@Override
+			public void describeTo(Description description) {
+				description.appendText("getName should return ").appendValue(name);
+			}
+
+			@Override
+            protected boolean matchesSafely(ConceptName item) {
+	            return item.getName().equals(name);
+            }
+		};
 	}
 	
 	private Concept newConcept(Integer id) {
