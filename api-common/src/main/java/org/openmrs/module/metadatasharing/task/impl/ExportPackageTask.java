@@ -145,6 +145,8 @@ public class ExportPackageTask extends Task {
 			throw new APIException("Items failed validation");
 		}
 		
+		Context.flushSession();
+		
 		log("Serializing items");
 		StringBuilder subpackage = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		subpackage.append(MetadataSharing.getInstance().getMetadataSerializer().serialize(explicitItems)).append("\n");
@@ -186,6 +188,8 @@ public class ExportPackageTask extends Task {
 	}
 	
 	private void resolveRelatedItems(final Object item) {
+		Context.flushSession(); //Let's save memory and make it easier to find broken data.
+		
 		List<Object> priorityDependencies = Handler.getPriorityDependencies(item);
 	    
 		List<Object> itemsToVisit = new ArrayList<Object>();
