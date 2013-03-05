@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.OpenmrsObject;
-import org.openmrs.User;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatamapping.api.MetadataMappingService;
@@ -127,17 +126,17 @@ public class ExportPackageTask extends Task {
 	private String exportSubpackage(List<Item> packageItems) throws SerializationException {
 		List<Object> explicitItems = new ArrayList<Object>();
 		
-		log("Validating items");
+		log("Validating added items");
 		for (Item packageItem : packageItems) {
 			Object item = Handler.getItemByUuid(packageItem.getContainedClass(), packageItem.getUuid());
 			
 			if (validateItem(item)) {
-				addLocalMappingToConcept(item);
+				addLocalMappingIfConcept(item);
 			}
 			explicitItems.add(item);
 		}
 		
-		log("Resolving related items");
+		log("Resolving and validating related items");
 		for (Object explicitItem : explicitItems) {
 			resolveRelatedItems(explicitItem);
 		}
@@ -178,7 +177,7 @@ public class ExportPackageTask extends Task {
 	 * @should add local mapping to concept if admin desires
 	 * @should not add local mapping to concept if admin desires
 	 */
-	protected void addLocalMappingToConcept(Object object) {
+	protected void addLocalMappingIfConcept(Object object) {
 		if (object instanceof Concept) {
 			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()) {
 				Context.getService(MetadataMappingService.class).addLocalMappingToConcept((Concept) object);
@@ -188,37 +187,36 @@ public class ExportPackageTask extends Task {
 	
 	private void resolveRelatedItems(final Object item) {
 		List<Object> priorityDependencies = Handler.getPriorityDependencies(item);
-		for (Object priorityDependency : priorityDependencies) {
-	        visitMetadata(priorityDependency);
-        }
+	    
+		List<Object> itemsToVisit = new ArrayList<Object>();
+		itemsToVisit.add(item);
+		itemsToVisit.addAll(priorityDependencies);
 		
-		MetadataSharing.getInstance().getObjectVisitor().visitFields(item, true, new ObjectVisitor.FieldVisitor() {
-			
-			@Override
-			public void visit(String name, Class<?> type, Class<?> definedIn, Object value) {
-				visitMetadata(value);
+		for (Object itemToVisit : itemsToVisit) {
+			MetadataSharing.getInstance().getObjectVisitor().visitFields(itemToVisit, true, new ObjectVisitor.FieldVisitor() {
 				
-				if (value instanceof Collection) {
-					for (Object object : (Collection<?>) value) {
-						visitMetadata(object);
-					}
+				@Override
+				public void visit(String name, Class<?> type, Class<?> definedIn, Object value) {
+					visitMetadata(value);
 				}
-			}
-			
-			
-		});
+			});
+        }
 	}
 	
 	private void visitMetadata(Object object) {
-		if (object instanceof OpenmrsObject && !(object instanceof User)) {
+		if (object instanceof OpenmrsObject) {
 			Item packageItem = Item.valueOf(object);
 			if (!exportedPackage.getItems().contains(packageItem)
 			        && exportedPackage.getRelatedItems().add(packageItem)) {
 				if (validateItem(object)) {
-					addLocalMappingToConcept(object);
+					addLocalMappingIfConcept(object);
 				}
 				
 				resolveRelatedItems(object);
+			}
+		} else if (object instanceof Collection) {
+			for (Object element : (Collection<?>) object) {
+				visitMetadata(element);
 			}
 		}
 	}

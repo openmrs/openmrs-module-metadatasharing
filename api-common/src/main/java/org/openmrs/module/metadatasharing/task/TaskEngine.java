@@ -129,6 +129,7 @@ public class TaskEngine {
 			finally {
 				task.setActive(false);
 				task.setCompleted(true);
+				Context.clearUserContext();
 				synchronized (engine.lock) {
 					engine.queuedTasks.remove(task.getUuid());
 					engine.finishedTasks.put(task.getUuid(), task);
