@@ -183,8 +183,8 @@
 }
 
 .toolbarButton {
-	padding: 1px;
-	margin: 3px 10px 3px 2px;
+	padding: 1px 1px 1px 23px;
+	margin: 3px 4px 3px 2px;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
@@ -193,10 +193,14 @@
 	white-space: nowrap;
 	display: inline;
 	float: left;
+    height: 26px;
+    border-radius: 4px;
+    font-size: 15;
 }
 
 .toolbarButton:hover {
 	cursor: pointer;
+    color: #e6e6fa;
 }
 
 .manageSubscriptions #subscriptionsTitle {
@@ -358,4 +362,16 @@ span.warning,div.warning,span.correct {
 .choose-import-mode .import-mode-description {
 	padding-left: 4em;
 	font-size: 0.8em;
+}
+
+.ui-icon-download {
+    background: #d3d3d3 url('../images/download.png') no-repeat top left;
+}
+
+.ui-icon-version {
+    background: #d3d3d3 url('../images/newVersion.png') no-repeat top left;
+}
+
+.ui-icon-scratch {
+    background: #d3d3d3 url('../images/scratch.png') no-repeat top left;
 }
