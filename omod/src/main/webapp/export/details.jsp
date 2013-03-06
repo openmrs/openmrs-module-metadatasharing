@@ -46,9 +46,9 @@
 		<input type="text" />
 	</p>
 	<div class="warning" id="notPublishedWarning" style="display:none;"></div>
-	<input type="button" value="<spring:message code="metadatasharing.packageSummary.newVersionLatest" />" id="latest" class="toolbarButton"/>
-	<input type="button" value="<spring:message code="metadatasharing.packageSummary.newVersionScratch" />" id="scratch" class="toolbarButton"/>
-	<input type="button" value="<spring:message code="metadatasharing.packageSummary.downloadLatest"  />" id="downloadLatest" class="toolbarButton"/>
+    <input type="button" value="<spring:message code="metadatasharing.packageSummary.downloadLatest"  />" id="downloadLatest" class="toolbarButton ui-icon-download"/>
+    <input type="button" value="<spring:message code="metadatasharing.packageSummary.newVersionLatest" />" id="latest" class="toolbarButton ui-icon-version"/>
+	<input type="button" value="<spring:message code="metadatasharing.packageSummary.newVersionScratch" />" id="scratch" class="toolbarButton ui-icon-scratch"/>
 	<table id="packages">
 		<thead>
 			<tr>
