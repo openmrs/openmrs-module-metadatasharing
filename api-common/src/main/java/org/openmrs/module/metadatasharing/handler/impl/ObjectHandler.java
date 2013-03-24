@@ -49,7 +49,20 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 	
 	@Autowired
 	private ComparisonEngine comparisonEngine;
-	
+
+	public ObjectHandler() {
+	}
+
+	/**
+	 * For use in unit tests when we can't autowire
+	 * @param visitor
+	 * @param comparisonEngine
+	 */
+	public ObjectHandler(ObjectVisitor visitor, ComparisonEngine comparisonEngine) {
+		this.visitor = visitor;
+		this.comparisonEngine = comparisonEngine;
+	}
+
 	@Override
 	public int getPriority() {
 	    return 0;
@@ -108,9 +121,9 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 			if (importType.isPreferTheirs() || importType.isPreferMine() || importType.isOverwriteMine()) {
 				//Copy properties from the incoming object to the existing object				
 				Integer id = Handler.getId(existing);
-				
+
 				visitor.visitFields(incoming, false, new ObjectVisitor.FieldVisitor() {
-					
+
 					@Override
 					public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object incomingField) {
 						if (Collection.class.isAssignableFrom(type)) {
@@ -118,42 +131,24 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 							if (incomingField == null) {
 								return;
 							}
-							
+
 							Object existingField = visitor.readField(existing, fieldName, definedIn);
 							if (existingField instanceof Collection) {
 								@SuppressWarnings("unchecked")
 								Collection<Object> existingCollection = (Collection<Object>) existingField;
 								@SuppressWarnings("unchecked")
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
-								
+
 								if (importType.isOverwriteMine()) {
 									//We'll be skipping incoming elements if they exist.
 									List<Object> incomingDiffCollection = new LinkedList<Object>(incomingCollection);
-									
+
 									Iterator<Object> existingCollectionIt = existingCollection.iterator();
 									while(existingCollectionIt.hasNext()) {
 										Object existingElement = existingCollectionIt.next();
-										
-										boolean existingMissing = true;
-										Iterator<Object> incomingDiffCollectionIt = incomingDiffCollection.iterator();
-										while(incomingDiffCollectionIt.hasNext()) {
-											Object incomingElement = incomingDiffCollectionIt.next();
-											
-											Object existing = incomingToExisting.get(incomingElement);
-											
-											if (existing != null) {
-												incomingDiffCollectionIt.remove();
-												existingMissing = false;
-												break;
-											} else { //Let's try equals for hidden types.
-												if (comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
-													incomingDiffCollectionIt.remove();
-													existingMissing = false;
-													break;
-												}
-											}
-										}
-										
+
+										boolean existingMissing = findAndRemoveMatchingElement(incomingDiffCollection, existingElement) == null;
+
 										if (existingMissing) {
 											if (existingElement instanceof ConceptName) {
 												//ConceptNames must not be purged, but voided. See META-324.
@@ -163,7 +158,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 											}
 										}
 									}
-									
+
 									//Let's add completely new incoming elements.
 									for (Object incomingElement : incomingDiffCollection) {
 	                                    existingCollection.add(incomingElement);
@@ -171,7 +166,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								} else {
 									for (Object incomingElement : incomingCollection) {
 										Object existing = incomingToExisting.get(incomingElement);
-										
+
 										if (existing == null) {
 											boolean incomingMissing = true;
 											for (Object existingElement : existingCollection) {
@@ -180,7 +175,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 													break;
 												}
 											}
-											
+
 											if (incomingMissing) {
 												existingCollection.add(incomingElement);
 											}
@@ -202,6 +197,22 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								}
 							}
 						}
+					}
+
+					private Object findAndRemoveMatchingElement(List<Object> incomingDiffCollection, Object existingElement) {
+						Iterator<Object> incomingDiffCollectionIt = incomingDiffCollection.iterator();
+						while (incomingDiffCollectionIt.hasNext()) {
+							Object incomingElement = incomingDiffCollectionIt.next();
+							// if this was mapped to another element, look at that one instead
+							if (incomingToExisting.get(incomingElement) != null) {
+								incomingElement = incomingToExisting.get(incomingElement);
+							}
+							if (incomingElement.equals(existingElement) || comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+								incomingDiffCollectionIt.remove();
+								return incomingElement;
+							}
+						}
+						return null;
 					}
 				});
 				
