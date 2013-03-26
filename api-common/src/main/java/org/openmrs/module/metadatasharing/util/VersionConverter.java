@@ -87,6 +87,13 @@ public class VersionConverter {
 	public String convert(String xml, String fromVersion, String toVersion) throws SerializationException {
 		if (fromVersion == null || toVersion == null)
 			return xml;
+
+        // currently the only conversions we handle are between 1.6.x and 1.7+ versions of concepts
+        // return fast if we have no conversions to do
+        int numThatAre16 = (fromVersion.startsWith("1.6.") ? 1 : 0) + (toVersion.startsWith("1.6.") ? 1 : 0);
+        if (numThatAre16 != 1) {
+            return xml;
+        }
 		
 		Document doc = fromXML(xml);
 		
@@ -143,7 +150,7 @@ public class VersionConverter {
 				}
 			}
 			catch (Exception e) {
-				throw new SerializationException("Errow while converting from 1.6.x:", e);
+				throw new SerializationException("Error while converting from 1.6.x:", e);
 			}
 			
 		} else if (toVersion.startsWith("1.6.") && !fromVersion.startsWith("1.6.")) {
@@ -201,7 +208,6 @@ public class VersionConverter {
 	 * @param nameNode
 	 * @param tagName
 	 * @param tagDescription
-	 * @param tagId
 	 */
 	private void addNameTag(Document doc, Element nameNode, String tagName, String tagDescription) {
 		Element tags = getChildElement(nameNode, "tags");
