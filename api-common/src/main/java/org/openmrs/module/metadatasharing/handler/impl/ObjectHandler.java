@@ -147,7 +147,8 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 									while(existingCollectionIt.hasNext()) {
 										Object existingElement = existingCollectionIt.next();
 
-										boolean existingMissing = findAndRemoveMatchingElement(incomingDiffCollection, existingElement) == null;
+										// note that modifications to collection members will be applied when handling the member itself as an import item
+										boolean existingMissing = findAndRemoveMatchingElementByUuid(incomingDiffCollection, existingElement) == null;
 
 										if (existingMissing) {
 											if (existingElement instanceof ConceptName) {
@@ -161,7 +162,12 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 
 									//Let's add completely new incoming elements.
 									for (Object incomingElement : incomingDiffCollection) {
-	                                    existingCollection.add(incomingElement);
+                                        Object mappedToExisting = incomingToExisting.get(incomingElement);
+                                        if (mappedToExisting != null) {
+                                            existingCollection.add(mappedToExisting);
+                                        } else {
+                                            existingCollection.add(incomingElement);
+                                        }
                                     }
 								} else {
 									for (Object incomingElement : incomingCollection) {
@@ -199,7 +205,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 						}
 					}
 
-					private Object findAndRemoveMatchingElement(List<Object> incomingDiffCollection, Object existingElement) {
+					private Object findAndRemoveMatchingElementByUuid(List<Object> incomingDiffCollection, Object existingElement) {
 						Iterator<Object> incomingDiffCollectionIt = incomingDiffCollection.iterator();
 						while (incomingDiffCollectionIt.hasNext()) {
 							Object incomingElement = incomingDiffCollectionIt.next();
@@ -207,12 +213,20 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 							if (incomingToExisting.get(incomingElement) != null) {
 								incomingElement = incomingToExisting.get(incomingElement);
 							}
-							if (incomingElement.equals(existingElement) || comparisonEngine.equal(incomingElement, existingElement, incomingToExisting)) {
+							if (equalUuids(existingElement, incomingElement)) {
 								incomingDiffCollectionIt.remove();
 								return incomingElement;
 							}
 						}
 						return null;
+					}
+
+					private boolean equalUuids(Object a, Object b) {
+						try {
+							return ((OpenmrsObject) a).getUuid().equals(((OpenmrsObject) b).getUuid());
+						} catch (Exception ex) {
+							return false;
+						}
 					}
 				});
 				
