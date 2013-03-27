@@ -45,14 +45,13 @@ public class ObjectByNameResolver extends Resolver<Object> {
 	@Override
 	public Object getExactMatch(Object incoming) {
 		if (incoming instanceof Role || incoming instanceof Privilege) {
+			//Roles and privileges are considered the same if they have the same names.
 			List<Object> objects = Handler.getItems(incoming.getClass(), true,
 			    Handler.getName(incoming), null, null);
 			
 			for (Object object : objects) {
 				if (Handler.getName(incoming).equalsIgnoreCase(Handler.getName(object))) {
-					if (Handler.getDescription(incoming).equalsIgnoreCase(Handler.getDescription(object))) {
-						return object;
-					}
+					return object;
 				}
 			}
 		}

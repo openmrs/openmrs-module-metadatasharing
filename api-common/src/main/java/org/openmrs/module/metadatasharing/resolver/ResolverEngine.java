@@ -106,8 +106,8 @@ public class ResolverEngine {
 					}
 				}
 				
-				if (importedItem.getExisting() == null) {
-					//Try to find a possible match
+				if (!importConfig.getPossibleMatch().isOverwriteMine() && importedItem.getExisting() == null) {
+					//Try to find a possible match if overwrite was not selected.
 					for (Resolver<?> resolver : resolvers) {
 						Class<?> supportedType = ClassUtil.getFirstParameterOfGenericType(resolver.getClass(),
 						    Resolver.class);
