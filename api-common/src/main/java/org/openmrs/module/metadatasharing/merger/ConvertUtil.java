@@ -25,7 +25,11 @@ import org.openmrs.module.metadatasharing.ImportedItem;
 public class ConvertUtil {
 	
 	public static void convert(ImportedItem importedItem) {
-		if (importedItem.getImportType().isPreferTheirs() && importedItem.getIncoming() instanceof Concept) {
+		if (!(importedItem.getExisting() instanceof Concept)) {
+			return;
+		}
+		
+		if (importedItem.getImportType().isPreferTheirs() || importedItem.getImportType().isOverwriteMine()) {
 			Concept incoming = (Concept) importedItem.getIncoming();
 			Concept existing = (Concept) importedItem.getExisting();
 			

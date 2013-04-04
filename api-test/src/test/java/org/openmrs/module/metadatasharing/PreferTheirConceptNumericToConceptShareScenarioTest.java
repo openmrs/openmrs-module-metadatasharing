@@ -57,7 +57,7 @@ public class PreferTheirConceptNumericToConceptShareScenarioTest extends BaseSha
 			}
 			
 			@Override
-			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
+			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {			
 				for (ImportedItem importedItem : importer.getImportedItems(0)) {
 					if (importedItem.getExisting() == null)
 						continue;
