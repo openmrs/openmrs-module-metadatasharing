@@ -14,7 +14,7 @@
 package org.openmrs.module.metadatasharing;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.Assert.assertTrue;
@@ -166,14 +166,22 @@ public class ConceptMirrorTest extends BaseShareTest {
 				Context.getConceptService().saveConcept(concept);
 			}
 			
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 */
+			@Override
+			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
+			    importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
+			}
+			
 			@SuppressWarnings({ "unchecked" })
 			@Override
 			public void runOnImportServerAfterImport() throws Exception {
 				Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
-				assertThat(concept.getNames(),
-				    hasItems(hasName("name to void"), hasName("name to add"), hasName("org.openmrs.Concept_1_name")));
+				assertThat(concept.getNames(true), containsInAnyOrder(hasName("name to void"), hasName("name to add"),
+				        hasName("org.openmrs.Concept_1_name")));
 				
-				assertThat(concept.getNames(false), hasItems(hasName("name to add"), hasName("org.openmrs.Concept_1_name")));
+				assertThat(concept.getNames(false), containsInAnyOrder(hasName("name to add"), hasName("org.openmrs.Concept_1_name")));
 			}
 			
 		});
@@ -207,7 +215,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 			public void prepareImportServer() throws Exception {
 				Concept concept = newConcept(1);
 				concept.setUuid(conceptUuid);
-								
+				
 				conceptService.saveConcept(concept);
 			}
 			
@@ -216,7 +224,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
-			    importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
+				importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
 			}
 			
 			@Override
@@ -261,9 +269,10 @@ public class ConceptMirrorTest extends BaseShareTest {
 			 */
 			@Override
 			public void runOnExportServerAfterExport(ExportedPackage exportedPackage) throws Exception {
-			    String xml = exportedPackage.getSerializedPackage().getMetadata()[0];
-			    
-			    XMLAssert.assertXpathEvaluatesTo("org.openmrs.ConceptNumeric", "/list/org.openmrs.Concept/answers/org.openmrs.ConceptAnswer/answerConcept/@class", xml);
+				String xml = exportedPackage.getSerializedPackage().getMetadata()[0];
+				
+				XMLAssert.assertXpathEvaluatesTo("org.openmrs.ConceptNumeric",
+				    "/list/org.openmrs.Concept/answers/org.openmrs.ConceptAnswer/answerConcept/@class", xml);
 			}
 			
 			/**
@@ -279,7 +288,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 				ConceptAnswer conceptAnswer = newConceptAnswer(1);
 				concept.addAnswer(conceptAnswer);
 				conceptAnswer.setAnswerConcept(answer);
-								
+				
 				conceptService.saveConcept(concept);
 			}
 			
@@ -288,7 +297,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
-			    importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
+				importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
 			}
 			
 			@Override
@@ -324,9 +333,9 @@ public class ConceptMirrorTest extends BaseShareTest {
 		populateConceptWithUuidAndNameAndDescription(id, concept);
 		return concept;
 	}
-
+	
 	private Concept populateConceptWithUuidAndNameAndDescription(Integer id, Concept concept) {
-	    concept.setUuid(newUuid(Concept.class, id));
+		concept.setUuid(newUuid(Concept.class, id));
 		ConceptName name = new ConceptName(newName(Concept.class, id), Locale.ENGLISH);
 		name.setUuid(newUuid(ConceptName.class, id));
 		concept.addName(name);
@@ -335,7 +344,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 		concept.addDescription(description);
 		Context.getConceptService().saveConcept(concept);
 		return concept;
-    }
+	}
 	
 	private ConceptNumeric newConceptNumeric(Integer id) {
 		ConceptNumeric concept = new ConceptNumeric();
