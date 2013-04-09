@@ -17,7 +17,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernateProxyMapper;
 
 import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
@@ -25,6 +24,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * Strips Hibernate proxies by retrieving the underlying objects that are next marshalled.
+ * <p>
+ * WARNING: We don't use this, because it breaks handling subclass entities properly. See also
+ * {@link HibernateProxyMapper}.
  * <p>
  * This converter only takes care of delivering the underlying objects while
  * {@link HibernateProxyMapper} takes care of the naming.

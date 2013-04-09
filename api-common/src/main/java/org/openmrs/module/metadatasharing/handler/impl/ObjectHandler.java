@@ -90,7 +90,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
     public void merge(final Object existing, final Object incoming, final ImportType importType, final Map<Object, Object> incomingToExisting) {
 		if (existing == null) {
 			//Replace incoming object's fields with existing objects
-			visitor.visitFields(incoming, false, false, new ObjectVisitor.FieldVisitor() {
+			visitor.visitFields(incoming, false, new ObjectVisitor.FieldVisitor() {
 				
 				@Override
 				public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object incomingField) {
@@ -122,7 +122,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 				//Copy properties from the incoming object to the existing object				
 				Integer id = Handler.getId(existing);
 
-				visitor.visitFields(incoming, false, false, new ObjectVisitor.FieldVisitor() {
+				visitor.visitFields(incoming, false, new ObjectVisitor.FieldVisitor() {
 
 					@Override
 					public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object incomingField) {

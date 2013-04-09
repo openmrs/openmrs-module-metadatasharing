@@ -25,7 +25,6 @@ import org.openmrs.module.metadatasharing.serializer.converter.DateTimeConverter
 import org.openmrs.module.metadatasharing.serializer.converter.DoubleLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.FloatLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.HibernatePersistentCollectionConverter;
-import org.openmrs.module.metadatasharing.serializer.converter.HibernateProxyConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.IntLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.LongLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.OpenmrsObjectConverter;
@@ -139,7 +138,11 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		
 		xstream.addImmutableType(User.class);
 		xstream.registerConverter(new UserConverter(), XStream.PRIORITY_VERY_HIGH);
-		xstream.registerConverter(new HibernateProxyConverter(), XStream.PRIORITY_NORMAL);
+		//The proxy converter must not be used, because it breaks displaying subclass entities. It's enough to use a mapper.
+		//The important thing is that proxies need to be initialized before serialization. It's done with ObjectVisitor.
+		//This way the 'resolves-to' attribute will be used for proxies instead of 'class'.
+		//See also META-329.
+		//xstream.registerConverter(new HibernateProxyConverter(), XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new HibernatePersistentCollectionConverter(xstream.getConverterLookup()),
 		    XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new OpenmrsObjectConverter(xstream.getMapper(), xstream.getReflectionProvider()),

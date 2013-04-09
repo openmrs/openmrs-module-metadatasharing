@@ -285,7 +285,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 				String xml = exportedPackage.getSerializedPackage().getMetadata()[0];
 				
 				XMLAssert.assertXpathEvaluatesTo("org.openmrs.ConceptNumeric",
-				    "/list/org.openmrs.Concept/answers/org.openmrs.ConceptAnswer/answerConcept/@class", xml);
+				    "/list/org.openmrs.Concept/answers/org.openmrs.ConceptAnswer/answerConcept/@resolves-to", xml);
 			}
 			
 			/**

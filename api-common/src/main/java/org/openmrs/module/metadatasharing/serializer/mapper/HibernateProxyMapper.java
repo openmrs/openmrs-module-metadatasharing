@@ -14,7 +14,6 @@
 package org.openmrs.module.metadatasharing.serializer.mapper;
 
 import org.hibernate.proxy.HibernateProxy;
-import org.openmrs.module.metadatasharing.serializer.converter.HibernateProxyConverter;
 import org.openmrs.module.metadatasharing.visitor.impl.OpenmrsObjectVisitor;
 
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -26,9 +25,8 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * WARNING: It doesn't work correctly for subclassed entities, because proxyClass.getSuperclass() returns
  * superclasses e.g. the org.openmrs.ConceptNumeric proxy returns org.openmrs.Concept. For
  * that reason we always serialize previously deproxied objects. See {@link OpenmrsObjectVisitor},
- * which is used before serialization.
- * <p>
- * Hibernate proxies will be replaced with the underlying objects by {@link HibernateProxyConverter}.
+ * which is used before serialization. We rely on the "resolves-to" attribute instead, which displays
+ * the correct thing.
  * <p>
  * Reference: <a
  * href="http://jira.codehaus.org/browse/XSTR-226">http://jira.codehaus.org/browse/XSTR-226</a>

@@ -49,7 +49,7 @@ public interface ObjectVisitor {
 	 * @param deproxy strips off proxies in visited fields
 	 * @param visitor the field visitor
 	 */
-	void visitFields(Object object, boolean writeReplace, boolean deproxy, FieldVisitor visitor);
+	void visitFields(Object object, boolean writeReplace, FieldVisitor visitor);
 	
 	/**
 	 * Writes the given value into the specified field.
