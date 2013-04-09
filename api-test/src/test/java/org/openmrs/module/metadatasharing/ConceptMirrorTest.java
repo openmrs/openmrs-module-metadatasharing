@@ -15,6 +15,7 @@ package org.openmrs.module.metadatasharing;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.Assert.assertTrue;
@@ -32,6 +33,7 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hibernate.proxy.HibernateProxy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
@@ -261,7 +263,18 @@ public class ConceptMirrorTest extends BaseShareTest {
 				conceptAnswer.setAnswerConcept(numericAnswer);
 				
 				conceptService.saveConcept(concept);
-				return Arrays.asList(concept);
+				
+				//We want to test here that Hibernate proxies are stripped off properly
+				Context.flushSession();
+				Context.clearSession();
+				
+				Concept conceptToExport = conceptService.getConceptByUuid(concept.getUuid());
+				
+				ConceptAnswer conceptAnswerToExport = conceptToExport.getAnswers().iterator().next();
+				
+				assertThat(conceptAnswerToExport.getAnswerConcept(), is(instanceOf(HibernateProxy.class)));
+				
+				return Arrays.asList(conceptToExport);
 			}
 			
 			/**

@@ -263,7 +263,7 @@ public class PackageImporterImpl extends PackageImporter {
 		}
 		
 		MetadataSharing.getInstance().getObjectVisitor()
-		        .visitFields(importedItem.getIncoming(), false, new ObjectVisitor.FieldVisitor() {
+		        .visitFields(importedItem.getIncoming(), false, false, new ObjectVisitor.FieldVisitor() {
 			        
 			        @Override
 			        public void visit(String name, Class<?> type, Class<?> definedIn, Object value) {

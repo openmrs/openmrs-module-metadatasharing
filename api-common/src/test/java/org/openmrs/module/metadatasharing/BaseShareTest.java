@@ -105,6 +105,9 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		// import the previously exported package to our "fresh" server
 		importPackage(metadataExporter.getExportedPackage(), testMethods);
 		
+		Context.flushSession();
+		Context.clearSession();
+		
 		runOnImportServerAfterImport(testMethods);
 	}
 	

@@ -139,7 +139,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		
 		xstream.addImmutableType(User.class);
 		xstream.registerConverter(new UserConverter(), XStream.PRIORITY_VERY_HIGH);
-		xstream.registerConverter(new HibernateProxyConverter(xstream.getConverterLookup()), XStream.PRIORITY_NORMAL);
+		xstream.registerConverter(new HibernateProxyConverter(), XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new HibernatePersistentCollectionConverter(xstream.getConverterLookup()),
 		    XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new OpenmrsObjectConverter(xstream.getMapper(), xstream.getReflectionProvider()),

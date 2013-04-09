@@ -71,7 +71,7 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 	 *      boolean, org.openmrs.module.metadatasharing.visitor.ObjectVisitor.FieldVisitor)
 	 */
 	@Override
-	public void visitFields(Object object, final boolean callBeforeExport, final FieldVisitor visitor) {
+	public void visitFields(Object object, final boolean writeReplace, final boolean deproxy, final FieldVisitor visitor) {
 		if (object instanceof User) {
 			return;
 		}
@@ -80,7 +80,7 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 			object = ((HibernateProxy) object).getHibernateLazyInitializer().getImplementation();
 		}
 		
-		if (callBeforeExport && object instanceof OpenmrsObject) {
+		if (writeReplace && object instanceof OpenmrsObject) {
 			object = methodInvoker.callWriteReplace((OpenmrsObject) object);
 		}
 		
@@ -96,9 +96,12 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 				
 				if (value instanceof HibernateProxy) {
 					value = ((HibernateProxy) value).getHibernateLazyInitializer().getImplementation();
+					if (deproxy) {
+						writeField(toVisit, name, value, definedIn);
+					}
 				}
 				
-				if (callBeforeExport && value instanceof OpenmrsObject) {
+				if (writeReplace && value instanceof OpenmrsObject) {
 					value = methodInvoker.callWriteReplace((OpenmrsObject) value);
 				}
 				
@@ -119,7 +122,7 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 			        + ") cannot be the same objects");
 		}
 		
-		visitFields(source, false, new ObjectVisitor.FieldVisitor() {
+		visitFields(source, false, false, new ObjectVisitor.FieldVisitor() {
 			
 			@Override
 			public void visit(String fieldName, Class<?> type, Class<?> definedIn, Object value) {

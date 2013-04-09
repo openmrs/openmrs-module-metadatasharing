@@ -36,12 +36,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * @see org.hibernate.proxy.HibernateProxy
  */
 public class HibernateProxyConverter implements Converter {
-
-	private final ConverterLookup converterLookup;
-	
-	public HibernateProxyConverter(ConverterLookup converterLookup) {
-		this.converterLookup = converterLookup;
-	}
 	
 	/**
 	 * @see com.thoughtworks.xstream.converters.reflection.ReflectionConverter#canConvert(Class)
@@ -58,7 +52,7 @@ public class HibernateProxyConverter implements Converter {
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 		Object impl = ((HibernateProxy) source).getHibernateLazyInitializer().getImplementation();
-		converterLookup.lookupConverterForType(impl.getClass()).marshal(impl, writer, context);
+		context.convertAnother(impl);
 	}
 	
 	/**

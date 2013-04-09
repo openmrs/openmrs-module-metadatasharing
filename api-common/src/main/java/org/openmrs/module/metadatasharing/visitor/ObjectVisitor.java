@@ -46,9 +46,10 @@ public interface ObjectVisitor {
 	 * @param object the object to be visited
 	 * @param writeReplace whether a writeReplace method of the object should be called before
 	 *            visiting object's fields
+	 * @param deproxy strips off proxies in visited fields
 	 * @param visitor the field visitor
 	 */
-	void visitFields(Object object, boolean writeReplace, FieldVisitor visitor);
+	void visitFields(Object object, boolean writeReplace, boolean deproxy, FieldVisitor visitor);
 	
 	/**
 	 * Writes the given value into the specified field.

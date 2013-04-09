@@ -197,7 +197,7 @@ public class ExportPackageTask extends Task {
 		itemsToVisit.addAll(priorityDependencies);
 		
 		for (Object itemToVisit : itemsToVisit) {
-			MetadataSharing.getInstance().getObjectVisitor().visitFields(itemToVisit, true, new ObjectVisitor.FieldVisitor() {
+			MetadataSharing.getInstance().getObjectVisitor().visitFields(itemToVisit, true, true, new ObjectVisitor.FieldVisitor() {
 				
 				@Override
 				public void visit(String name, Class<?> type, Class<?> definedIn, Object value) {

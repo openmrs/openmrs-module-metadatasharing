@@ -15,12 +15,18 @@ package org.openmrs.module.metadatasharing.serializer.mapper;
 
 import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.module.metadatasharing.serializer.converter.HibernateProxyConverter;
+import org.openmrs.module.metadatasharing.visitor.impl.OpenmrsObjectVisitor;
 
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
  * Removes proxy marker from classnames managed by Hibernate.
+ * <p>
+ * WARNING: It doesn't work correctly for subclassed entities, because proxyClass.getSuperclass() returns
+ * superclasses e.g. the org.openmrs.ConceptNumeric proxy returns org.openmrs.Concept. For
+ * that reason we always serialize previously deproxied objects. See {@link OpenmrsObjectVisitor},
+ * which is used before serialization.
  * <p>
  * Hibernate proxies will be replaced with the underlying objects by {@link HibernateProxyConverter}.
  * <p>
@@ -45,7 +51,7 @@ public class HibernateProxyMapper extends MapperWrapper {
 	@Override
 	public String serializedClass(@SuppressWarnings("rawtypes") Class type) {
 		if (HibernateProxy.class.isAssignableFrom(type)) {
-			return super.serializedClass(type.getSuperclass());
+			type = type.getSuperclass();
 		}
 		return super.serializedClass(type);
 	}
@@ -53,11 +59,11 @@ public class HibernateProxyMapper extends MapperWrapper {
 	/**
 	 * @see com.thoughtworks.xstream.mapper.MapperWrapper#isImmutableValueType(java.lang.Class)
 	 */
-    @Override
+	@Override
 	public boolean isImmutableValueType(@SuppressWarnings("rawtypes") Class type) {
 		if (HibernateProxy.class.isAssignableFrom(type)) {
 			type = type.getSuperclass();
 		}
-	    return super.isImmutableValueType(type);
+		return super.isImmutableValueType(type);
 	}
 }
