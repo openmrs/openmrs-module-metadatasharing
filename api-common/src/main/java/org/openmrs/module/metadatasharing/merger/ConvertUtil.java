@@ -13,65 +13,59 @@
  */
 package org.openmrs.module.metadatasharing.merger;
 
+import java.util.Collection;
+
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ImportedItem;
+import org.openmrs.module.metadatasharing.util.ImportUtil;
 
 /**
  *
  */
 public class ConvertUtil {
 	
-	public static void convert(ImportedItem importedItem) {
-		if (!(importedItem.getExisting() instanceof Concept)) {
-			return;
-		}
-		
-		if (importedItem.getImportType().isPreferTheirs() || importedItem.getImportType().isOverwriteMine()) {
-			Concept incoming = (Concept) importedItem.getIncoming();
-			Concept existing = (Concept) importedItem.getExisting();
-			
-			if (!incoming.isSet() && existing.isSet()) {
-				if (existing.getConceptSets() != null) {
-					existing.getConceptSets().clear();
-				}
-			}
-			if (incoming.getDatatype() != null && !incoming.getDatatype().isCoded()) {
-				if (existing.getAnswers(true) != null) {
-					existing.getAnswers(true).clear();
-				}
+	public static void convert(Collection<ImportedItem> importedItems) {
+		for (ImportedItem importedItem : importedItems) {
+			if (!(importedItem.getExisting() instanceof Concept)) {
+				continue;
 			}
 			
-			if (incoming.isNumeric() && !existing.isNumeric()) {
-				//Initialize collections
-				if (existing.getNames(true) != null) {
+			if (importedItem.getImportType().isPreferTheirs() || importedItem.getImportType().isOverwriteMine()) {
+				Concept incoming = (Concept) importedItem.getIncoming();
+				Concept existing = (Concept) importedItem.getExisting();
+				
+				if (!incoming.isSet() && existing.isSet()) {
+					if (existing.getConceptSets() != null) {
+						existing.getConceptSets().clear();
+					}
+				}
+				if (incoming.getDatatype() != null && !incoming.getDatatype().isCoded()) {
+					if (existing.getAnswers(true) != null) {
+						existing.getAnswers(true).clear();
+					}
+				}
+				
+				if (incoming.isNumeric() && !existing.isNumeric()) {
+					ConceptNumeric numeric = ConceptNumericBuilder.valueOf(existing);
+					
+					//Initialize ConceptNameTags before evicting.
 					for (ConceptName name : existing.getNames(true)) {
 						if (name.getTags() != null) {
 							name.getTags().size();
 						}
 					}
+					
+					Context.evictFromSession(existing);
+					Context.getConceptService().saveConcept(numeric);
+					importedItem.setExisting(numeric);
+					
+					//It's slightly inefficient, but it's the easiest way to get around lazily initialization exceptions.
+					//It's needed, because some items may reference the evicted existing instance.
+					ImportUtil.reloadExistingItems(importedItems);
 				}
-				if (existing.getDescriptions() != null) {
-					existing.getDescriptions().size();
-				}
-				if (existing.getConceptMappings() != null) {
-					existing.getConceptMappings().size();
-				}
-				if (existing.getConceptSets() != null) {
-					existing.getConceptSets().size();
-				}
-				if (existing.getAnswers(true) != null) {
-					existing.getAnswers(true).size();
-				}
-				
-				ConceptNumeric concept = new ConceptNumeric(existing);
-				concept.setUuid(existing.getUuid()); //The ConceptNumeric constructor had bug so we need to set it manually
-				
-				Context.evictFromSession(existing);
-				Context.getConceptService().saveConcept(concept);
-				importedItem.setExisting(concept);
 			}
 		}
 	}

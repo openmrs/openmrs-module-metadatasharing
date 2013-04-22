@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
@@ -43,6 +42,7 @@ import org.openmrs.module.metadatasharing.model.validator.ValidateCustomUtil;
 import org.openmrs.module.metadatasharing.task.Task;
 import org.openmrs.module.metadatasharing.task.TaskException;
 import org.openmrs.module.metadatasharing.task.TaskType;
+import org.openmrs.module.metadatasharing.util.ImportUtil;
 import org.openmrs.module.metadatasharing.wrapper.ObjectWrapper;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
 import org.springframework.validation.BindException;
@@ -125,17 +125,7 @@ public class ImportPackageTask extends Task {
     }
 	
 	public void importItems(Collection<ImportedItem> importedItems) throws APIException, ValidationException {
-		for (ImportedItem importedItem : importedItems) {
-			if (importedItem.getImportType().isCreate()) {
-				importedItem.setExisting(null);
-			}
-		}
-		
-		for (ImportedItem importedItem : importedItems) {
-			ConvertUtil.convert(importedItem);
-		}
-		
-		log("Setting import type for hidden objects");
+		log("Adjusting import settings");
 		Set<ImportedItem> visited = new HashSet<ImportedItem>();
 		for (ImportedItem importedItem : importedItems) {
 			if (!Handler.isHidden(importedItem.getIncoming())) {
@@ -144,13 +134,21 @@ public class ImportPackageTask extends Task {
 		}
 		
 		for (ImportedItem importedItem : importedItems) {
-			importedItem.setDateChanged(Handler.getDateChanged(importedItem.getIncoming()));
+			if (importedItem.getImportType().isCreate()) {
+				importedItem.setExisting(null);
+			}
 		}
 		
-		log("Loading existing objects");
-		reloadExistingItems(importedItems);
+		log("Loading existing items");
+		ImportUtil.reloadExistingItems(importedItems);
 		
-		log("Setting required fields");
+		log("Converting items");
+		ConvertUtil.convert(importedItems);
+		
+		log("Setting audit fields");
+		for (ImportedItem importedItem : importedItems) {
+			importedItem.setDateChanged(Handler.getDateChanged(importedItem.getIncoming()));
+		}
 		for (ImportedItem importedItem : importedItems) {
 			if (importedItem.getIncoming() instanceof OpenmrsObject) {
 				OpenmrsObject incoming = (OpenmrsObject) importedItem.getIncoming();
@@ -253,22 +251,6 @@ public class ImportPackageTask extends Task {
 		
 		for (ImportedItem importedItem : importedItems) {
 			importedItem.initIncomingToSave(openmrsObjectMappings);
-		}
-	}
-	
-	public void reloadExistingItems(Collection<ImportedItem> importedItems) {
-		for (ImportedItem importedItem : importedItems) {
-			if (importedItem.getExisting() != null) {
-				Object item = Handler.getItemByUuid(importedItem.getExisting().getClass(),
-				    Handler.getUuid(importedItem.getExisting()));
-				
-				//Get rid of HibernateProxy
-				if (item instanceof HibernateProxy) {
-					item = ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
-				}
-				
-				importedItem.setExisting(item);
-			}
 		}
 	}
 	
