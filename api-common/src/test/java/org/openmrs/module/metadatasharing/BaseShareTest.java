@@ -102,6 +102,10 @@ public abstract class BaseShareTest extends BaseModuleContextSensitiveTest {
 		
 		runOnImportServerBeforeImport(testMethods);
 		
+		//Clear session so that objects are loaded with Hibernate proxies, test for META-331
+		Context.flushSession();
+		Context.clearSession();
+		
 		// import the previously exported package to our "fresh" server
 		importPackage(metadataExporter.getExportedPackage(), testMethods);
 		
