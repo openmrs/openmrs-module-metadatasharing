@@ -233,7 +233,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 			public void runOnImportServerAfterImport() throws Exception {
 				ConceptNumeric concept = conceptService.getConceptNumericByUuid(conceptUuid);
 				
-				assertThat(concept, isA(ConceptNumeric.class));
+				assertThat(concept, instanceOf(ConceptNumeric.class));
 				assertThat(concept.getLowNormal(), is(2.0));
 				assertThat(concept.getHiNormal(), is(2.0));
 				assertThat(concept.getDatatype().getName(), is("Numeric"));
@@ -272,7 +272,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 				
 				ConceptAnswer conceptAnswerToExport = conceptToExport.getAnswers().iterator().next();
 				
-				assertThat(conceptAnswerToExport.getAnswerConcept(), is(instanceOf(HibernateProxy.class)));
+				assertThat(conceptAnswerToExport.getAnswerConcept(), instanceOf(HibernateProxy.class));
 				
 				return Arrays.asList(conceptToExport);
 			}
@@ -317,7 +317,7 @@ public class ConceptMirrorTest extends BaseShareTest {
 			public void runOnImportServerAfterImport() throws Exception {
 				ConceptNumeric concept = conceptService.getConceptNumericByUuid(newUuid(Concept.class, 2));
 				
-				assertThat(concept, isA(ConceptNumeric.class));
+				assertThat(concept, instanceOf(ConceptNumeric.class));
 				assertThat(concept.getLowNormal(), is(2.0));
 				assertThat(concept.getHiNormal(), is(2.0));
 				assertThat(concept.getDatatype().getName(), is("Numeric"));

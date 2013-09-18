@@ -66,5 +66,11 @@
 			<version>${openmrs.1.9.api.version}</version><!--$NO-MVN-MAN-VER$-->
 			<type>pom</type>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
 	</dependencies>
 </project>
