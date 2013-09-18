@@ -138,7 +138,7 @@ public class ImportPackageTask extends Task {
 				importedItem.setExisting(null);
 			}
 		}
-		
+
 		log("Loading existing items");
 		ImportUtil.reloadExistingItems(importedItems);
 		
@@ -284,6 +284,7 @@ public class ImportPackageTask extends Task {
 		log.debug("Saving " + item.getClass().getName() + " [" + Handler.getUuid(item) + "]");
 		
 		Object savedItem = Handler.saveItem(item);
+		Context.flushSession();
 		
 		if (savedItem == null) {
 			log.debug(item.getClass().getName() + " [" + Handler.getUuid(item) + "] will be saved with a parent");

@@ -26,7 +26,7 @@ import org.openmrs.test.SkipBaseSetup;
 
 
 public class Concept19SmokeTest extends BaseModuleContextSensitiveTest {
-	
+
 	@Test
 	public void importConceptsMVP184Small1() throws Exception {
 		PackageImporter metadataImporter = MetadataSharing.getInstance().newPackageImporter();
@@ -41,45 +41,36 @@ public class Concept19SmokeTest extends BaseModuleContextSensitiveTest {
 	public void importProgramsAndConcepts() throws Exception {
 		executeDataSet(INITIAL_XML_DATASET_PACKAGE_PATH);
 		executeDataSet("conceptDatatypes.xml");
+		executeDataSet("Programs-Test.xml");
 		authenticate();
 
 		final String TB_PROGRAM_UUID = "9f144a34-3a4a-44a9-8486-6b7af6cc64f6";
+		final String MCH_PROGRAM_UUID = "b5d9e05f-f5ab-4612-98dd-adb75438ed34";
 
-		// Verify that program doesn't exist
-		Program program = Context.getProgramWorkflowService().getProgramByUuid(TB_PROGRAM_UUID);
-		Assert.assertNull(program);
+		// Verify that programs exists with old details (from testing dataset)
+		Program tbProgram = Context.getProgramWorkflowService().getProgramByUuid(TB_PROGRAM_UUID);
+		Assert.assertEquals("TB old name", tbProgram.getName());
+		Assert.assertEquals("TB old description", tbProgram.getDescription());
 
-		// Import package containing program
+		Program mchProgram = Context.getProgramWorkflowService().getProgramByUuid(MCH_PROGRAM_UUID);
+		Assert.assertEquals("MCH old name", mchProgram.getName());
+		Assert.assertEquals("MCH old description", mchProgram.getDescription());
+
+		Context.flushSession();
+		Context.clearSession();
+
+		// Import package containing same programs with new names and descriptions
 		PackageImporter metadataImporter = MetadataSharing.getInstance().newPackageImporter();
-		metadataImporter.loadSerializedPackageStream(ClassLoader.getSystemResourceAsStream("packages/Programs_Test-4.zip"));
+		metadataImporter.loadSerializedPackageStream(ClassLoader.getSystemResourceAsStream("packages/Programs_Test-6.zip"));
 		metadataImporter.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
 		metadataImporter.importPackage();
 
-		// Verify that program now exists and that details are correct from package
-		program = Context.getProgramWorkflowService().getProgramByUuid(TB_PROGRAM_UUID);
-		Assert.assertNotNull(program);
-		Assert.assertEquals("TB Program", program.getName());
-		Assert.assertEquals("Treatment for TB patients", program.getDescription());
-
-		// Modify program, save and flush session
-		program.setName("XXX");
-		program.setDescription("YYY");
-		Context.getProgramWorkflowService().saveProgram(program);
-		Context.flushSession();
-		Context.clearSession();
-
-		// Re-import package containing program
-		metadataImporter = MetadataSharing.getInstance().newPackageImporter();
-		metadataImporter.loadSerializedPackageStream(ClassLoader.getSystemResourceAsStream("packages/Programs_Test-4.zip"));
-		metadataImporter.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
-		metadataImporter.importPackage();
-		Context.flushSession();
-		Context.clearSession();
-
-		// Verify that program details are correct from package
-		program = Context.getProgramWorkflowService().getProgramByUuid(TB_PROGRAM_UUID);
-		Assert.assertNotNull(program);
-		Assert.assertEquals("TB Program", program.getName());  // FAILS !!!
-		Assert.assertEquals("Treatment for TB patients", program.getDescription());     // FAILS !!!
+		// Verify that program details are now correct from package
+		tbProgram = Context.getProgramWorkflowService().getProgramByUuid(TB_PROGRAM_UUID);
+		Assert.assertEquals("TB Program", tbProgram.getName());
+		Assert.assertEquals("Treatment for TB patients", tbProgram.getDescription());
+		mchProgram = Context.getProgramWorkflowService().getProgramByUuid(MCH_PROGRAM_UUID);
+		Assert.assertEquals("MCH Program - Maternal Services", mchProgram.getName());
+		Assert.assertEquals("Treatment for mothers", mchProgram.getDescription());
 	}
 }

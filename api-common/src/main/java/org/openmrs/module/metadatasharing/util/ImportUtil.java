@@ -36,9 +36,9 @@ public class ImportUtil {
 				    Handler.getUuid(importedItem.getExisting()));
 				
 				//Get rid of HibernateProxy
-				if (item instanceof HibernateProxy) {
-					item = ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
-				}
+				//if (item instanceof HibernateProxy) {
+				//	item = ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation();
+				//}
 				
 				importedItem.setExisting(item);
 			}

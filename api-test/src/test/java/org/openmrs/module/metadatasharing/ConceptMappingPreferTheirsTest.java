@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
@@ -37,7 +36,7 @@ import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
  *
  */
 public class ConceptMappingPreferTheirsTest extends BaseShareTest {
-	
+
 	@Test
 	public void preferTheirsShouldNotAddExistingConceptMappings() throws Exception {
 		
@@ -128,9 +127,12 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 			}
 		});
 	}
-	
+
 	@Test
 	public void shouldUpdateRelatedConceptSourceWhenImportedAgain() throws Exception {
+		initializeInMemoryDatabase();
+		authenticate();
+
 		Concept concept = ConceptMock.newInstance().addMapping("1", "source").addPreferredName("hiv", Locale.ENGLISH)
 		        .saveConcept().getConcept();
 		PackageExporter exporter = MetadataSharing.getInstance().newPackageExporter();
@@ -148,10 +150,6 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 		updateExporter.getExportedPackage().setDescription("updated pack");
 		updateExporter.exportPackage();
 		ExportedPackage updatedPack = updateExporter.getExportedPackage();
-		
-		deleteAllData();
-		initializeInMemoryDatabase();
-		authenticate();
 		
 		PackageImporter importer = MetadataSharing.getInstance().newPackageImporter();
 		importer.loadSerializedPackage(pack.getSerializedPackage());

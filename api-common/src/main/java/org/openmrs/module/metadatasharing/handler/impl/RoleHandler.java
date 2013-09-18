@@ -85,14 +85,20 @@ public class RoleHandler implements MetadataPropertiesHandler<Role>, MetadataPri
 	}
 
 	/**
-     * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
-     */
-    @Override
-    public List<Object> getPriorityDependencies(Role object) {
-    	if (object.getInheritedRoles() != null && !object.getInheritedRoles().isEmpty()) {
-    		return new ArrayList<Object>(object.getInheritedRoles());
-    	}
-	    return Collections.emptyList();
-    }
-	
+	 * @see org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler#getPriorityDependencies(java.lang.Object)
+	 */
+	@Override
+	public List<Object> getPriorityDependencies(Role object) {
+		List<Object> result = new ArrayList<Object>();
+
+		if (object.getInheritedRoles() != null && !object.getInheritedRoles().isEmpty()) {
+			result.addAll(object.getInheritedRoles());
+		}
+
+		if (object.getPrivileges() != null && !object.getPrivileges().isEmpty()) {
+			result.addAll(object.getPrivileges());
+		}
+
+		return result;
+	}
 }
