@@ -98,7 +98,8 @@ public class ImportPackageTask extends Task {
 			packageImporter.getImportedPackage().setDateImported(dateImported);
 			MetadataSharing.getService().saveImportedPackage(packageImporter.getImportedPackage());
 			
-			//Clean-up session after import which would otherwise leave a lot of objects in memory
+			//Clean-up session after import. Otherwise we would have a lot of objects in session,
+			//which slows Hibernate down.
 			Context.flushSession();
 			Context.clearSession();
 			

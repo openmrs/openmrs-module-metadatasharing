@@ -56,10 +56,10 @@ public class ConfigureController {
 	}
 	
 	@ModelAttribute("sourceIdPreferredMap")
-	public Map<Integer, Boolean> getPreferredConceptSources(@ModelAttribute("conceptSources") List<ConceptSource> conceptSources) {
+	public Map<Integer, Boolean> getPreferredConceptSources() {
 		Set<String> preferredSourceNames = Context.getService(MetadataSharingService.class).getPreferredSourceNames();
 		Map<Integer, Boolean> sourceIdPreferredMap = new HashMap<Integer, Boolean>();
-		for (ConceptSource conceptSource : conceptSources) {
+		for (ConceptSource conceptSource : getConceptSources()) {
 			sourceIdPreferredMap.put(conceptSource.getConceptSourceId(),
 			    preferredSourceNames.contains(conceptSource.getName()));
 		}
