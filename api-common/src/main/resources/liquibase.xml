@@ -6,10 +6,8 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
     
     <changeSet id="metadatasharing_drop_table_package" author="Dmytro Trifonov" failOnError="false">
-        <preConditions onFail="HALT">
-            <not>
-                <tableExists tableName="metadatasharing_package"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="metadatasharing_package"/>
         </preConditions>
 
         <comment>
@@ -20,10 +18,8 @@
     </changeSet>
 
     <changeSet id="metadatasharing_drop_table_exported_package" author="Dmytro Trifonov" failOnError="false">
-        <preConditions onFail="HALT">
-            <not>
-                <tableExists tableName="metadatasharing_exported_package"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="metadatasharing_exported_package"/>
         </preConditions>
 
         <comment>
@@ -34,10 +30,8 @@
     </changeSet>
 
     <changeSet id="metadatasharing_drop_table_imported_item" author="Dmytro Trifonov" failOnError="false">
-        <preConditions onFail="HALT">
-            <not>
-                <tableExists tableName="metadatasharing_imported_item"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="metadatasharing_imported_item"/>
         </preConditions>
 
         <comment>
@@ -48,10 +42,8 @@
     </changeSet>
 
     <changeSet id="metadatasharing_drop_table_imported_package" author="Dmytro Trifonov" failOnError="false">
-        <preConditions onFail="HALT">
-            <not>
-                <tableExists tableName="metadatasharing_imported_package"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="metadatasharing_imported_package"/>
         </preConditions>
 
         <comment>
@@ -62,10 +54,8 @@
     </changeSet>
 
     <changeSet id="metadatasharing_drop_table_subscription" author="Dmytro Trifonov" failOnError="false">
-        <preConditions onFail="HALT">
-            <not>
-                <tableExists tableName="metadatasharing_subscription"/>
-            </not>
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="metadatasharing_subscription"/>
         </preConditions>
 
         <comment>
