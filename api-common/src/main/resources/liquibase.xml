@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
     
-    <changeSet id="metadatasharing_drop_table_package" author="Dmytro Trifonov" failOnError="false">
+    <changeSet id="metadatasharing_drop_table_package" author="Dmytro Trifonov">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="metadatasharing_package"/>
         </preConditions>
@@ -17,7 +17,7 @@
         <dropTable tableName="metadatasharing_package"/>
     </changeSet>
 
-    <changeSet id="metadatasharing_drop_table_exported_package" author="Dmytro Trifonov" failOnError="false">
+    <changeSet id="metadatasharing_drop_table_exported_package" author="Dmytro Trifonov">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="metadatasharing_exported_package"/>
         </preConditions>
@@ -29,7 +29,7 @@
         <dropTable tableName="metadatasharing_exported_package"/>
     </changeSet>
 
-    <changeSet id="metadatasharing_drop_table_imported_item" author="Dmytro Trifonov" failOnError="false">
+    <changeSet id="metadatasharing_drop_table_imported_item" author="Dmytro Trifonov">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="metadatasharing_imported_item"/>
         </preConditions>
@@ -41,7 +41,7 @@
         <dropTable tableName="metadatasharing_imported_item"/>
     </changeSet>
 
-    <changeSet id="metadatasharing_drop_table_imported_package" author="Dmytro Trifonov" failOnError="false">
+    <changeSet id="metadatasharing_drop_table_imported_package" author="Dmytro Trifonov">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="metadatasharing_imported_package"/>
         </preConditions>
@@ -53,7 +53,7 @@
         <dropTable tableName="metadatasharing_imported_package"/>
     </changeSet>
 
-    <changeSet id="metadatasharing_drop_table_subscription" author="Dmytro Trifonov" failOnError="false">
+    <changeSet id="metadatasharing_drop_table_subscription" author="Dmytro Trifonov">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="metadatasharing_subscription"/>
         </preConditions>
