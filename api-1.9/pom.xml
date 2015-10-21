@@ -14,7 +14,7 @@
 	<description>API 1.9 project for Metadata Sharing Module</description>
 
 	<properties>
-		<openmrs.1.9.api.version>1.9.1</openmrs.1.9.api.version>
+		<openmrs.1.9.api.version>1.9.9</openmrs.1.9.api.version>
 	</properties>
 
 	<dependencies>

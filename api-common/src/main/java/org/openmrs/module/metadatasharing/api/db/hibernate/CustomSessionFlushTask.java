@@ -14,7 +14,7 @@
 package org.openmrs.module.metadatasharing.api.db.hibernate;
 
 import org.hibernate.FlushMode;
-import org.hibernate.classic.Session;
+import org.openmrs.api.db.hibernate.DbSession;  
 
 /**
  * Allows to execute code in a custom session flush mode.
@@ -50,8 +50,7 @@ public abstract class CustomSessionFlushTask<T> {
 	 * @return the result or <code>null</code>
 	 */
 	public final T executeInManualFlushMode() {
-		Session currentSession = HibernateSessionFactory.getSessionFactory().getCurrentSession();
-		
+		DbSession currentSession = HibernateSessionFactory.getSessionFactory().getCurrentSession();		
 		FlushMode previousFlushMode = currentSession.getFlushMode();
 		currentSession.setFlushMode(FlushMode.MANUAL);
 		
@@ -69,8 +68,7 @@ public abstract class CustomSessionFlushTask<T> {
 	 * @return the result or <code>null<code>
 	 */
 	public final T executeInAutoFlushMode() {
-		Session currentSession = HibernateSessionFactory.getSessionFactory().getCurrentSession();
-		
+		DbSession currentSession = HibernateSessionFactory.getSessionFactory().getCurrentSession();		
 		FlushMode previousFlushMode = currentSession.getFlushMode();
 		currentSession.setFlushMode(FlushMode.AUTO);
 		
