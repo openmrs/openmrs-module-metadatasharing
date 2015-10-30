@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
+import org.openmrs.api.db.hibernate.DbSessionFactory;  
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.metadatasharing.ExportedPackage;
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Repository;
 public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 	
 	@Autowired
-	private SessionFactory sessionFactory;
+	private DbSessionFactory sessionFactory;
 	
 	/**
 	 * @see org.openmrs.module.metadatasharing.api.db.MetadataSharingDAO#getExportedPackage(java.lang.Integer)

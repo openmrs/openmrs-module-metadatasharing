@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
+import org.openmrs.api.db.hibernate.DbSessionFactory;  
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
@@ -50,7 +50,7 @@ import org.springframework.stereotype.Repository;
 public class HibernateMetadataDAO implements MetadataDAO {
 	
 	@Autowired
-	private SessionFactory sessionFactory;
+	private DbSessionFactory sessionFactory;
 	
 	@Override
 	public <T> List<T> getItems(Class<? extends T> type, boolean includeRetired, String filter, Integer first, Integer max)
@@ -143,8 +143,8 @@ public class HibernateMetadataDAO implements MetadataDAO {
 				or.add(Restrictions.ilike("form.name", filter, MatchMode.START));
 			} else if (OpenmrsMetadata.class.isAssignableFrom(type)) {
 				//It may happen that the name property is not defined for the specific metadata type so we need to test it.
-				if (sessionFactory.getClassMetadata(type) != null) {
-					String[] propertyNames = sessionFactory.getClassMetadata(type).getPropertyNames();
+				if (sessionFactory.getHibernateSessionFactory().getClassMetadata(type) != null) {
+					String[] propertyNames = sessionFactory.getHibernateSessionFactory().getClassMetadata(type).getPropertyNames();
 					if (Arrays.asList(propertyNames).contains("name")) {
 						or.add(Restrictions.ilike("name", filter, MatchMode.START));
 					}
