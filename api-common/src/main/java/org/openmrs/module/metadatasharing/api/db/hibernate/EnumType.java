@@ -34,8 +34,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.type.Type;
 import org.hibernate.usertype.EnhancedUserType;
 import org.hibernate.usertype.ParameterizedType;
-import org.hibernate.util.ReflectHelper;
-import org.hibernate.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +59,7 @@ public class EnumType implements EnhancedUserType, ParameterizedType, Serializab
 	 * that performance hit, and yet still allow more "normal" logging usage/config.
 	 */
 	private static final boolean IS_VALUE_TRACING_ENABLED = LoggerFactory.getLogger(
-	    StringHelper.qualifier(Type.class.getName())).isTraceEnabled();
+	    qualifier(Type.class.getName())).isTraceEnabled();
 	
 	private transient Logger log;
 	
@@ -104,6 +102,34 @@ public class EnumType implements EnhancedUserType, ParameterizedType, Serializab
 	
 	public int hashCode(Object x) throws HibernateException {
 		return x == null ? 0 : x.hashCode();
+	}
+	
+	public static String qualifier(String qualifiedName) {
+		int loc = qualifiedName.lastIndexOf( "." );
+		return ( loc < 0 ) ? "" : qualifiedName.substring( 0, loc );
+	}
+	
+	/**
+	 * Perform resolution of a class name.
+	 * <p/>
+	 * Here we first check the context classloader, if one, before delegating to
+	 * {@link Class#forName(String, boolean, ClassLoader)} using the caller's classloader
+	 *
+	 * @param name The class name
+	 * @param caller The class from which this call originated (in order to access that class's loader).
+	 * @return The class reference.
+	 * @throws ClassNotFoundException From {@link Class#forName(String, boolean, ClassLoader)}.
+	 */
+	public static Class classForName(String name, Class caller) throws ClassNotFoundException {
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			if ( classLoader != null ) {
+				return classLoader.loadClass( name );
+			}
+		}
+		catch ( Throwable ignore ) {
+		}
+		return Class.forName( name, true, caller.getClassLoader() );
 	}
 	
 	public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
@@ -205,7 +231,7 @@ public class EnumType implements EnhancedUserType, ParameterizedType, Serializab
 	public void setParameterValues(Properties parameters) {
 		String enumClassName = parameters.getProperty(ENUM);
 		try {
-			enumClass = ReflectHelper.classForName(enumClassName, this.getClass()).asSubclass(Enum.class);
+			enumClass = classForName(enumClassName, this.getClass()).asSubclass(Enum.class);
 		}
 		catch (ClassNotFoundException exception) {
 			throw new HibernateException("Enum class not found", exception);
