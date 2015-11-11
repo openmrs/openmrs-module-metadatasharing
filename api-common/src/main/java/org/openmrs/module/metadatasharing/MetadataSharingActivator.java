@@ -15,29 +15,23 @@ package org.openmrs.module.metadatasharing;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class MetadataSharingActivator implements Activator {
+public class MetadataSharingActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(getClass());
-	
-	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
+
 	@Override
-    public void startup() {
-		log.info("Starting Metadata Sharing");
+	public void started() {
+		log.info("Started Metadata Sharing");
 	}
-	
-	/**
-	 * @see org.openmrs.module.Activator#shutdown()
-	 */
+
 	@Override
-    public void shutdown() {
-		log.info("Shutting down Metadata Sharing");
+	public void stopped() {
+		log.info("Stopped Metadata Sharing");
 	}
 	
 }
