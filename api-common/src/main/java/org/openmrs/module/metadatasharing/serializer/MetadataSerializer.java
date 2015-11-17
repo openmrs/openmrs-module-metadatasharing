@@ -22,6 +22,7 @@ import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.serializer.converter.DateTimeConverter;
+import org.openmrs.module.metadatasharing.serializer.converter.DisabledDynamicProxyConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.DoubleLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.FloatLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.HibernatePersistentCollectionConverter;
@@ -42,6 +43,7 @@ import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -76,11 +78,12 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	 * @see org.openmrs.serialization.OpenmrsSerializer#deserialize(java.lang.String,
 	 *      java.lang.Class)
 	 * @should deserialize number in us locale format
+	 * @should not deserialize ENTITY
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T deserialize(String xml, Class<? extends T> type) throws SerializationException {
-		return (T) getXstream().fromXML(xml);
+		return (T) getXStream().fromXML(xml);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -88,7 +91,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		xml = MetadataSharing.getInstance().getConverterEngine()
 		        .convert(xml, openmrsVersion, OpenmrsConstants.OPENMRS_VERSION);
 		
-		return (T) getXstream().fromXML(xml);
+		return (T) getXStream().fromXML(xml);
 	}
 	
 	/**
@@ -100,32 +103,32 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	@Override
 	public String serialize(Object obj) throws SerializationException {
 		try {
-			return getXstream().toXML(obj);
+			return getXStream().toXML(obj);
 		}
 		catch (Exception e) {
 			//TODO: Temporary work-around for META-127
 			log.error("Will retry serializing...", e);
-			return getXstream().toXML(obj);
+			return getXStream().toXML(obj);
 		}
 	}
 	
 	/**
 	 * @return the xstream
 	 */
-	private XStream getXstream() {
+	public XStream getXStream() {
 		if (xstream == null) {
 			synchronized (lock) {
 				if (xstream == null) {
-					setupXstream();
+					setupXStream();
 				}
 			}
 		}
 		return xstream;
 	}
 	
-	private void setupXstream() {
+	private void setupXStream() {
 		xstream = new XStream(
-		                      null, new DomDriver("UTF-8"), OpenmrsClassLoader.getInstance()) {
+		                      null, new XppDriver(), OpenmrsClassLoader.getInstance()) {
 			
 			@Override
 			protected MapperWrapper wrapMapper(MapperWrapper next) {
@@ -135,8 +138,9 @@ public class MetadataSerializer implements OpenmrsSerializer {
 				return next;
 			}
 		};
-		
+
 		xstream.addImmutableType(User.class);
+		xstream.registerConverter(new DisabledDynamicProxyConverter(xstream.getMapper()), XStream.PRIORITY_VERY_HIGH);
 		xstream.registerConverter(new UserConverter(), XStream.PRIORITY_VERY_HIGH);
 		//The proxy converter must not be used, because it breaks displaying subclass entities. It's enough to use a mapper.
 		//The important thing is that proxies need to be initialized before serialization. It's done with ObjectVisitor.
