@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -76,6 +77,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	 * @see org.openmrs.serialization.OpenmrsSerializer#deserialize(java.lang.String,
 	 *      java.lang.Class)
 	 * @should deserialize number in us locale format
+	 * @should not deserialize ENTITY
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -125,7 +127,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	
 	private void setupXstream() {
 		xstream = new XStream(
-		                      null, new DomDriver("UTF-8"), OpenmrsClassLoader.getInstance()) {
+		                      null, new XppDriver(), OpenmrsClassLoader.getInstance()) {
 			
 			@Override
 			protected MapperWrapper wrapMapper(MapperWrapper next) {
@@ -135,7 +137,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 				return next;
 			}
 		};
-		
+
 		xstream.addImmutableType(User.class);
 		xstream.registerConverter(new UserConverter(), XStream.PRIORITY_VERY_HIGH);
 		//The proxy converter must not be used, because it breaks displaying subclass entities. It's enough to use a mapper.

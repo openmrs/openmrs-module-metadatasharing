@@ -14,15 +14,21 @@
 package org.openmrs.module.metadatasharing.serializer;
 
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Locale;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.openmrs.Location;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
@@ -35,6 +41,9 @@ import org.openmrs.test.Verifies;
 public class MetadataSerializerTest extends BaseModuleContextSensitiveTest {
 	private OpenmrsSerializer serializer;
 	private LocationService locationService;
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 	
 	@Before
 	public void before() throws Exception {
@@ -133,6 +142,23 @@ public class MetadataSerializerTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals(Double.valueOf(1000000.1), numberTest.d);
 		Assert.assertEquals(Float.valueOf(1000000.1f), numberTest.f);
 		Locale.setDefault(defaultLocale);
+    }
+    
+    /**
+     * @see MetadataSerializer#deserialize(String,Class)
+     * @verifies not deserialize ENTITY
+     */
+    @Test
+    public void deserialize_shouldNotDeserializeEntity() throws Exception {
+	    String xml = "<!DOCTYPE ZSL [<!ENTITY xxe1 \"some name\" >]>"
+	    		+ "<package id=\"1\" uuid=\"eecb64f8-35b0-412b-acda-3d83edf4ee63\">" +
+	    		"<name>&xxe1;</name>" +
+	    		"</package>";
+	    
+	    thrown.expectMessage("could not resolve entity named 'xxe1'");
+	    ExportedPackage exportedPackage = serializer.deserialize(xml, ExportedPackage.class);
+	    
+	    assertThat(exportedPackage.getName(), is("&xxe1;"));
     }
     
     /**
