@@ -5,68 +5,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
     
-    <changeSet id="metadatasharing_drop_table_package" author="Dmytro Trifonov">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="metadatasharing_package"/>
-        </preConditions>
-
-        <comment>
-            Drop table metadatasharing_package if exists
-        </comment>
-
-        <dropTable tableName="metadatasharing_package"/>
-    </changeSet>
-
-    <changeSet id="metadatasharing_drop_table_exported_package" author="Dmytro Trifonov">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="metadatasharing_exported_package"/>
-        </preConditions>
-
-        <comment>
-            Drop table metadatasharing_exported_package if exists
-        </comment>
-
-        <dropTable tableName="metadatasharing_exported_package"/>
-    </changeSet>
-
-    <changeSet id="metadatasharing_drop_table_imported_item" author="Dmytro Trifonov">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="metadatasharing_imported_item"/>
-        </preConditions>
-
-        <comment>
-            Drop table metadatasharing_imported_item if exists
-        </comment>
-
-        <dropTable tableName="metadatasharing_imported_item"/>
-    </changeSet>
-
-    <changeSet id="metadatasharing_drop_table_imported_package" author="Dmytro Trifonov">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="metadatasharing_imported_package"/>
-        </preConditions>
-
-        <comment>
-            Drop table metadatasharing_imported_package if exists
-        </comment>
-
-        <dropTable tableName="metadatasharing_imported_package"/>
-    </changeSet>
-
-    <changeSet id="metadatasharing_drop_table_subscription" author="Dmytro Trifonov">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="metadatasharing_subscription"/>
-        </preConditions>
-
-        <comment>
-            Drop table metadatasharing_subscription if exists
-        </comment>
-
-        <dropTable tableName="metadatasharing_subscription"/>
-    </changeSet>
-
     <changeSet id="metadatasharing_create_table_exported_package" author="Dmytro Trifonov">
-
+		<preConditions onFail="MARK_RAN">
+    		<not><tableExists tableName="metadatasharing_exported_package"/></not>
+    	</preConditions>
         <comment>Create table metadatasharing_exported_package</comment>
 
         <createTable tableName="metadatasharing_exported_package">
@@ -107,14 +49,16 @@
 
         </createTable>
         
-        <createIndex tableName="metadatasharing_exported_package" indexName="metadatasharing_exported_package_group_uuid">
+        <createIndex tableName="metadatasharing_exported_package" indexName="metadatasharing_package_group_uuid">
             <column name="group_uuid"></column>
         </createIndex>
     </changeSet>
 
     <changeSet id="metadatasharing_create_table_imported_package" author="Dmytro Trifonov">
-
-        <comment> Create table metadatasharing_imported_package</comment>
+		<preConditions onFail="MARK_RAN">
+    		<not><tableExists tableName="metadatasharing_imported_package"/></not>
+    	</preConditions>
+        <comment>Create table metadatasharing_imported_package</comment>
 
         <createTable tableName="metadatasharing_imported_package">
 
@@ -140,29 +84,31 @@
 
             <column name="date_imported" type="datetime" defaultValue="null"></column>
 
-            <column name="name" type="varchar(64)" defaultValue="NULL"></column>
+            <column name="name" type="varchar(64)" defaultValue="null"></column>
 
             <column name="description" type="varchar(256)">
                 <constraints nullable="false"></constraints>
             </column>
 
-            <column name="import_config" type="varchar(256)" defaultValue="null"></column>
+            <column name="import_config" type="varchar(1024)" defaultValue="null"></column>
 
-            <column name="remote_version" type="int" defaultValue="NULL"></column>
+            <column name="remote_version" type="int" defaultValue="null"></column>
 
-            <column name="version" type="int" defaultValue="NULL"></column>
+            <column name="version" type="int" defaultValue="null"></column>
 
         </createTable>
 
-        <createIndex tableName="metadatasharing_imported_package" indexName="metadatasharing_imported_package_uuid_index">
+        <createIndex tableName="metadatasharing_imported_package" indexName="metadatasharing_package_uuid">
             <column name="group_uuid"></column>
         </createIndex>
 
     </changeSet>
 
     <changeSet id="metadatasharing_create_table_imported_item" author="Dmytro Trifonov">
-
-        <comment> Create table metadatasharing_imported_item</comment>
+    	<preConditions onFail="MARK_RAN">
+    		<not><tableExists tableName="metadatasharing_imported_item"/></not>
+    	</preConditions>
+        <comment>Create table metadatasharing_imported_item</comment>
 
         <createTable tableName="metadatasharing_imported_item">
 
@@ -192,7 +138,7 @@
 
         </createTable>
 
-        <createIndex tableName="metadatasharing_imported_item" indexName="metadatasharing_imported_item_uuid_index">
+        <createIndex tableName="metadatasharing_imported_item" indexName="metadatasharing_item_uuid">
             <column name="uuid"></column>
             <column name="existing_uuid"></column>
         </createIndex>

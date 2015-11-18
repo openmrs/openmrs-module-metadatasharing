@@ -24,6 +24,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.type.TextType;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
+import org.openmrs.module.metadatasharing.serializer.MetadataSerializer;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -38,7 +39,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	
 	private static final int[] SQL_TYPES = { Types.VARCHAR };
 	
-	private XStream xstream = new XStream(new DomDriver());
+	private XStream xstream = new MetadataSerializer().getXStream();
 	
 	private Class returnedClass;
 	
