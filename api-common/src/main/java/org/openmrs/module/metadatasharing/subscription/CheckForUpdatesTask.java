@@ -40,9 +40,7 @@ public class CheckForUpdatesTask extends AbstractTask {
 			if (!Context.isSessionOpen()) {
 				Context.openSession();
 			}
-			if (!Context.isAuthenticated()) {
-				authenticate();
-			}
+
 			Context.addProxyPrivilege(MetadataSharingConsts.MODULE_PRIVILEGE);
 			Context.addProxyPrivilege("View Users");
 			Context.addProxyPrivilege("Manage Alerts");

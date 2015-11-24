@@ -25,6 +25,10 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 		return 0;
 	}
 	
+	private static final String SYNONYM = "synonym";
+	
+	private static final String PREFERRED = "preferred";
+	
 	@Override
 	public void merge(Concept existingConcept, Concept incomingConcept, ImportType importType,
 	                  Map<Object, Object> incomingToExisting) {
@@ -91,7 +95,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 	private void changeToNonPreferred(ConceptName existingName) {
 		if (existingName.getTags() != null) {
 			for (ConceptNameTag tag : existingName.getTags()) {
-				if (tag.getTag().startsWith(ConceptNameTag.PREFERRED)) {
+				if (tag.getTag().startsWith(PREFERRED)) {
 					existingName.removeTag(tag);
 					break;
 				}
@@ -110,7 +114,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 	
 	private void changeFromFullySpecifiedToSynonym(ConceptName name) {
 		if (name.getTags() == null) {
-			name.addTag(ConceptNameTag.SYNONYM);
+			name.addTag(SYNONYM);
 		}
 	}
 	

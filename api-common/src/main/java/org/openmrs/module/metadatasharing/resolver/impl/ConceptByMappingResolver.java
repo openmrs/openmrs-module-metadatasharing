@@ -46,15 +46,15 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 		Set<String> preferredSourceNames = MetadataSharing.getService().getPreferredSourceNames();
 		
 		for (ConceptMap map : incoming.getConceptMappings()) {
-			if (map.getSourceCode() == null || map.getSource() == null || map.getSource().getName() == null) {
+			if (map.getConceptReferenceTerm().getCode() == null || map.getConceptReferenceTerm().getConceptSource() == null || map.getConceptReferenceTerm().getConceptSource().getName() == null) {
 				continue;
 			}
 			
-			if (preferredSourceNames.contains(map.getSource().getName())) {
-				ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getSource().getName());
+			if (preferredSourceNames.contains(map.getConceptReferenceTerm().getConceptSource().getName())) {
+				ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getConceptReferenceTerm().getConceptSource().getName());
 				
-				for (ConceptMap m : Context.getConceptService().getConceptsByConceptSource(source)) {
-					if (m.getSourceCode().equals(map.getSourceCode())) {
+				for (ConceptMap m : Context.getConceptService().getConceptMappingsToSource(source)) {
+					if (m.getConceptReferenceTerm().getCode().equals(map.getConceptReferenceTerm().getCode())) {
 						Concept existing = m.getConcept();
 						
 						if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null
@@ -92,13 +92,13 @@ public class ConceptByMappingResolver extends Resolver<Concept> {
 	@Override
 	public Concept getPossibleMatch(Concept incoming) {
 		for (ConceptMap map : incoming.getConceptMappings()) {
-			if (map.getSourceCode() == null || map.getSource() == null || map.getSource().getName() == null) {
+			if (map.getConceptReferenceTerm().getCode() == null || map.getConceptReferenceTerm().getConceptSource() == null || map.getConceptReferenceTerm().getConceptSource().getName() == null) {
 				continue;
 			}
 			
-			ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getSource().getName());
-			for (ConceptMap m : Context.getConceptService().getConceptsByConceptSource(source)) {
-				if (m.getSourceCode().equals(map.getSourceCode())) {
+			ConceptSource source = Context.getConceptService().getConceptSourceByName(map.getConceptReferenceTerm().getConceptSource().getName());
+			for (ConceptMap m : Context.getConceptService().getConceptMappingsToSource(source)) {
+				if (m.getConceptReferenceTerm().getCode().equals(map.getConceptReferenceTerm().getCode())) {
 					Concept existing = m.getConcept();
 					
 					if (existing == null || existing.getDatatype() == null || existing.getDatatype().getName() == null

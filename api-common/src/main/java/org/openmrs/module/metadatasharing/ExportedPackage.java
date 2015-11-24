@@ -22,7 +22,8 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
-import org.hibernate.Hibernate;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.api.MetadataService;
 import org.openmrs.module.metadatasharing.io.MetadataZipper;
 
 /**
@@ -120,7 +121,7 @@ public class ExportedPackage extends Package implements Serializable {
 	public void setSerializedPackageStream(InputStream serializedPackageStream) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		IOUtils.copy(serializedPackageStream, output);
-		this.content = Hibernate.createBlob(output.toByteArray());
+		this.content = Context.getService(MetadataService.class).createBlob(output.toByteArray());
 		
 		ByteArrayInputStream input = new ByteArrayInputStream(output.toByteArray());
 		super.setSerializedPackageStream(input);
@@ -139,7 +140,7 @@ public class ExportedPackage extends Package implements Serializable {
 	public void setSerializedPackage(SerializedPackage serializedPackage) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		new MetadataZipper().zipPackage(output, serializedPackage);
-		this.content = Hibernate.createBlob(output.toByteArray());
+		this.content = Context.getService(MetadataService.class).createBlob(output.toByteArray());
 		
 		super.setSerializedPackage(serializedPackage);
 	}

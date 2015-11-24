@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.metadatasharing.api.db;
 
+import java.sql.Blob;
 import java.util.List;
 
 import org.openmrs.Concept;
@@ -64,4 +65,6 @@ public interface MetadataDAO {
 	 * @see org.openmrs.module.metadatasharing.api.db.MetadataDAO#getItemById(Class, Integer)
 	 */
 	<T> T getItemById(Class<? extends T> type, Integer id);
+	
+	Blob createBlob(byte[] bytes);
 }

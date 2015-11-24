@@ -13,6 +13,7 @@ import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
+import org.openmrs.module.metadatasharing.api.ConceptServiceCompatibility;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
 import org.openmrs.module.metadatasharing.web.bean.ConfigureForm;
 import org.openmrs.module.metadatasharing.web.bean.validator.ConfigureFormValidator;
@@ -50,9 +51,12 @@ public class ConfigureController {
 	@Autowired
 	private ConfigureFormValidator validator;
 	
+	@Autowired
+	private ConceptServiceCompatibility conceptService;
+	
 	@ModelAttribute("conceptSources")
 	public List<ConceptSource> getConceptSources() {
-		return Context.getConceptService().getAllConceptSources();
+		return conceptService.getAllConceptSources();
 	}
 	
 	@ModelAttribute("sourceIdPreferredMap")

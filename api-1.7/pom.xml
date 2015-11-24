@@ -45,11 +45,5 @@
 			<classifier>tests</classifier>
 		</dependency>
 
-		<dependency>
-			<groupId>org.openmrs.test</groupId>
-			<artifactId>openmrs-test</artifactId>
-			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
-			<type>pom</type>
-		</dependency>
 	</dependencies>
 </project>

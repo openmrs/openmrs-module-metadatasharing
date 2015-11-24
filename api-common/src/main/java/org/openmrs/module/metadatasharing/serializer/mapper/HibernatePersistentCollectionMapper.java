@@ -1,17 +1,5 @@
 package org.openmrs.module.metadatasharing.serializer.mapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentList;
-import org.hibernate.collection.PersistentMap;
-import org.hibernate.collection.PersistentSet;
-import org.hibernate.collection.PersistentSortedMap;
-import org.hibernate.collection.PersistentSortedSet;
 import org.openmrs.module.metadatasharing.serializer.converter.HibernatePersistentCollectionConverter;
 
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -31,13 +19,14 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  */
 public class HibernatePersistentCollectionMapper extends MapperWrapper {
 	
-	private final Class<?>[] hbClasses = { PersistentList.class, PersistentSet.class, PersistentMap.class,
-	        PersistentSortedSet.class, PersistentSortedMap.class };
-	
-	private final Class<?>[] jdkClasses = { ArrayList.class, HashSet.class, HashMap.class, TreeSet.class, TreeMap.class };
+	private CollectionMapperCompatibility mapperCompatibility;
 	
 	public HibernatePersistentCollectionMapper(Mapper wrapped) {
 		super(wrapped);
+	}
+	
+	public void setCollectionMapperCompatibility(CollectionMapperCompatibility mapperCompatibility) {
+		this.mapperCompatibility = mapperCompatibility;
 	}
 	
 	/**
@@ -45,12 +34,9 @@ public class HibernatePersistentCollectionMapper extends MapperWrapper {
 	 */
 	@Override
     public String serializedClass(@SuppressWarnings("rawtypes") Class type) {
-		if (PersistentCollection.class.isAssignableFrom(type)) {
-			for (int i = 0; i < hbClasses.length; i++) {
-				if (type.equals(hbClasses[i])) {
-					return super.serializedClass(jdkClasses[i]);
-				}
-			}
+		Class<?> cls = mapperCompatibility.serializedClass(type);
+		if (cls != null) {
+			return super.serializedClass(cls);
 		}
 		return super.serializedClass(type);
 	}

@@ -17,6 +17,12 @@
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api</artifactId>
 			<version>${project.parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>javassist</artifactId>
+					<groupId>javassist</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	
 		<dependency>
@@ -24,6 +30,12 @@
 			<artifactId>${project.parent.artifactId}-api-common</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>tests</classifier>
+			<exclusions>
+				<exclusion>
+					<artifactId>javassist</artifactId>
+					<groupId>javassist</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<dependency>
@@ -31,6 +43,12 @@
 			<artifactId>${project.parent.artifactId}-api-1.7</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>tests</classifier>
+			<exclusions>
+				<exclusion>
+					<artifactId>javassist</artifactId>
+					<groupId>javassist</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<dependency>
@@ -38,21 +56,32 @@
 			<artifactId>${project.parent.artifactId}-api-1.9</artifactId>
 			<version>${project.parent.version}</version>
 			<classifier>tests</classifier>
+			<exclusions>
+				<exclusion>
+					<artifactId>javassist</artifactId>
+					<groupId>javassist</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+			
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.5</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.openmrs.api</groupId>
-			<artifactId>openmrs-api</artifactId>
-			<classifier>tests</classifier>
-			<scope>compile</scope>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>mockito-all</artifactId>
+					<groupId>org.mockito</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.openmrs.test</groupId>
-			<artifactId>openmrs-test</artifactId>
-			<type>pom</type>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 
 </project>

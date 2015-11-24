@@ -42,10 +42,10 @@ public class ComparisonEngine {
 			ConceptMap incomingMap = (ConceptMap) incoming;
 			ConceptMap existingMap = (ConceptMap) existing;
 			
-			if (incomingMap.getSource() != null && existingMap.getSource() != null) {
-				Object existingSource = incomingToExisting.get(incomingMap.getSource());
-				if (incomingMap.getSource().equals(existingMap.getSource()) || existingMap.getSource().equals(existingSource)) {
-					return StringUtils.equalsIgnoreCase(incomingMap.getSourceCode(), existingMap.getSourceCode());
+			if (incomingMap.getConceptReferenceTerm().getConceptSource() != null && existingMap.getConceptReferenceTerm().getConceptSource() != null) {
+				Object existingSource = incomingToExisting.get(incomingMap.getConceptReferenceTerm().getConceptSource());
+				if (incomingMap.getConceptReferenceTerm().getConceptSource().equals(existingMap.getConceptReferenceTerm().getConceptSource()) || existingMap.getConceptReferenceTerm().getConceptSource().equals(existingSource)) {
+					return StringUtils.equalsIgnoreCase(incomingMap.getConceptReferenceTerm().getCode(), existingMap.getConceptReferenceTerm().getCode());
 				}
 			} else {
 				return false;

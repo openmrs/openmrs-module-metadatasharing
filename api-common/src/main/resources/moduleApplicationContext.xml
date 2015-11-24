@@ -99,5 +99,7 @@
 			</list>
 		</property>
 	</bean>
-
+	
+	<bean name="persistentCollectionConverter" class="org.openmrs.module.metadatasharing.serializer.converter.HibernatePersistentCollectionConverter"/>
+	
 </beans>

@@ -36,8 +36,11 @@ public class ConceptMapHandler implements MetadataPriorityDependenciesHandler<Co
 	public List<Object> getPriorityDependencies(ConceptMap object) {
 		List<Object> result = new ArrayList<Object>();
 		
-		if (object.getSource() != null) {
-			result.add(object.getSource());
+		if (object.getConceptReferenceTerm() != null) {
+			result.add(object.getConceptReferenceTerm());
+		}
+		if (object.getConceptMapType() != null) {
+			result.add(object.getConceptMapType());
 		}
 		
 		return result;

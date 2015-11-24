@@ -13,31 +13,28 @@
  */
 package org.openmrs.module.metadatasharing.api.db.hibernate;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.openmrs.api.db.hibernate.DbSessionFactory;  
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 import org.hibernate.type.StringType;
 import org.openmrs.Concept;
-import org.openmrs.ConceptWord;
 import org.openmrs.OpenmrsMetadata;
 import org.openmrs.Privilege;
 import org.openmrs.RelationshipType;
 import org.openmrs.Role;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.module.metadatasharing.api.db.HibernateCompatibility;
 import org.openmrs.module.metadatasharing.api.db.MetadataDAO;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +48,9 @@ public class HibernateMetadataDAO implements MetadataDAO {
 	
 	@Autowired
 	private DbSessionFactory sessionFactory;
+	
+	@Autowired
+	private HibernateCompatibility compatibility;
 	
 	@Override
 	public <T> List<T> getItems(Class<? extends T> type, boolean includeRetired, String filter, Integer first, Integer max)
@@ -178,6 +178,7 @@ public class HibernateMetadataDAO implements MetadataDAO {
 			}
 		}
 		
+		List<Concept> concepts = null;
 		Criteria criteria = null;
 		if (StringUtils.isEmpty(filter)) {
 			criteria = sessionFactory.getCurrentSession().createCriteria(Concept.class);
@@ -187,25 +188,20 @@ public class HibernateMetadataDAO implements MetadataDAO {
 			}
 			
 			criteria.addOrder(Order.asc("conceptId"));
+			
+			if (firstResult != null) {
+				criteria.setFirstResult(firstResult);
+			}
+			
+			if (maxResults != null) {
+				criteria.setMaxResults(maxResults);
+			}
+			
+			concepts = criteria.list();
+			
 		} else {
-			criteria = sessionFactory.getCurrentSession().createCriteria(ConceptWord.class, "conceptWord");
-			
-			filterConceptWords(criteria, includeRetired, filter);
-			
-			criteria.addOrder(Order.asc("concept"));
-			criteria.setProjection(Projections.distinct(Projections.property("concept")));
+			concepts = compatibility.getConcepts(includeRetired, filter, firstResult, maxResults);
 		}
-		
-		if (firstResult != null) {
-			criteria.setFirstResult(firstResult);
-		}
-		
-		if (maxResults != null) {
-			criteria.setMaxResults(maxResults);
-		}
-		
-		@SuppressWarnings("unchecked")
-		List<Concept> concepts = criteria.list();
 		
 		if (concepts != null && !concepts.isEmpty()) {
 			result.addAll(concepts);
@@ -248,39 +244,11 @@ public class HibernateMetadataDAO implements MetadataDAO {
 			}
 		}
 		
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ConceptWord.class, "conceptWord");
-		
-		filterConceptWords(criteria, includeRetired, filter);
-		
-		criteria.setProjection(Projections.countDistinct("concept"));
-		
-		Integer resultsCount = ((Number) criteria.uniqueResult()).intValue();
+		Integer resultsCount = compatibility.getConceptsCount(includeRetired, filter);
 		if (incrementNeeded) {
 			return resultsCount + 1;
 		} else {
 			return resultsCount;
-		}
-	}
-	
-	private void filterConceptWords(Criteria criteria, boolean includeRetired, String filter) {
-		criteria.createAlias("concept", "concept");
-		if (!includeRetired) {
-			criteria.add(Restrictions.eq("concept.retired", includeRetired));
-		}
-		
-		if (!StringUtils.isEmpty(filter)) {
-			Iterator<String> words = ConceptWord.getUniqueWords(filter).iterator();
-			if (words.hasNext()) {
-				criteria.add(Restrictions.like("word", words.next(), MatchMode.START));
-				while (words.hasNext()) {
-					DetachedCriteria crit = DetachedCriteria.forClass(ConceptWord.class)
-					        .setProjection(Property.forName("concept"))
-					        .add(Restrictions.eqProperty("concept", "conceptWord.concept"))
-					        .add(Restrictions.like("word", words.next(), MatchMode.START));
-					
-					criteria.add(Subqueries.exists(crit));
-				}
-			}
 		}
 	}
 	
@@ -323,5 +291,10 @@ public class HibernateMetadataDAO implements MetadataDAO {
 			// do nothing
 		}
 		return itemId;
+	}
+
+	@Override
+	public Blob createBlob(byte[] bytes) {
+		return compatibility.createBlob(bytes);
 	}
 }

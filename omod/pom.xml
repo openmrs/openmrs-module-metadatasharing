@@ -39,6 +39,7 @@
 			<artifactId>openmrs-web</artifactId>
 			<classifier>tests</classifier>
 		</dependency>
+		
 	</dependencies>
 
 	<build>

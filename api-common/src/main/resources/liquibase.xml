@@ -6,6 +6,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
     
     <changeSet id="metadatasharing_create_table_exported_package" author="Dmytro Trifonov">
+    	<validCheckSum>3:cd6f473e1eef04494f47fbaaff70a52f</validCheckSum>
 		<preConditions onFail="MARK_RAN">
     		<not><tableExists tableName="metadatasharing_exported_package"/></not>
     	</preConditions>
@@ -55,6 +56,7 @@
     </changeSet>
 
     <changeSet id="metadatasharing_create_table_imported_package" author="Dmytro Trifonov">
+    	<validCheckSum>3:582520a49887eb6fd3e36592693e0730</validCheckSum>
 		<preConditions onFail="MARK_RAN">
     		<not><tableExists tableName="metadatasharing_imported_package"/></not>
     	</preConditions>
@@ -105,6 +107,7 @@
     </changeSet>
 
     <changeSet id="metadatasharing_create_table_imported_item" author="Dmytro Trifonov">
+    	<validCheckSum>3:412a3292ac3cc3f3d27fd8334df634c3</validCheckSum>
     	<preConditions onFail="MARK_RAN">
     		<not><tableExists tableName="metadatasharing_imported_item"/></not>
     	</preConditions>

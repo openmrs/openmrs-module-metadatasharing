@@ -12,7 +12,7 @@
 		<property name="existingUuid" type="java.lang.String" column="existing_uuid"
 			length="38" />
 		<property name="importType" column="import_type" length="10">
-			<type name="org.openmrs.module.metadatasharing.api.db.hibernate.EnumType">
+			<type name="org.hibernate.type.EnumType">
 				<param name="enumClass">org.openmrs.module.metadatasharing.ImportType</param>
 				<param name="type">-6</param>
 			</type>

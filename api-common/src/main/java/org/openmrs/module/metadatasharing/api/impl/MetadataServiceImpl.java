@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.metadatasharing.api.impl;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -90,5 +91,10 @@ public class MetadataServiceImpl extends BaseOpenmrsService implements MetadataS
 	@Override
 	public <T> T getItemById(Class<? extends T> type, Integer id) throws APIException {
 		return dao.getItemById(type, id);
+	}
+
+	@Override
+	public Blob createBlob(byte[] bytes) {
+		return dao.createBlob(bytes);
 	}
 }

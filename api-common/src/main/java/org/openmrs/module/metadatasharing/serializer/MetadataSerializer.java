@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.User;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
@@ -31,6 +32,7 @@ import org.openmrs.module.metadatasharing.serializer.converter.LongLocaleUSConve
 import org.openmrs.module.metadatasharing.serializer.converter.OpenmrsObjectConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.ShortLocaleUSConverter;
 import org.openmrs.module.metadatasharing.serializer.converter.UserConverter;
+import org.openmrs.module.metadatasharing.serializer.mapper.CollectionMapperCompatibility;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernatePersistentCollectionMapper;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernateProxyMapper;
 import org.openmrs.module.metadatasharing.serializer.mapper.NonExistigFieldMapper;
@@ -39,11 +41,10 @@ import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
@@ -74,6 +75,9 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	private volatile XStream xstream;
 	
 	private final Object lock = new Object();
+	
+	@Autowired
+	private CollectionMapperCompatibility mapperCompatibility;
 	
 	/**
 	 * @see org.openmrs.serialization.OpenmrsSerializer#deserialize(java.lang.String,
@@ -136,6 +140,7 @@ public class MetadataSerializer implements OpenmrsSerializer {
 				next = new NonExistigFieldMapper(next);
 				next = new HibernateProxyMapper(next);
 				next = new HibernatePersistentCollectionMapper(next);
+				((HibernatePersistentCollectionMapper)next).setCollectionMapperCompatibility(mapperCompatibility);
 				return next;
 			}
 		};
@@ -149,8 +154,10 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		//See also META-329.
 		//xstream.registerConverter(new HibernateProxyConverter(), XStream.PRIORITY_NORMAL);
 		
-		xstream.registerConverter(new HibernatePersistentCollectionConverter(xstream.getConverterLookup()),
-		    XStream.PRIORITY_NORMAL);
+		HibernatePersistentCollectionConverter collectionConverter = Context.getRegisteredComponent("persistentCollectionConverter", HibernatePersistentCollectionConverter.class);
+		collectionConverter.setConverterLookup(xstream.getConverterLookup());
+
+		xstream.registerConverter(collectionConverter, XStream.PRIORITY_NORMAL);
 		xstream.registerConverter(new OpenmrsObjectConverter(xstream.getMapper(), xstream.getReflectionProvider()),
 		    XStream.PRIORITY_LOW);
 		

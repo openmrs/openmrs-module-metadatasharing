@@ -37,6 +37,19 @@
 		<point>org.openmrs.admin.list</point>
 		<class>@MODULE_PACKAGE@.web.extension.html.AdminList</class>
 	</extension>
+	
+	<!-- Conditional Resources -->
+    <conditionalResources>
+    	<conditionalResource>
+            <path>/lib/metadatasharing-api-1.9-${project.parent.version}.jar</path>
+            <openmrsVersion>1.9.9 - 1.12.*</openmrsVersion>
+        </conditionalResource>
+        <conditionalResource>
+            <path>/lib/metadatasharing-api-2.0-${project.parent.version}.jar</path>
+            <openmrsVersion>2.0.*</openmrsVersion>
+        </conditionalResource>
+    </conditionalResources>
+    <!-- / Conditional Resources -->
 
 	<mappingFiles>
 		ExportedPackage.hbm.xml

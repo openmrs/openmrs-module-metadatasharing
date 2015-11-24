@@ -24,6 +24,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
+import org.openmrs.module.metadatasharing.PrivilegeCompatibility;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.module.metadatasharing.io.MetadataZipper;
@@ -61,6 +62,9 @@ public class PublishController {
 	 */
 	@Autowired
 	private DownloadPackageView packageContentView;
+	
+	@Autowired
+	private PrivilegeCompatibility privilegeCompatibility;
 	
 	/**
 	 * The prefix of each URL this controller is mapping to. It is used to extract the group form
@@ -191,7 +195,7 @@ public class PublishController {
 				try {
 					Context.addProxyPrivilege(MetadataSharingConsts.MODULE_PRIVILEGE);
 					//The extra privilege is needed because the Concept handler uses Context.getConceptService().
-					Context.addProxyPrivilege(OpenmrsConstants.PRIV_VIEW_CONCEPTS);
+					Context.addProxyPrivilege(privilegeCompatibility.GET_CONCEPTS());
 					
 					PackageExporter exporter = MetadataSharing.getInstance().newPackageExporter();
 					if (OpenmrsUtil.compareWithNullAsEarliest(new Date(), modifiedSince) > 0) {
@@ -236,7 +240,7 @@ public class PublishController {
 				}
 				finally {
 					Context.removeProxyPrivilege(MetadataSharingConsts.MODULE_PRIVILEGE);
-					Context.removeProxyPrivilege(OpenmrsConstants.PRIV_VIEW_CONCEPTS);
+					Context.removeProxyPrivilege(privilegeCompatibility.GET_CONCEPTS());
 				}
 				
 			} else {

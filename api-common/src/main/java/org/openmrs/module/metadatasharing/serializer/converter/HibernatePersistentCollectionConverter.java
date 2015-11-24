@@ -13,24 +13,8 @@
  */
 package org.openmrs.module.metadatasharing.serializer.converter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentList;
-import org.hibernate.collection.PersistentMap;
-import org.hibernate.collection.PersistentSet;
-import org.hibernate.collection.PersistentSortedMap;
-import org.hibernate.collection.PersistentSortedSet;
 import org.openmrs.module.metadatasharing.serializer.mapper.HibernatePersistentCollectionMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.ConverterLookup;
@@ -55,9 +39,20 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 public class HibernatePersistentCollectionConverter implements Converter {
 	
-	private final ConverterLookup converterLookup;
+	private ConverterLookup converterLookup;
+	
+	@Autowired
+	private CollectionConverterCompatibility collection;
+	
+	public HibernatePersistentCollectionConverter() {
+		
+	}
 	
 	public HibernatePersistentCollectionConverter(ConverterLookup converterLookup) {
+		this.converterLookup = converterLookup;
+	}
+	
+	public void setConverterLookup(ConverterLookup converterLookup) {
 		this.converterLookup = converterLookup;
 	}
 	
@@ -66,7 +61,7 @@ public class HibernatePersistentCollectionConverter implements Converter {
 	 */
 	@Override
     public boolean canConvert(@SuppressWarnings("rawtypes") Class type) {
-		return PersistentCollection.class.isAssignableFrom(type);
+		return collection.canConvert(type);
 	}
 	
 	/**
@@ -77,20 +72,7 @@ public class HibernatePersistentCollectionConverter implements Converter {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		if (source instanceof PersistentList) {
-			source = new ArrayList((Collection) source);
-		} else if (source instanceof PersistentMap) {
-			source = new HashMap((Map) source);
-		} else if (source instanceof PersistentSortedMap) {
-			source = new TreeMap((SortedMap) source);
-		} else if (source instanceof PersistentSortedSet) {
-			source = new TreeSet((SortedSet) source);
-		} else if (source instanceof PersistentSet) {
-			source = new HashSet((Set) source);
-		}
-		
-		// delegate the collection to the approapriate converter
-		converterLookup.lookupConverterForType(source.getClass()).marshal(source, writer, context);
+		collection.marshal(source, writer, context, converterLookup);
 	}
 	
 	/**

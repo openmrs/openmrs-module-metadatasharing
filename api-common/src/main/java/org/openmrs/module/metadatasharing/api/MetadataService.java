@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.metadatasharing.api;
 
+import java.sql.Blob;
 import java.util.List;
 
 import org.openmrs.Concept;
@@ -116,4 +117,8 @@ public interface MetadataService extends OpenmrsService {
 	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
 	<T> T getItemById(Class<? extends T> type, Integer id) throws APIException;
+	
+	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
+	@Transactional(readOnly = true)
+	Blob createBlob(byte[] bytes);
 }

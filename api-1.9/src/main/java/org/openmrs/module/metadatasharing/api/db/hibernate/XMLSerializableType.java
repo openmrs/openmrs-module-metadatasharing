@@ -24,10 +24,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.type.TextType;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.serializer.MetadataSerializer;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * Allows to persist objects as XML.
@@ -39,7 +40,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	
 	private static final int[] SQL_TYPES = { Types.VARCHAR };
 	
-	private XStream xstream = new MetadataSerializer().getXStream();
+	private XStream xstream;
 	
 	private Class returnedClass;
 	
@@ -58,7 +59,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Object assemble(Serializable value, Object owner) throws HibernateException {
-		return xstream.fromXML((String) value);
+		return getXStream().fromXML((String) value);
 	}
 	
 	/**
@@ -66,7 +67,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Object deepCopy(Object value) throws HibernateException {
-		return xstream.fromXML(xstream.toXML(value));
+		return getXStream().fromXML(getXStream().toXML(value));
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public Serializable disassemble(Object value) throws HibernateException {
-		return xstream.toXML(value);
+		return getXStream().toXML(value);
 	}
 	
 	/**
@@ -114,7 +115,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	@Override
 	public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
 		String xmlString = (String) new TextType().nullSafeGet(rs, names[0]);
-		return xstream.fromXML(xmlString);
+		return getXStream().fromXML(xmlString);
 	}
 	
 	/**
@@ -123,7 +124,7 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 	 */
 	@Override
 	public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
-		String xmlString = xstream.toXML(value);
+		String xmlString = getXStream().toXML(value);
 		new TextType().nullSafeSet(st, xmlString, index);
 	}
 	
@@ -168,4 +169,12 @@ public class XMLSerializableType implements UserType, ParameterizedType {
 		return SQL_TYPES;
 	}
 	
+	private XStream getXStream() {
+		if (xstream == null) {
+			MetadataSerializer serialier = Context.getRegisteredComponent(MetadataSharingConsts.MODULE_ID + ".MetadataSerializer", MetadataSerializer.class);
+			xstream = serialier.getXStream();
+		}
+		
+		return xstream;
+	}
 }

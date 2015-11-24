@@ -62,6 +62,9 @@ public class SubscriptionUpdaterImpl implements SubscriptionUpdater {
 	@Autowired
 	private SubscriptionHeaderValidator validator;
 	
+	@Autowired
+	private SchedulerCompatibility scheduler;
+	
 	/**
 	 * @see org.openmrs.module.metadatasharing.updater.SubscriptionUpdater#checkForUpdates(org.openmrs.module.metadatasharing.subscription.Subscription)
 	 */
@@ -230,7 +233,7 @@ public class SubscriptionUpdaterImpl implements SubscriptionUpdater {
 				taskDefinition.setDescription(Context.getMessageSourceService().getMessage(
 				    "metadatasharing.alert.description"));
 				taskDefinition.setRepeatInterval(interval);
-				Context.getSchedulerService().saveTask(taskDefinition);
+				scheduler.saveTask(Context.getSchedulerService(), taskDefinition);
 				Context.getSchedulerService().scheduleTask(taskDefinition);
 			} else {
 				taskDefinition.setRepeatInterval(interval);
