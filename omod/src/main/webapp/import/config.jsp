@@ -29,52 +29,52 @@
 			<spring:message code="metadatasharing.import.mode.adjust" />
 		</legend>
 		<p>
-			1. Exact Match: <br />
+			<spring:message code="metadatasharing.exactMatch" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.exactMatch"
 				value="PREFER_MINE" />
-			Merge (prefer mine) <br />
+			<spring:message code="metadatasharing.mergePreferMine" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.exactMatch"
 				value="PREFER_THEIRS" />
-			Merge (prefer theirs) <br />
+			<spring:message code="metadatasharing.mergePreferTheirs" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.exactMatch" value="OMIT" />
-			Omit <br /> <br />
+			<spring:message code="metadatasharing.omit" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmExactMatch" />
-			Ask if dates differ
+			<spring:message code="metadatasharing.askIfDatesDiffer" />
 		</p>
 		<p>
-			2. Possible Match: <br />
+			<spring:message code="metadatasharing.possibleMatch" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch"
 				value="CREATE" />
-			Create new <br />
+			<spring:message code="metadatasharing.createNew" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch"
 				value="PREFER_MINE" />
-			Merge (prefer mine) <br />
+			<spring:message code="metadatasharing.mergePreferMine" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch"
 				value="PREFER_THEIRS" />
-			Merge (prefer theirs) <br />
+			<spring:message code="metadatasharing.mergePreferTheirs" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch"
 				value="OMIT" />
-			Omit <br /> <br />
+			<spring:message code="metadatasharing.omit" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmPossibleMatch" />
-			Ask if dates differ
+			<spring:message code="metadatasharing.askIfDatesDiffer" />
 		</p>
 		<p>
-			3. No Match: <br />
+			<spring:message code="metadatasharing.noMatch" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.noMatch" value="CREATE" />
-			Create new <br />
+			<spring:message code="metadatasharing.createNew" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.noMatch"
 				value="PREFER_MINE" />
-			Merge (prefer mine) <br />
+			<spring:message code="metadatasharing.mergePreferMine" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.noMatch"
 				value="PREFER_THEIRS" />
-			Merge (prefer theirs) <br />
+			<spring:message code="metadatasharing.mergePreferTheirs" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.noMatch" value="OMIT" />
-			Omit <br /> <br />
+			<spring:message code="metadatasharing.omit" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmNoMatch" />
-			Ask every time (lets you search for replacements)
+			<spring:message code="metadatasharing.askEveryTime" />
 		</p>
 	</fieldset>
 	<p>
