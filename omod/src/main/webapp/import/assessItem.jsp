@@ -126,57 +126,58 @@
 </p>
 
 <springform:form commandName="assessItemForm">
-	Assessing Item ${assessItemForm.index + 1} <input
+		<spring:message code="metadatasharing.assessingItem" />
+		${assessItemForm.index + 1} <input
 		name="assessItemForm.index" type="hidden"
 		value="${assessItemForm.index}" />
 	<input id="uuid" name="uuid" type="hidden"
 		value="<h:handle object="${item.existing}" get="uuid" />" />
 	<p>
-		Type: <b><h:handle object="${item.incoming}" get="type" /> </b>
+		<spring:message code="metadatasharing.type" /> <b><h:handle object="${item.incoming}" get="type" /> </b>
 	</p>
 
 	<table width="100%">
 		<tr>
 			<td width="50%" style="vertical-align: top">
 				<fieldset>
-					<legend>Incoming Item</legend>
+					<legend> <spring:message code="metadatasharing.incomingItem" /> </legend>
 					<table>
 						<c:if test="${not empty item.existing}">
 							<c:if
 								test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 								<tr>
-									<td class="to_right">Type:</td>
+									<td class="to_right"> <springform:form code="metadatasharing.type" /> </td>
 									<td><span id="incomingType">${item.incomingClassSimpleName}</span></td>
 								</tr>
 							</c:if>
 						</c:if>
 						<tr>
-							<td class="to_right">Name:</td>
+							<td class="to_right"> <spring:message code="metadatasharing.name" /> </td>
 							<td><b><span id="incomingName"><h:handle
 											object="${item.incoming}" get="name" /></span></b></td>
 						</tr>
 						<tr>
-							<td class="to_right">Description:</td>
+							<td class="to_right"> <spring:message code="metadatasharing.description" /> </td>
 							<td><span id="incomingDescription"><h:handle
 										object="${item.incoming}" get="description" /></span></td>
 						</tr>
 						<tr>
-							<td class="to_right">UUID:</td>
+							<td class="to_right"> <spring:message code="metadatasharing.UUID" /> </td>
 							<td><span id="incomingUUID"><h:handle
 										object="${item.incoming}" get="uuid" /></span></td>
 						</tr>
 						<tr>
-							<td class="to_right">Date modified:</td>
+							<td class="to_right"> <spring:message code="metadatasharing.dateModified" /> </td>
 							<td><span id="incomingDateChanged"><h:handle
 										object="${item.incoming}" get="dateChanged" /></span></td>
 						</tr>
 						<c:if test="${type == 'Concept'}">
 							<tr>
-								<td class="to_right">Datatype:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.datatype" /></td>
 								<td><span id="incomingDatatype">${item.incoming.datatype.name}</span></td>
 							</tr>
 							<tr>
-								<td class="to_right">Class:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.class" /></td>
 								<td><span id="incomingClass">${item.incoming.conceptClass.name}</span></td>
 							</tr>
 						</c:if>
@@ -185,45 +186,45 @@
 			</td>
 			<td width="50%" style="vertical-align: top">
 				<fieldset>
-					<legend>Existing Item</legend>
+					<legend> <spring:message code="metadatasharing.existingItem" /> </legend>
 					<div id="existingItem">
 						<table>
 							<c:if test="${not empty item.existing}">
 								<c:if
 									test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 									<tr>
-										<td class="to_right">Type:</td>
+										<td class="to_right"> <springform:form code="metadatasharing.type"> </td>
 										<td><span id="existingType">${item.existingClassSimpleName}</span></td>
 									</tr>
 								</c:if>
 							</c:if>
 							<tr>
-								<td class="to_right">Name:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.name" /> </td>
 								<td><b><span id="existingName"><h:handle
 												object="${item.existing}" get="name" /></span></b></td>
 							</tr>
 							<tr>
-								<td class="to_right">Description:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.description" /> </td>
 								<td><span id="existingDescription"><h:handle
 											object="${item.existing}" get="description" /></span></td>
 							</tr>
 							<tr>
-								<td class="to_right">UUID:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.UUID" /> </td>
 								<td><span id="existingUUID"><h:handle
 											object="${item.existing}" get="uuid" /></span></td>
 							</tr>
 							<tr>
-								<td class="to_right">Date modified:</td>
+								<td class="to_right"> <spring:message code="metadatasharing.dateModified" /> </td>
 								<td><span id="existingDateChanged"><h:handle
 											object="${item.existing}" get="dateChanged" /></span></td>
 							</tr>
 							<c:if test="${type == 'Concept'}">
 								<tr>
-									<td class="to_right">Datatype:</td>
+									<td class="to_right"> <spring:message code="metadatasharing.datatype" /> </td>
 									<td><span id="existingDatatype">${item.existing.datatype.name}</span></td>
 								</tr>
 								<tr>
-									<td class="to_right">Class:</td>
+									<td class="to_right"> <spring:message code="metadatasharing.class" /> </td>
 									<td><span id="existingClass">${item.existing.conceptClass.name}</span></td>
 								</tr>
 							</c:if>
@@ -240,31 +241,29 @@
 		</tr>
 		<tr>
 			<td><springform:radiobutton path="importType" value="CREATE"
-					id="createButton" disabled="${!empty incomingInvalid}" /> Create
-				New
+					id="createButton" disabled="${!empty incomingInvalid}" /> 
+					<spring:message code="metadatasharing.createNew" />
 				<div style="padding-left: 4em; font-size: 0.8em;">
 					<c:choose>
 						<c:when test="${empty incomingInvalid}">
-				Create a new item in the system.
+						<spring:message code="metadatasharing.createNewItem" />
 				</c:when>
 						<c:otherwise>
-					Cannot create item as-is because:
+							<spring:message code="metadatasharing.cannotCreateItem" />
 							<span class="error">${incomingInvalid}</span>
 						</c:otherwise>
 					</c:choose>
 				</div> <springform:radiobutton path="importType" value="OMIT"
-					id="omitButton" /> Skip If Possible
-				<div style="padding-left: 4em; font-size: 0.8em;">Skip
-					importing this item, if there are no other items which require this
-					item to work.</div></td>
+					id="omitButton" /> 
+				<spring:message code="metadatasharing.skipIfPossible" />
+				<div style="padding-left: 4em; font-size: 0.8em;">
+					<spring:message code="metadatasharing.skipImportingIfWorks" /> </div></td>
 			<td><springform:radiobutton path="importType"
-					value="PREFER_MINE" id="preferMineButton" /> Merge (Prefer Mine)
-				<div style="padding-left: 4em; font-size: 0.8em;">Merge
-					collections, but do not overwrite simple values</div> <springform:radiobutton
+					value="PREFER_MINE" id="preferMineButton" /> <spring:message code="metadatasharing.mergePreferMine" />
+				<div style="padding-left: 4em; font-size: 0.8em;"> <spring:message code="metadatasharing.mergeNoOverwrite" /> </div> <springform:radiobutton
 					path="importType" value="PREFER_THEIRS" id="preferTheirsButton" />
-				Merge (Prefer Theirs)
-				<div style="padding-left: 4em; font-size: 0.8em;">Merge
-					collections and overwrite simple values</div></td>
+				<spring:message code="metadatasharing.mergePreferTheirs" />
+				<div style="padding-left: 4em; font-size: 0.8em;"> <spring:message code="mergeWithOverwrite" /> </div></td>
 		</tr>
 	</table>
 

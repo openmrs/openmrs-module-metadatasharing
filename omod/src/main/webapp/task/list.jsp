@@ -30,6 +30,6 @@
 	</c:forEach>
 </ol>
 
-<c:if test="${empty tasks}"><p>There are no active or archived tasks.</p></c:if>
+<c:if test="${empty tasks}"><p> <spring:message code="metadatasharing.noTasks" /> </p></c:if>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
