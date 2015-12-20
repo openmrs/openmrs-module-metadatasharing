@@ -38,73 +38,73 @@ import org.openmrs.util.OpenmrsConstants;
 
 /**
  * Defines a metadata package in the system.
- * 
+ *
  * @since 1.0
  */
 public abstract class Package extends BaseOpenmrsObject implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private Date dateCreated;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private String name;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private String description;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private String openmrsVersion;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private Integer version;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private String groupUuid;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private String subscriptionUrl;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private SerializedPackage serializedPackage;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private Map<String, String> modules;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private Set<Item> items;
-	
+
 	/**
 	 * @since 1.0
 	 */
 	private Set<Item> relatedItems;
-	
+
 	/**
 	 * @since 1.1
 	 */
 	private Boolean incrementalVersion;
-	
+
 	public Package() {
 		setUuid(UUID.randomUUID().toString());
 		dateCreated = new Date();
@@ -121,7 +121,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 		relatedItems = new LinkedHashSet<Item>();
 		incrementalVersion = null;
 	}
-	
+
 	/**
 	 * @return the dateCreated
 	 * @since 1.0
@@ -129,7 +129,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public Date getDateCreated() {
 		return dateCreated;
 	}
-	
+
 	/**
 	 * @param dateCreated the dateCreated to set
 	 * @since 1.0
@@ -137,7 +137,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-	
+
 	/**
 	 * @return the name
 	 * @since 1.0
@@ -145,7 +145,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param name the name to set
 	 * @since 1.0
@@ -153,7 +153,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * @return the description
 	 * @since 1.0
@@ -161,7 +161,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public String getDescription() {
 		return description;
 	}
-	
+
 	/**
 	 * @param description the description to set
 	 * @since 1.0
@@ -169,7 +169,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
 	 * @return the openmrsVersion
 	 * @since 1.0
@@ -177,15 +177,15 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public String getOpenmrsVersion() {
 		return openmrsVersion;
 	}
-	
+
 	/**
-	 * @param openmrsVersion the openmrsVersion to set
+	 * @param openmrsVersion: the openmrsVersion to set
 	 * @since 1.0
 	 */
 	public void setOpenmrsVersion(String openmrsVersion) {
 		this.openmrsVersion = openmrsVersion;
 	}
-	
+
 	/**
 	 * @param version the version to set
 	 * @since 1.0
@@ -193,7 +193,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
+
 	/**
 	 * @return the version
 	 * @since 1.0
@@ -201,7 +201,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public Integer getVersion() {
 		return version;
 	}
-	
+
 	/**
 	 * @param groupUuid the groupUuid to set
 	 * @since 1.0
@@ -209,7 +209,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setGroupUuid(String groupUuid) {
 		this.groupUuid = groupUuid;
 	}
-	
+
 	/**
 	 * @return the groupUuid
 	 * @since 1.0
@@ -217,27 +217,27 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public String getGroupUuid() {
 		return groupUuid;
 	}
-	
+
 	/**
 	 * The URL which points to the future package updates
-	 * 
+	 *
 	 * @param subscriptionUrl the subscriptionUrl to set
 	 * @since 1.0
 	 */
 	public void setSubscriptionUrl(String subscriptionUrl) {
 		this.subscriptionUrl = subscriptionUrl;
 	}
-	
+
 	/**
 	 * The URL which points to the future package updates
-	 * 
+	 *
 	 * @return the subscriptionUrl
 	 * @since 1.0
 	 */
 	public String getSubscriptionUrl() {
 		return subscriptionUrl;
 	}
-	
+
 	/**
 	 * @return the serializedPackage
 	 * @since 1.0
@@ -245,7 +245,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public SerializedPackage getSerializedPackage() throws IOException {
 		return serializedPackage;
 	}
-	
+
 	/**
 	 * @param serializedPackage the serializedPackage to set
 	 * @since 1.0
@@ -253,7 +253,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setSerializedPackage(SerializedPackage serializedPackage) throws IOException {
 		this.serializedPackage = serializedPackage;
 	}
-	
+
 	/**
 	 * @param serializedPackageStream the serializedPackageStream to set
 	 * @since 1.0
@@ -261,7 +261,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setSerializedPackageStream(InputStream serializedPackageStream) throws IOException {
 		serializedPackage = new MetadataZipper().unzipPackage(serializedPackageStream);
 	}
-	
+
 	/**
 	 * @return the serializedPackageStream
 	 * @since 1.0
@@ -276,7 +276,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 			return input;
 		}
 	}
-	
+
 	/**
 	 * @return the items
 	 * @since 1.0
@@ -284,7 +284,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public Set<Item> getItems() {
 		return items;
 	}
-	
+
 	/**
 	 * @return the relatedItems
 	 * @since 1.0
@@ -292,7 +292,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public Set<Item> getRelatedItems() {
 		return relatedItems;
 	}
-	
+
 	/**
 	 * @return the modules[moduleId, version]
 	 * @since 1.0
@@ -300,7 +300,7 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public Map<String, String> getModules() {
 		return modules;
 	}
-	
+
 	/**
 	 * @since 1.1
 	 */
@@ -314,11 +314,11 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	public void setIncrementalVersion(Boolean incrementalVersion) {
 		this.incrementalVersion = incrementalVersion;
 	}
-	
+
 	/**
 	 * Imperfect check to see what modules are required for the items in this package (based on
 	 * looking for java package names like org.openmrs.module.XYZ).
-	 * 
+	 *
 	 * @param pack
 	 * @return the requiredModules[moduleId, version]
 	 * @should get modules ids and versions
@@ -326,9 +326,9 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 	 */
 	public Map<String, String> getRequiredModules() {
 		Set<String> classNames = new HashSet<String>();
-		
+
 		Transformer getClassnameTransform = new Transformer() {
-			
+
 			@Override
 			public Object transform(Object item) {
 				try {
@@ -339,13 +339,13 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 				}
 			}
 		};
-		
+
 		CollectionUtils.collect(items, getClassnameTransform, classNames);
 		CollectionUtils.collect(relatedItems, getClassnameTransform, classNames);
-		
+
 		// org.openmrs.module.(group 1: moduleId)[.more.packages].(group 2: SimpleClassName)
 		Pattern regex = Pattern.compile("org\\.openmrs\\.module\\.(\\w+)[\\.\\w+]*\\.(\\w+)");
-		
+
 		Map<String, String> requiredModules = new HashMap<String, String>();
 		for (String cn : classNames) {
 			Matcher m = regex.matcher(cn);
@@ -354,13 +354,13 @@ public abstract class Package extends BaseOpenmrsObject implements Serializable 
 				requiredModules.put(moduleId, modules.get(moduleId));
 			}
 		}
-		
+
 		return requiredModules;
 	}
-	
+
 	/**
 	 * Loads the given package in the current instance.
-	 * 
+	 *
 	 * @param other
 	 * @throws IOException
 	 * @since 1.0
