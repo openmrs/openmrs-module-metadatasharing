@@ -47,7 +47,7 @@ public class CollectionConverterCompatibility2_0 implements CollectionConverterC
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context, ConverterLookup converterLookup) {
-		
+
 		if (source instanceof PersistentList) {
 			source = new ArrayList((Collection) source);
 		} else if (source instanceof PersistentMap) {
@@ -59,8 +59,8 @@ public class CollectionConverterCompatibility2_0 implements CollectionConverterC
 		} else if (source instanceof PersistentSet) {
 			source = new HashSet((Set) source);
 		}
-		
-		// delegate the collection to the approapriate converter
+
+		// delegate the collection to the appropriate converter
 		converterLookup.lookupConverterForType(source.getClass()).marshal(source, writer, context);
 	}
 }

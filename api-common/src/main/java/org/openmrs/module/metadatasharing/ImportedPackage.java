@@ -21,22 +21,22 @@ import java.util.Date;
  * Defines an imported metadata package in the system.
  */
 public class ImportedPackage extends Package implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer importedPackageId;
-	
+
 	private Date dateImported;
-	
+
 	private Integer remoteVersion;
-	
+
 	private ImportConfig importConfig = new ImportConfig();
-	
+
 	private SubscriptionStatus subscriptionStatus = SubscriptionStatus.DISABLED;
-	
+
 	public ImportedPackage() {
 	}
-	
+
 	public ImportedPackage(ExportedPackage pack) {
 		setName(pack.getName());
 		setDescription(pack.getDescription());
@@ -44,13 +44,13 @@ public class ImportedPackage extends Package implements Serializable {
 		setDateCreated(pack.getDateCreated());
 		setOpenmrsVersion(pack.getOpenmrsVersion());
 		setSubscriptionUrl(pack.getSubscriptionUrl());
-		
+
 		getModules().putAll(pack.getModules());
-		
+
 		setGroupUuid(pack.getGroupUuid());
 		setVersion(pack.getVersion());
 	}
-	
+
 	/**
 	 * @see org.openmrs.OpenmrsObject#getId()
 	 */
@@ -58,7 +58,7 @@ public class ImportedPackage extends Package implements Serializable {
 	public Integer getId() {
 		return importedPackageId;
 	}
-	
+
 	/**
 	 * @see org.openmrs.OpenmrsObject#setId(java.lang.Integer)
 	 */
@@ -66,82 +66,82 @@ public class ImportedPackage extends Package implements Serializable {
 	public void setId(Integer id) {
 		importedPackageId = id;
 	}
-	
+
 	/**
 	 * @return the packageImportId
 	 */
 	public Integer getImportedPackageId() {
 		return importedPackageId;
 	}
-	
+
 	/**
 	 * @param importedPackageId the packageImportId to set
 	 */
 	public void setImportedPackageId(Integer importedPackageId) {
 		this.importedPackageId = importedPackageId;
 	}
-	
+
 	public Date getDateImported() {
 		return dateImported;
 	}
-	
+
 	public void setDateImported(Date dateImported) {
 		this.dateImported = dateImported;
 	}
-	
+
 	public boolean isImported() {
 		return getDateImported() != null;
 	}
-	
+
 	public boolean isSubscribed() {
 		return !SubscriptionStatus.DISABLED.equals(subscriptionStatus);
 	}
-	
+
 	/**
 	 * @return the remoteVersion
 	 */
 	public Integer getRemoteVersion() {
 		return remoteVersion;
 	}
-	
+
 	/**
 	 * @param remoteVersion the remoteVersion to set
 	 */
 	public void setRemoteVersion(Integer remoteVersion) {
 		this.remoteVersion = remoteVersion;
 	}
-	
+
 	/**
 	 * @return the importConfig
 	 */
 	public ImportConfig getImportConfig() {
 		return importConfig;
 	}
-	
+
 	/**
 	 * @param importConfig the importConfig to set
 	 */
 	public void setImportConfig(ImportConfig importConfig) {
 		this.importConfig = importConfig;
 	}
-	
+
 	/**
 	 * @return the subscriptionStatus
 	 */
 	public SubscriptionStatus getSubscriptionStatus() {
 		return subscriptionStatus;
 	}
-	
+
 	/**
 	 * @param subscriptionStatus the subscriptionStatus to set
 	 */
 	public void setSubscriptionStatus(SubscriptionStatus subscriptionStatus) {
 		this.subscriptionStatus = subscriptionStatus;
 	}
-	
+
 	/**
 	 * Tests if the current subscription's status indicates that there were errors.
-	 * 
+	 *
 	 * @see {@link SubscriptionStatus}
 	 * @return true if there were errors, false otherwise
 	 */
@@ -151,7 +151,7 @@ public class ImportedPackage extends Package implements Serializable {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -159,16 +159,16 @@ public class ImportedPackage extends Package implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof ImportedPackage) {
 			ImportedPackage packageImport = (ImportedPackage) obj;
-			
+
 			if (getImportedPackageId() != null && packageImport.getImportedPackageId() != null)
 				return getImportedPackageId().equals(packageImport.getImportedPackageId());
 		}
-		
-		// if packageId is null for either object, for equality the
-		// two objects must be the same
+
+		// if packageId is null for either object,
+		// the two objects must be the same (one is the package of the other)
 		return this == obj;
 	}
-	
+
 	/**
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -178,5 +178,5 @@ public class ImportedPackage extends Package implements Serializable {
 			return super.hashCode();
 		return getImportedPackageId().hashCode();
 	}
-	
+
 }

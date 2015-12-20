@@ -46,39 +46,39 @@ import org.springframework.stereotype.Service;
  */
 @Service("metadatasharing")
 public class MetadataSharing implements ApplicationContextAware {
-	
+
 	private static MetadataSharing instance;
-	
+
 	@Autowired
 	private HandlerEngine handlerEngine;
-	
+
 	@Autowired
 	private ReplaceMethodInovker replaceMethodInvoker;
-	
+
 	@Autowired
 	private MetadataSerializer metadataSerializer;
-	
+
 	@Autowired
 	private ResolverEngine resolverEngine;
-	
+
 	@Autowired
 	private ObjectVisitor objectVisitor;
-	
+
 	@Autowired
 	private ConceptMapper conceptMapper;
-	
+
 	@Autowired
 	private TaskEngine taskEngine;
-	
+
 	@Autowired
 	private PackageContainerValidator containerValidator;
-	
+
 	@Autowired
 	private PackageValidator packageValidator;
-	
+
 	@Autowired
 	private ConverterEngine converterEngine;
-	
+
 	/**
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
 	 */
@@ -86,88 +86,88 @@ public class MetadataSharing implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext context) throws BeansException {
 		instance = (MetadataSharing) context.getBean("metadatasharing");
 	}
-	
+
 	/**
 	 * @return the instance
 	 */
 	public static MetadataSharing getInstance() {
 		return instance;
 	}
-	
+
 	public static MetadataSharingService getService() {
 		return Context.getService(MetadataSharingService.class);
 	}
-	
+
 	/**
 	 * @return the taskEngine
 	 */
 	public TaskEngine getTaskEngine() {
 		return taskEngine;
 	}
-	
+
 	/**
 	 * @return the handlerEngine
 	 */
 	public HandlerEngine getHandlerEngine() {
 		return handlerEngine;
 	}
-	
+
 	/**
 	 * @return the metadataSerializer
 	 */
 	public MetadataSerializer getMetadataSerializer() {
 		return metadataSerializer;
 	}
-	
+
 	/**
 	 * @return the replaceMethodInvoker
 	 */
 	public ReplaceMethodInovker getReplaceMethodInvoker() {
 		return replaceMethodInvoker;
 	}
-	
+
 	/**
 	 * @return the resolverEngine
 	 */
 	public ResolverEngine getResolverEngine() {
 		return resolverEngine;
 	}
-	
+
 	/**
 	 * @return the objectVisitor
 	 */
 	public ObjectVisitor getObjectVisitor() {
 		return objectVisitor;
 	}
-	
+
 	/**
 	 * @return the conceptMapper
 	 */
 	public ConceptMapper getConceptMapper() {
 		return conceptMapper;
 	}
-	
+
 	/**
 	 * @return the containerValidator
 	 */
 	public PackageContainerValidator getContainerValidator() {
 		return containerValidator;
 	}
-	
+
 	/**
 	 * @return the packageValidator
 	 */
 	public PackageValidator getPackageValidator() {
 		return packageValidator;
 	}
-	
+
 	/**
 	 * @return the converterEngine
 	 */
 	public ConverterEngine getConverterEngine() {
 		return converterEngine;
 	}
-	
+
 	/**
 	 * @return the boolean value of global property with name GP_CONFIGURED
 	 * @deprecated since 1.1 first time configuration no longer required
@@ -175,7 +175,7 @@ public class MetadataSharing implements ApplicationContextAware {
 	public boolean isConfigured() {
 		return true;
 	}
-	
+
 	/**
 	 * @return boolean stating if user has properly configured the URL prefix
 	 */
@@ -187,7 +187,7 @@ public class MetadataSharing implements ApplicationContextAware {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * @return
 	 * @deprecated since 1.1, use {@link MetadataMappingService#isAddLocalMappings()}
@@ -196,38 +196,38 @@ public class MetadataSharing implements ApplicationContextAware {
 	public boolean isAddLocalMappings() {
 		return Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport();
 	}
-	
+
 	/**
 	 * Defines if system concept source has been already configured
-	 * 
+	 *
 	 * @return true if concept source is configured and exists, false otherwise
 	 * @deprecated since 1.1, use {@link MetadataMappingService#isLocalSourceConfigured()}
 	 */
 	public boolean isConceptSourceConfigured() {
 		return Context.getService(MetadataMappingService.class).isLocalSourceConfigured();
 	}
-	
+
 	/**
 	 * @return the packageExporter
 	 */
 	public PackageExporter newPackageExporter() {
 		return new PackageExporterImpl();
 	}
-	
+
 	public PackageImporter newPackageImporter() {
 		return new PackageImporterImpl();
 	}
-	
+
 	/**
 	 * Creates new {@link PackageVersioner} instance associated with the given package
-	 * 
+	 *
 	 * @param pack the package to be associated with versioner
 	 * @return new versioner instance
 	 */
 	public PackageVersioner getPackageVersioner(ExportedPackage pack) {
 		return new PackageVersionerImpl(pack);
 	}
-	
+
 	/**
 	 * @return the Module
 	 */
