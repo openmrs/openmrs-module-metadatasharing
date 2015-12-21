@@ -64,8 +64,8 @@ public class ExportedPackage extends Package implements Serializable {
 				return getExportedPackageId().equals(pack.getExportedPackageId());
 		}
 		
-		// if packageId is null for either object, for equality the
-		// two objects must be the same
+		// if packageId is null for either object,
+		// the two objects must be the same (one is the package of the other)
 		return this == obj;
 	}
 	
@@ -157,7 +157,7 @@ public class ExportedPackage extends Package implements Serializable {
 	/**
 	 * The Boolean stating if the package is published
 	 * 
-	 * @return the published
+	 * @return boolean describing whether the package is published
 	 */
 	public boolean isPublished() {
 		return published;
