@@ -30,7 +30,7 @@
 								"sName" : "uuid"
 							}, {
 								"sName" : "id"
-							}, { 
+							}, {
 								"sName" : "retired"
 							} ],
 							"bJQueryUI" : true,
@@ -44,11 +44,11 @@
 								$j(":last-child", nRow)
 										.replaceWith(
 												"<input type=\"button\" value=\"choose\" onclick=\"window.location='assessItem.form?index=${assessItemForm.index}&uuid=" + aData[2] + "'\" />");
-								
+
 								if (aData[4] == "true") {
 									$j('td', nRow).addClass("retired");
 								}
-								
+
 								return nRow;
 							}
 						});
@@ -63,7 +63,7 @@
 							draggable : false,
 							title : 'Choose replacement'
 						});
-		
+
 		$j('#omitButton').click(function() {
 			$j('#existingItem').hide(200);
 		});
@@ -76,18 +76,18 @@
 		$j('#preferTheirsButton').click(function() {
 			$j('#existingItem').show(200);
 		});
-		
+
 		<c:if test="${empty item.existing || item.importType.create || item.importType.omit}">
 		$j('#existingItem').hide(200);
 		</c:if>
-		
+
 		highlightDifferences();
-		
+
 		$j('#chooseExistingButton').click(showChooseExistingDialog);
 
 		$j('#nextButton').focus();
 	});
-	
+
 	function highlightDifferences() {
 		highlightDifferent("#incomingName", "#existingName");
 		highlightDifferent("#incomingDescription", "#existingDescription");
@@ -98,7 +98,7 @@
 		highlightDifferent("#incomingClass", "#existingClass");
 		</c:if>
 	}
-	
+
 	function highlightDifferent(incoming, existing) {
 		var incoming = $j(incoming);
 		var existing = $j(existing);
@@ -143,8 +143,7 @@
 					<legend> <spring:message code="metadatasharing.incomingItem" /> </legend>
 					<table>
 						<c:if test="${not empty item.existing}">
-							<c:if
-								test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
+							<c:if test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 								<tr>
 									<td class="to_right"> <springform:form code="metadatasharing.type" /> </td>
 									<td><span id="incomingType">${item.incomingClassSimpleName}</span></td>
@@ -190,10 +189,9 @@
 					<div id="existingItem">
 						<table>
 							<c:if test="${not empty item.existing}">
-								<c:if
-									test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
+								<c:if test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 									<tr>
-										<td class="to_right"> <springform:form code="metadatasharing.type"> </td>
+										<td class="to_right"> <springform:form code="metadatasharing.type" /> </td>
 										<td><span id="existingType">${item.existingClassSimpleName}</span></td>
 									</tr>
 								</c:if>
@@ -241,7 +239,7 @@
 		</tr>
 		<tr>
 			<td><springform:radiobutton path="importType" value="CREATE"
-					id="createButton" disabled="${!empty incomingInvalid}" /> 
+					id="createButton" disabled="${!empty incomingInvalid}" />
 					<spring:message code="metadatasharing.createNew" />
 				<div style="padding-left: 4em; font-size: 0.8em;">
 					<c:choose>
@@ -254,7 +252,7 @@
 						</c:otherwise>
 					</c:choose>
 				</div> <springform:radiobutton path="importType" value="OMIT"
-					id="omitButton" /> 
+					id="omitButton" />
 				<spring:message code="metadatasharing.skipIfPossible" />
 				<div style="padding-left: 4em; font-size: 0.8em;">
 					<spring:message code="metadatasharing.skipImportingIfWorks" /> </div></td>
