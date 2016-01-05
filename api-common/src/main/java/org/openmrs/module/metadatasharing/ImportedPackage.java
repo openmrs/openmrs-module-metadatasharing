@@ -164,8 +164,8 @@ public class ImportedPackage extends Package implements Serializable {
 				return getImportedPackageId().equals(packageImport.getImportedPackageId());
 		}
 		
-		// if packageId is null for either object, for equality the
-		// two objects must be the same
+		// if packageId is null for either object,
+		// the two objects must be the same (one is the package of the other)
 		return this == obj;
 	}
 	
