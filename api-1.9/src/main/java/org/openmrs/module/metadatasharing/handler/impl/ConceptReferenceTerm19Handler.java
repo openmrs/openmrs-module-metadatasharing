@@ -29,7 +29,7 @@ import org.openmrs.module.metadatasharing.handler.MetadataSearchHandler;
 import org.openmrs.module.metadatasharing.util.DateUtil;
 
 /**
- * The handler is instantiated by {@link MetadataSharing19Configuration} only if 
+ * The handler is instantiated by {@link MetadataSharing19Configuration} only if
  * ConceptReferenceTerm is present on the class path.
  */
 public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>, MetadataSearchHandler<ConceptReferenceTerm>  {
@@ -38,7 +38,7 @@ public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenci
     public int getPriority() {
 	    return 0;
     }
-	
+
 	@Override
 	public List<Object> getPriorityDependencies(ConceptReferenceTerm object) {
 		List<Object> result = new ArrayList<Object>();
@@ -65,7 +65,14 @@ public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenci
 
 	@Override
     public String getName(ConceptReferenceTerm o) {
-	    return (o.getCode() != null) ? o.getCode() : "";
+		String name = "";
+		if (o.getConceptSource() != null) {
+			name += o.getConceptSource().getName() + ":";
+		}
+	    if (o.getCode() != null) {
+	    	name += o.getCode();
+	    }
+	    return name;
     }
 
 	@Override
@@ -120,6 +127,6 @@ public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenci
 	    return Context.getConceptService().getConceptReferenceTerm(id);
     }
 
-	
-	
+
+
 }
