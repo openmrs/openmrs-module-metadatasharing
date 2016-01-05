@@ -19,6 +19,8 @@ import org.openmrs.module.metadatasharing.converter.ConceptMap19Converter;
 import org.openmrs.module.metadatasharing.handler.MetadataHandler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptMap19Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ConceptReferenceTerm19Handler;
+import org.openmrs.module.metadatasharing.handler.impl.Location19Handler;
+import org.openmrs.module.metadatasharing.handler.impl.LocationAttribute19Handler;
 import org.openmrs.module.metadatasharing.handler.impl.ObjectHandler;
 import org.openmrs.module.metadatasharing.handler.impl.Role18Handler;
 import org.openmrs.module.metadatasharing.reflection.ClassUtil;
@@ -32,20 +34,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MetadataSharing19Configuration {
-	
+
 	@Autowired
 	ObjectHandler objectHandler;
-	
+
 	@Autowired
 	ObjectByNameResolver objectByNameResolver;
-	
+
 	@Autowired
 	ObjectByUuidResolver objectByUuidResolver;
-	
+
 	public static boolean supportsConceptReferenceTerm() {
 		return ClassUtil.loadClass("org.openmrs.ConceptReferenceTerm") != null;
 	}
-	
+
 	public static boolean supportsChildRoles() {
 		try {
 	        Role.class.getDeclaredMethod("getChildRoles");
@@ -55,7 +57,7 @@ public class MetadataSharing19Configuration {
 	        return false;
         }
 	}
-	
+
 	@Bean(name = "metadatasharing.ConceptReferenceTerm19Resolver")
 	public Resolver<?> getConceptReferenceTerm19Resolver() {
 		if (supportsConceptReferenceTerm()) {
@@ -64,7 +66,7 @@ public class MetadataSharing19Configuration {
 		}
 		return null;
 	}
-	
+
 	@Bean(name = "metadatasharing.ConceptReferenceTerm19Handler")
 	public MetadataHandler<?> getConceptReferenceTerm19Handler() {
 		if (supportsConceptReferenceTerm()) {
@@ -73,7 +75,7 @@ public class MetadataSharing19Configuration {
 		}
 		return null;
 	}
-	
+
 	@Bean(name = "metadatasharing.ConceptMap19Handler")
 	public MetadataHandler<?> getConceptMap19Handler() {
 		if (supportsConceptReferenceTerm()) {
@@ -81,7 +83,7 @@ public class MetadataSharing19Configuration {
 		}
 		return null;
 	}
-	
+
 	@Bean(name = "metadatashaing.ConceptMap19Converter")
 	public BaseConverter getConceptMap19Converter() {
 		if (supportsConceptReferenceTerm()) {
@@ -89,11 +91,27 @@ public class MetadataSharing19Configuration {
 		}
 		return null;
 	}
-	
+
 	@Bean(name = "metadatashaing.Role18Handler")
 	public MetadataHandler<?> getRole18Handler() {
 		if (supportsChildRoles()) {
 			return new Role18Handler(objectHandler);
+		}
+		return null;
+	}
+
+	@Bean(name = "metadatashaing.Location19Handler")
+	public MetadataHandler<?> getLocation19Handler() {
+		if (supportsChildRoles()) {
+			return new Location19Handler();
+		}
+		return null;
+	}
+
+	@Bean(name = "metadatashaing.LocationAttribute19Handler")
+	public MetadataHandler<?> getLocationAttribute19Handler() {
+		if (supportsChildRoles()) {
+			return new LocationAttribute19Handler();
 		}
 		return null;
 	}
