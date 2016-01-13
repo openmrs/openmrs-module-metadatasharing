@@ -60,7 +60,7 @@ public class CollectionConverterCompatibility2_0 implements CollectionConverterC
 			source = new HashSet((Set) source);
 		}
 		
-		// delegate the collection to the approapriate converter
+		// delegate the collection to the appropriate converter
 		converterLookup.lookupConverterForType(source.getClass()).marshal(source, writer, context);
 	}
 }
