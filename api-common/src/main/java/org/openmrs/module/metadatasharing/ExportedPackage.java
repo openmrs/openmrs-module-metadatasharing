@@ -157,7 +157,7 @@ public class ExportedPackage extends Package implements Serializable {
 	/**
 	 * The Boolean stating if the package is published
 	 * 
-	 * @return the published
+	 * @return boolean stating if the package is published
 	 */
 	public boolean isPublished() {
 		return published;
