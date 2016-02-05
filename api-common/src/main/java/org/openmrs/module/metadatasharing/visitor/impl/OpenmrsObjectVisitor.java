@@ -84,7 +84,7 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 				String objectDescription = object.getClass().getSimpleName();
 				if (object instanceof OpenmrsObject) {
 					OpenmrsObject openmrsObject = (OpenmrsObject) object;
-					objectDescription += "[" + openmrsObject.getUuid() + "]";
+					objectDescription += "[id:" + openmrsObject.getId() + " uuid:" + openmrsObject.getUuid() + "]";
 				}
 				throw new RuntimeException("Failed resolving " + objectDescription + " due to " + e.getMessage(), e);
 			}
@@ -111,7 +111,7 @@ public class OpenmrsObjectVisitor implements ObjectVisitor {
 						String objectDescription = toVisit.getClass().getSimpleName();
 						if (toVisit instanceof OpenmrsObject) {
 							OpenmrsObject openmrsObject = (OpenmrsObject) toVisit;
-							objectDescription += "[" + openmrsObject.getUuid() + "]";
+							objectDescription += "[id:" + openmrsObject.getId() + " uuid:" + openmrsObject.getUuid() + "]";
 						}
 						throw new RuntimeException("Failed resolving " + objectDescription + " due to " + e.getMessage(), e);
 					}
