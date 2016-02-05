@@ -52,14 +52,14 @@ import org.springframework.validation.Errors;
  *
  */
 public class ImportPackageTask extends Task {
-	
+
 	private final PackageImporter packageImporter;
-	
+
 	public ImportPackageTask(PackageImporter packageImporter) {
 		this.packageImporter = packageImporter;
 		setType(TaskType.IMPORT);
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.metadatasharing.task.Task#getPackage()
 	 */
@@ -67,7 +67,7 @@ public class ImportPackageTask extends Task {
 	public Package getPackage() {
 		return packageImporter.getPackage();
 	}
-	
+
 	/**
 	 * @see org.openmrs.module.metadatasharing.task.Task#execute()
 	 */
@@ -77,16 +77,16 @@ public class ImportPackageTask extends Task {
 			log("Saving import state");
 			packageImporter.saveState();
 			packageImporter.clearState();
-			
+
 			int partsCount = packageImporter.getPartsCount();
-			
+
 			for (int i = 0; i < partsCount; i++) {
 				log("Importing subpackage " + (i + 1) + " of " + partsCount);
-				
+
 				log("Resolving related items");
 				importItems(packageImporter.getImportedItems(i));
 			}
-			
+
 			log("Updating mappings");
 			Date dateImported = new Date();
 			for (Item item : packageImporter.getImportedPackage().getItems()) {
@@ -97,12 +97,12 @@ public class ImportPackageTask extends Task {
 			}
 			packageImporter.getImportedPackage().setDateImported(dateImported);
 			MetadataSharing.getService().saveImportedPackage(packageImporter.getImportedPackage());
-			
+
 			//Clean-up session after import. Otherwise we would have a lot of objects in session,
 			//which slows Hibernate down.
 			Context.flushSession();
 			Context.clearSession();
-			
+
 			log("Import completed");
 		}
 		catch (Exception e) {
@@ -115,7 +115,7 @@ public class ImportPackageTask extends Task {
 		if (item.getContainedClass() == null) {
 			return;
 		}
-		
+
 	    ImportedItem importedItem = MetadataSharing.getService().getImportedItemByUuid(item.getContainedClass(),
 	        item.getUuid());
 	    if (importedItem != null) {
@@ -128,7 +128,7 @@ public class ImportPackageTask extends Task {
 	    	MetadataSharing.getService().persistImportedItem(importedItem);
 	    }
     }
-	
+
 	public void importItems(Collection<ImportedItem> importedItems) throws APIException, ValidationException {
 		log("Adjusting import settings");
 		Set<ImportedItem> visited = new HashSet<ImportedItem>();
@@ -137,19 +137,19 @@ public class ImportPackageTask extends Task {
 				setImportTypeForHiddenObjects(importedItem, visited);
 			}
 		}
-		
+
 		for (ImportedItem importedItem : importedItems) {
 			if (importedItem.getImportType().isCreate()) {
 				importedItem.setExisting(null);
 			}
 		}
-		
+
 		log("Loading existing items");
 		ImportUtil.reloadExistingItems(importedItems);
-		
+
 		log("Converting items");
 		ConvertUtil.convert(importedItems);
-		
+
 		log("Setting audit fields");
 		for (ImportedItem importedItem : importedItems) {
 			importedItem.setDateChanged(Handler.getDateChanged(importedItem.getIncoming()));
@@ -160,7 +160,7 @@ public class ImportPackageTask extends Task {
 				RequiredDataAdvice.recursivelyHandle(SaveHandler.class, incoming, "Persisted through metadatasharing");
 			}
 		}
-		
+
 		log("Merging items");
 		Map<Object, Object> incomingToExisting = new LinkedHashMap<Object, Object>();
 		for (ImportedItem importedItem : importedItems) {
@@ -168,7 +168,7 @@ public class ImportPackageTask extends Task {
 				incomingToExisting.put(importedItem.getIncoming(), importedItem.getExisting());
 			}
 		}
-		
+
 		for (ImportedItem importedItem : importedItems) {
 			//Replacing in hidden items first
 			if (Handler.isHidden(importedItem.getIncoming())) {
@@ -176,17 +176,17 @@ public class ImportPackageTask extends Task {
 				merger.merge(importedItem.getExisting(), importedItem.getIncoming(), importedItem.getImportType(), incomingToExisting);
 			}
 		}
-		
+
 		for (ImportedItem importedItem : importedItems) {
 			if (!Handler.isHidden(importedItem.getIncoming())) {
 				MetadataMergeHandler<Object> merger = MetadataSharing.getInstance().getHandlerEngine().getMergeHandler(importedItem.getIncoming());
 				merger.merge(importedItem.getExisting(), importedItem.getIncoming(), importedItem.getImportType(), incomingToExisting);
 			}
 		}
-		
+
 		log("Preparing items to save");
 		prepareItemsToSave(importedItems, incomingToExisting);
-		
+
 		log("Validating items");
 		Errors errors = new BindException(importedItems, "items");
 		for (ImportedItem importedItem : importedItems) {
@@ -196,33 +196,35 @@ public class ImportPackageTask extends Task {
 			} else {
 				item = importedItem.getIncoming();
 			}
-			
+
 			try {
 				ValidateCustomUtil.validate(item);
 			}
 			catch (Exception e) {
-				log(Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] failed validation", e);
+				Integer itemId = Handler.getId(item);
+				String id = (itemId != null) ? itemId.toString() : "";
+				log(Handler.getRegisteredType(item) + " [id:" + id + " uuid:" + Handler.getUuid(item) + "] failed validation", e);
 				errors.reject("", Handler.getRegisteredType(item) + " [" + Handler.getUuid(item) + "] " + e.getMessage());
 			}
 		}
 		if (errors.hasErrors()) {
 			throw new ValidationException(errors);
 		}
-		
+
 		Set<ObjectWrapper<Object>> savedItems = new HashSet<ObjectWrapper<Object>>();
-		
+
 		log("Saving items");
 		for (ImportedItem importedItem : importedItems) {
 			if (!importedItem.getImportType().isOmit()) {
 				saveItem(importedItem, savedItems);
 			}
 		}
-		
+
 		//Clean up to save memory
 		Context.flushSession();
 		Context.clearSession();
 	}
-	
+
 	/**
 	 * @param importedItem
 	 */
@@ -245,24 +247,24 @@ public class ImportPackageTask extends Task {
 			}
 		}
 	}
-	
+
 	public void prepareItemsToSave(Collection<ImportedItem> importedItems, Map<Object, Object> mappings) {
 		Map<OpenmrsObject, OpenmrsObject> openmrsObjectMappings = new LinkedHashMap<OpenmrsObject, OpenmrsObject>();
 		for (Entry<Object, Object> mapping : mappings.entrySet()) {
 	        if (mapping.getKey() instanceof OpenmrsObject && mapping.getValue() instanceof OpenmrsObject) {
-	        	openmrsObjectMappings.put((OpenmrsObject) mapping.getKey(), (OpenmrsObject) mapping.getValue()); 
+	        	openmrsObjectMappings.put((OpenmrsObject) mapping.getKey(), (OpenmrsObject) mapping.getValue());
 	        }
         }
-		
+
 		for (ImportedItem importedItem : importedItems) {
 			importedItem.initIncomingToSave(openmrsObjectMappings);
 		}
 	}
-	
+
 	public Map<OpenmrsObject, OpenmrsObject> evaluateMappings(Collection<ImportedItem> importedItems) {
 		Map<OpenmrsObject, OpenmrsObject> mappings = new HashMap<OpenmrsObject, OpenmrsObject>();
 		EnumSet<ImportType> map = EnumSet.of(ImportType.PREFER_MINE, ImportType.PREFER_THEIRS, ImportType.OMIT);
-		
+
 		for (ImportedItem importedItem : importedItems) {
 			if (importedItem.getIncoming() instanceof OpenmrsObject) {
 				if (map.contains(importedItem.getImportType()) && importedItem.getExisting() != null) {
@@ -270,32 +272,32 @@ public class ImportPackageTask extends Task {
 				}
 			}
 		}
-		
+
 		return mappings;
 	}
-	
+
 	private void saveItem(ImportedItem importedItem, Set<ObjectWrapper<Object>> savedItems) throws APIException {
 		Object item = (importedItem.getExisting() != null) ? importedItem.getExisting() : importedItem.getIncoming();
-		
+
 		if (!savedItems.add(new ObjectWrapper<Object>(item))) {
 			return;
 		}
-		
+
 		List<Object> dependencies = Handler.getPriorityDependencies(item);
 		for (Object dependency : dependencies) {
 			saveItem(new ImportedItem(dependency), savedItems);
 		}
-		
+
 		log.debug("Saving " + item.getClass().getName() + " [" + Handler.getUuid(item) + "]");
-		
+
 		Object savedItem = Handler.saveItem(item);
-		
+
 		if (savedItem == null) {
 			log.debug(item.getClass().getName() + " [" + Handler.getUuid(item) + "] will be saved with a parent");
 		} else {
 			log.debug(item.getClass().getName() + "[" + Handler.getUuid(item) + "] saved");
 		}
-		
+
 	}
-	
+
 }
