@@ -34,7 +34,7 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.metadatasharing.api.db.HibernateCompatibility;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 1.12.*")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 1.10.*")
 public class HibernateCompatibility1_9 implements HibernateCompatibility {
 
 	@Autowired

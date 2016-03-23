@@ -8,16 +8,17 @@
 		<version>1.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>metadatasharing-api-1.7</artifactId>
+	<artifactId>metadatasharing-api-1.11</artifactId>
 	<packaging>jar</packaging>
-	<name>Metadata Sharing Module API 1.7</name>
-	<description>API 1.7 project for Metadata Sharing Module</description>
+	<name>Metadata Sharing Module API 1.11</name>
+	<description>API 1.11 project for Metadata Sharing Module</description>
 
 	<properties>
-		<openmrs.1.7.api.version>1.9.9</openmrs.1.7.api.version>
+		<openmrs.1.11.api.version>1.11.5</openmrs.1.11.api.version>
 	</properties>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api-common</artifactId>
@@ -35,15 +36,21 @@
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
+			<version>${openmrs.1.11.api.version}</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
-			<version>${openmrs.1.7.api.version}</version><!--$NO-MVN-MAN-VER$ -->
+			<version>${openmrs.1.11.api.version}</version><!--$NO-MVN-MAN-VER$-->
 			<classifier>tests</classifier>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.openmrs.test</groupId>
+			<artifactId>openmrs-test</artifactId>
+			<version>${openmrs.1.11.api.version}</version><!--$NO-MVN-MAN-VER$-->
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 </project>

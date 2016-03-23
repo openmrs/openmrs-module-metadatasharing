@@ -11,27 +11,29 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.metadatasharing.resolver;
+package org.openmrs.module.metadatasharing.resolver.impl;
 
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.MetadataSharingConsts;
+import org.openmrs.module.metadatasharing.resolver.Resolver;
 import org.openmrs.module.metadatasharing.resolver.impl.ObjectByNameResolver;
 import org.openmrs.module.metadatasharing.resolver.impl.ObjectByUuidResolver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  */
-public class ConceptReferenceTerm19Resolver extends Resolver<ConceptReferenceTerm> {
-	
+@Component(MetadataSharingConsts.MODULE_ID + ".ConceptReferenceTermResolver")
+public class ConceptReferenceTermResolver extends Resolver<ConceptReferenceTerm> {
+
+	@Autowired
 	ObjectByNameResolver objectByName;
-	
+
+	@Autowired
 	ObjectByUuidResolver objectByUuid;
-	
-	public ConceptReferenceTerm19Resolver(ObjectByNameResolver objectByName, ObjectByUuidResolver objectByUuid) {
-		this.objectByName = objectByName;
-		this.objectByUuid = objectByUuid;
-	}
 	
 	/**
 	 * @see org.openmrs.module.metadatasharing.resolver.Resolver#getPriority()

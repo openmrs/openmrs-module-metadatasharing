@@ -17,7 +17,7 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.scheduler.SchedulerService;
 import org.openmrs.scheduler.TaskDefinition;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.0")
 public class SchedulerCompatibility2_0 implements SchedulerCompatibility {
 
 	@Override

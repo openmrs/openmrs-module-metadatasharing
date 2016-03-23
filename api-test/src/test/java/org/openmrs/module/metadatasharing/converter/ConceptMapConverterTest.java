@@ -28,10 +28,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.metadatasharing.converter.BaseConverter.ConverterContext;
 import org.openmrs.module.metadatasharing.util.Version;
+import org.openmrs.test.BaseContextSensitiveTest;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
 import org.w3c.dom.Document;
 
-public class ConceptMapConverterTest {
+public class ConceptMapConverterTest extends BaseModuleContextSensitiveTest {
 	
 	private static final String TEXT_CONCEPT_MAP_XML_FILE = "testConceptMapXmlFile.xml";
 	
@@ -55,13 +57,13 @@ public class ConceptMapConverterTest {
 	 * @see {@link ConceptMapConverter#convert(Document,Version,Version,ConverterContext)}
 	 */
 	@Test
-	@Verifies(value = "should replace nothing if the from version is pre one nine", method = "convert(Document,Version,Version,ConverterContext)")
-	public void convert_shouldReplaceNothingIfTheFromVersionIsPreOneNine() throws Exception {
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_MAP_TYPE) > -1);
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_REFERENCE_TERM) > -1);
+	@Verifies(value = "should replace source if the from version is pre one nine", method = "convert(Document,Version,Version,ConverterContext)")
+	public void convert_shouldReplaceSourceIfTheFromVersionIsPreOneNine() throws Exception {
+		Assert.assertTrue(originalXml.indexOf(CONCEPT_MAP_TYPE) < 0);
+		Assert.assertTrue(originalXml.indexOf(CONCEPT_REFERENCE_TERM) < 0);
 		String convertedXml = convertXml("1.8.3", "1.10.0");
-		Assert.assertTrue(convertedXml.indexOf(CONCEPT_MAP_TYPE) > -1);
-		Assert.assertTrue(convertedXml.indexOf(CONCEPT_REFERENCE_TERM) > -1);
+		Assert.assertTrue(convertedXml.indexOf(CONCEPT_MAP_TYPE) > 0);
+		Assert.assertTrue(convertedXml.indexOf(CONCEPT_REFERENCE_TERM) > 0);
 	}
 	
 	/**
@@ -70,22 +72,7 @@ public class ConceptMapConverterTest {
 	@Test
 	@Verifies(value = "should replace nothing if the to version is post one nine", method = "convert(Document,Version,Version,ConverterContext)")
 	public void convert_shouldReplaceNothingIfTheToVersionIsPostOneNine() throws Exception {
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_MAP_TYPE) > -1);
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_REFERENCE_TERM) > -1);
 		String convertedXml = convertXml("1.9.0", "1.9.1");
-		Assert.assertTrue(convertedXml.indexOf(CONCEPT_MAP_TYPE) > -1);
-		Assert.assertTrue(convertedXml.indexOf(CONCEPT_REFERENCE_TERM) > -1);
-	}
-	
-	/**
-	 * @see {@link ConceptMapConverter#convert(Document,Version,Version,ConverterContext)}
-	 */
-	@Test
-	@Verifies(value = "should convert the xml if from version is post one nine and to version is pre one nine", method = "convert(Document,Version,Version,ConverterContext)")
-	public void convert_shouldConvertTheXmlIfFromVersionIsPostOneNineAndToVersionIsPreOneNine() throws Exception {
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_MAP_TYPE) > -1);
-		Assert.assertTrue(originalXml.indexOf(CONCEPT_REFERENCE_TERM) > -1);
-		String convertedXml = convertXml("1.9.0", "1.8.3");
 		Assert.assertTrue(convertedXml.indexOf(CONCEPT_MAP_TYPE) < 0);
 		Assert.assertTrue(convertedXml.indexOf(CONCEPT_REFERENCE_TERM) < 0);
 	}

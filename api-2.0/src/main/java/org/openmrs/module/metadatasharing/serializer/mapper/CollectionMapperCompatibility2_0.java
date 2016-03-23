@@ -27,7 +27,7 @@ import org.hibernate.collection.internal.PersistentSortedSet;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.openmrs.annotation.OpenmrsProfile;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0.*")
+@OpenmrsProfile(openmrsPlatformVersion = "2.0")
 public class CollectionMapperCompatibility2_0 implements CollectionMapperCompatibility {
 
 	private final Class<?>[] hbClasses = { PersistentList.class, PersistentSet.class, PersistentMap.class,

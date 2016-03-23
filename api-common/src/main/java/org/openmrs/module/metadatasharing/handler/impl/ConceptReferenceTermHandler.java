@@ -22,17 +22,14 @@ import java.util.Map;
 import org.openmrs.ConceptReferenceTerm;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
-import org.openmrs.module.metadatasharing.MetadataSharing19Configuration;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPropertiesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataSearchHandler;
 import org.openmrs.module.metadatasharing.util.DateUtil;
+import org.springframework.stereotype.Component;
 
-/**
- * The handler is instantiated by {@link MetadataSharing19Configuration} only if
- * ConceptReferenceTerm is present on the class path.
- */
-public class ConceptReferenceTerm19Handler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>, MetadataSearchHandler<ConceptReferenceTerm>  {
+@Component("metadatasharing.ConceptReferenceTermHandler")
+public class ConceptReferenceTermHandler implements MetadataPriorityDependenciesHandler<ConceptReferenceTerm>, MetadataPropertiesHandler<ConceptReferenceTerm>, MetadataSearchHandler<ConceptReferenceTerm>  {
 
 	@Override
     public int getPriority() {

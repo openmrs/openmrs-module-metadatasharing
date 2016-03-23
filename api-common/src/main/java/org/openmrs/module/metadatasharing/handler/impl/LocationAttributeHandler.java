@@ -18,8 +18,10 @@ import java.util.List;
 
 import org.openmrs.LocationAttribute;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
+import org.springframework.stereotype.Component;
 
-public class LocationAttribute19Handler implements MetadataPriorityDependenciesHandler<LocationAttribute> {
+@Component("metadatasharing.LocationAttributeHandler")
+public class LocationAttributeHandler implements MetadataPriorityDependenciesHandler<LocationAttribute> {
 
 	@Override
 	public int getPriority() {

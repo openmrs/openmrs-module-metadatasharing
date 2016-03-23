@@ -13,10 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.api.db.hibernate;
 
-import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Hibernate;
 import org.openmrs.Concept;
 import org.openmrs.ConceptSearchResult;
@@ -26,27 +22,30 @@ import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.metadatasharing.api.db.HibernateCompatibility;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0.*")
-public class HibernateCompatibility2_0 implements HibernateCompatibility {
+import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
+@OpenmrsProfile(openmrsPlatformVersion = "1.11")
+public class HibernateCompatibility1_11 implements HibernateCompatibility {
 	@Autowired
 	private DbSessionFactory sessionFactory;
 
 	@Override
 	public List<Concept> getConcepts(boolean includeRetired, String filter, Integer firstResult, Integer maxResults) {
 		List<Concept> concepts  = new ArrayList<Concept>();
-		
+
 		List<ConceptSearchResult> results = Context.getConceptService().getConcepts(filter, null, includeRetired, null, null, null, null, null, firstResult, maxResults);
 		for (ConceptSearchResult result : results) {
 			concepts.add(result.getConcept());
 		}
-		
+
 		return concepts;
 	}
 
 	@Override
 	public Integer getConceptsCount(boolean includeRetired, String filter) {
-		return getConcepts(includeRetired, filter, null, null).size();
+		return Context.getConceptService().getCountOfConcepts(filter, null, includeRetired, null, null, null, null, null);
 	}
 
 	@Override

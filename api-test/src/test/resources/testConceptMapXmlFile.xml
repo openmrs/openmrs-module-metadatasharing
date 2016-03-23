@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<org.openmrs.ConceptMap id="31"
-	uuid="567c4d51-09a6-48f0-9da7-381e776c7db7">
-	<conceptMapType id="32"
-		uuid="43ac5109-7d8c-11e1-909d-c80aa9edcf4e">
-		<name>NARROWER-THAN</name>
-		<creator />
-		<dateCreated id="33">2012-05-15 00:00:00</dateCreated>
+<list>
+<org.openmrs.ConceptMap id="40" uuid="4acef65d-3a76-4102-8d88-53b2a7c2dd1e">
+	<concept class="org.openmrs.ConceptNumeric" reference="2"/>
+	<source id="41" resolves-to="org.openmrs.ConceptSource"
+			uuid="00001827-639f-4cb4-961f-1e025bf80000">
+		<name>Some Standardized Terminology</name>
+		<description>A made up source</description>
+		<creator/>
+		<dateCreated id="43">2005-02-24 00:00:00</dateCreated>
 		<retired>false</retired>
-		<conceptMapTypeId>2</conceptMapTypeId>
-		<isHidden>false</isHidden>
-	</conceptMapType>
-	<concept reference="2" />
-	<conceptReferenceTerm id="34"
-		uuid="eed71c0a-9e37-45f3-8b0a-7066507ebc64">
-		<retired>false</retired>
-		<conceptSource id="35" resolves-to="org.openmrs.ConceptSource"
-			uuid="87e496f8-27b8-431f-9c23-462f035a6aec">
-			<name>openmrs-standalone-1-9-one</name>
-			<description>demo</description>
-			<creator />
-			<dateCreated id="37">2012-08-29 12:11:44</dateCreated>
-			<retired>false</retired>
-			<conceptSourceId>1</conceptSourceId>
-			<hl7Code>OSTAND-1-9-one</hl7Code>
-		</conceptSource>
-		<code>6099</code>
-		<conceptReferenceTermMaps class="linked-hash-set" id="38" />
-	</conceptReferenceTerm>
+		<hl7Code>SSTRM</hl7Code>
+	</source>
+	<sourceCode>WGT234</sourceCode>
+	<comment>MAP TYPE:SAME-AS</comment>
+	<creator/>
+	<dateCreated id="44">2004-08-12 00:00:00</dateCreated>
 </org.openmrs.ConceptMap>
+<org.openmrs.ConceptMap id="45" uuid="4bb7f2b7-7bd1-41c5-a7a0-30454559e78f">
+	<concept class="org.openmrs.ConceptNumeric" reference="2"/>
+	<source id="46" resolves-to="org.openmrs.ConceptSource"
+			uuid="j3nfjk33-639f-4cb4-961f-1e025b908433">
+		<name>SNOMED CT</name>
+		<description>'Systematized Nomenclature of Medicine--Clinical Terms' is a comprehensive clinical terminology</description>
+		<creator/>
+		<dateCreated id="48">2005-02-24 00:00:00</dateCreated>
+		<retired>false</retired>
+		<hl7Code>SNOMED-CT</hl7Code>
+	</source>
+	<sourceCode>2332523</sourceCode>
+	<comment>MAP TYPE:SAME-AS</comment>
+	<creator/>
+	<dateCreated id="49">2004-08-12 00:00:00</dateCreated>
+</org.openmrs.ConceptMap>
+</list>

@@ -66,8 +66,8 @@
 		<module>api</module>
 		<module>api-test</module>
 		<module>api-common</module>
-		<module>api-1.7</module>
 		<module>api-1.9</module>
+		<module>api-1.11</module>
 		<module>api-2.0</module>
 		<module>omod</module>
 		<module>integration-test</module>

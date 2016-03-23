@@ -20,14 +20,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Role;
+import org.openmrs.module.metadatasharing.ImportType;
+import org.openmrs.module.metadatasharing.handler.MetadataMergeHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPriorityDependenciesHandler;
 import org.openmrs.module.metadatasharing.handler.MetadataPropertiesHandler;
 import org.openmrs.module.metadatasharing.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("metadatasharing.RoleHandler")
-public class RoleHandler implements MetadataPropertiesHandler<Role>, MetadataPriorityDependenciesHandler<Role> {
-	
+public class RoleHandler implements MetadataPropertiesHandler<Role>, MetadataPriorityDependenciesHandler<Role>, MetadataMergeHandler<Role> {
+
+	@Autowired
+	ObjectHandler objectHandler;
+
 	@Override
 	public int getPriority() {
 	    return 0;
@@ -94,5 +100,22 @@ public class RoleHandler implements MetadataPropertiesHandler<Role>, MetadataPri
     	}
 	    return Collections.emptyList();
     }
-	
+
+	/**
+	 * New nested roles must be added only to inheritedRoles and not both inheritedRoles and
+	 * childRoles.
+	 *
+	 * @see org.openmrs.module.metadatasharing.handler.MetadataMergeHandler#merge(java.lang.Object,
+	 *      java.lang.Object, org.openmrs.module.metadatasharing.ImportType, java.util.Map)
+	 */
+	@Override
+	public void merge(Role existing, Role incoming, ImportType importType, Map<Object, Object> incomingToExisting) {
+		if (incoming.getChildRoles() != null) {
+			incoming.setChildRoles(null);
+		}
+
+		objectHandler.merge(existing, incoming, importType, incomingToExisting);
+	}
+
+
 }
