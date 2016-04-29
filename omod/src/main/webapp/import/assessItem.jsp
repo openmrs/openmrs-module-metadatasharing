@@ -145,7 +145,7 @@
 						<c:if test="${not empty item.existing}">
 							<c:if test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 								<tr>
-									<td class="to_right"> <springform:form code="metadatasharing.type" /> </td>
+									<td class="to_right"> <spring:message code="metadatasharing.type" /> </td>
 									<td><span id="incomingType">${item.incomingClassSimpleName}</span></td>
 								</tr>
 							</c:if>
@@ -191,7 +191,7 @@
 							<c:if test="${not empty item.existing}">
 								<c:if test="${item.existingClassSimpleName != item.incomingClassSimpleName}">
 									<tr>
-										<td class="to_right"> <springform:form code="metadatasharing.type" /> </td>
+										<td class="to_right"> <spring:message code="metadatasharing.type" /> </td>
 										<td><span id="existingType">${item.existingClassSimpleName}</span></td>
 									</tr>
 								</c:if>
