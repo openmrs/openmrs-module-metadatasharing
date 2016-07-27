@@ -35,7 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ExportPackageTaskTest {
 	
 	/**
-	 * @see ExportPackageTask#addLocalMappingIfConcept(List)
+	 * @see ExportPackageTask#addLocalMappingIfConcept(Object)
 	 * @verifies add local mapping to concept if admin desires
 	 */
 	@Test
@@ -45,7 +45,7 @@ public class ExportPackageTaskTest {
 		MetadataMappingService service = PowerMockito.mock(MetadataMappingService.class);
 		PowerMockito.when(Context.getService(MetadataMappingService.class)).thenReturn(service);
 		
-		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(true); // this is the only difference from test setup below
+		Mockito.when(service.isAddLocalMappingToConceptOnExport()).thenReturn(true); // this is the only difference from test setup below
 		
 		// do the test
 		Concept stubconcept = new Concept();
@@ -60,7 +60,7 @@ public class ExportPackageTaskTest {
 	}
 	
 	/**
-	 * @see ExportPackageTask#addLocalMappingIfConcept(List)
+	 * @see ExportPackageTask#addLocalMappingIfConcept(Object)
 	 * @verifies not add local mapping to concept if admin desires
 	 */
 	@Test
@@ -74,7 +74,7 @@ public class ExportPackageTaskTest {
 		MetadataSharing mockInstance = Mockito.mock(MetadataSharing.class);
 		PowerMockito.when(MetadataSharing.getInstance()).thenReturn(mockInstance);
 		
-		Mockito.when(service.isAddLocalMappingOnExport()).thenReturn(false); // this is the only difference from test setup above
+		Mockito.when(service.isAddLocalMappingToConceptOnExport()).thenReturn(false); // this is the only difference from test setup above
 		
 		// do the test
 		Concept stubconcept = new Concept();

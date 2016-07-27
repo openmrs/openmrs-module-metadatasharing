@@ -38,18 +38,18 @@ public class ConceptMapper {
 	}
 	
 	/**
-	 * @deprecated use {@link ConceptPubSubService#getLocalSource()}
+	 * @deprecated use {@link MetadataMappingService#getLocalConceptSource()} ()}
 	 */
 	@Deprecated
 	public ConceptSource getSystemConceptSource() throws APIException {
-		return Context.getService(MetadataMappingService.class).getLocalSource();
+		return Context.getService(MetadataMappingService.class).getLocalConceptSource();
 	}
 	
 	/**
 	 * Adds a system mapping to the given concept if necessary.
 	 * 
 	 * @param concept
-	 * @deprecated use {@link ConceptPubSubService#addLocalMappingToConcept(Concept)}
+	 * @deprecated use {@link MetadataMappingService#addLocalMappingToConcept(Concept)}
 	 */
 	@Deprecated
 	public void addSystemConceptMap(Concept concept) throws APIException {

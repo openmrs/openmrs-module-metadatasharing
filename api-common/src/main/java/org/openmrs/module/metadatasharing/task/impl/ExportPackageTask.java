@@ -177,13 +177,13 @@ public class ExportPackageTask extends Task {
 	 * Only an item which is Concept will get mapping <br/>
 	 *
 	 * @see MetadataSharing#isAddLocalMappings()
-	 * @param the object
+	 * @param object
 	 * @should add local mapping to concept if admin desires
 	 * @should not add local mapping to concept if admin desires
 	 */
 	protected void addLocalMappingIfConcept(Object object) {
 		if (object instanceof Concept) {
-			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()) {
+			if (Context.getService(MetadataMappingService.class).isAddLocalMappingToConceptOnExport()) {
 				Context.getService(MetadataMappingService.class).addLocalMappingToConcept((Concept) object);
 			}
 		}
