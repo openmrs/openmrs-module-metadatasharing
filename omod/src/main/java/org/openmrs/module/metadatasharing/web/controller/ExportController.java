@@ -417,8 +417,8 @@ public class ExportController {
 	PackageExporter exporter, Errors errors, @ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, Model model, SessionStatus session) {
 		if (packageItems.getItems().get("Concept") != null) {
-			if (Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport()
-			        && !Context.getService(MetadataMappingService.class).isLocalSourceConfigured()) {
+			if (Context.getService(MetadataMappingService.class).isAddLocalMappingToConceptOnExport()
+			        && !Context.getService(MetadataMappingService.class).isLocalConceptSourceConfigured()) {
 				errors.rejectValue("package", "metadatasharing.error.conceptSource.notConfigured");
 				return EDIT_PATH;
 			}

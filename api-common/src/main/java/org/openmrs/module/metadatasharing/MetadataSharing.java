@@ -190,21 +190,21 @@ public class MetadataSharing implements ApplicationContextAware {
 	
 	/**
 	 * @return
-	 * @deprecated since 1.1, use {@link MetadataMappingService#isAddLocalMappings()}
+	 * @deprecated since 1.1, use {@link MetadataMappingService#isAddLocalMappingToConceptOnExport()}
 	 */
 	@Deprecated
 	public boolean isAddLocalMappings() {
-		return Context.getService(MetadataMappingService.class).isAddLocalMappingOnExport();
+		return Context.getService(MetadataMappingService.class).isAddLocalMappingToConceptOnExport();
 	}
 	
 	/**
 	 * Defines if system concept source has been already configured
 	 * 
 	 * @return true if concept source is configured and exists, false otherwise
-	 * @deprecated since 1.1, use {@link MetadataMappingService#isLocalSourceConfigured()}
+	 * @deprecated since 1.1, use {@link MetadataMappingService#isLocalConceptSourceConfigured()}
 	 */
 	public boolean isConceptSourceConfigured() {
-		return Context.getService(MetadataMappingService.class).isLocalSourceConfigured();
+		return Context.getService(MetadataMappingService.class).isLocalConceptSourceConfigured();
 	}
 	
 	/**
