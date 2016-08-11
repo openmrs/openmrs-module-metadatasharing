@@ -26,11 +26,7 @@
 			length="64" />
 		<property name="description" type="java.lang.String" column="description"
 			length="256" />
-		<property name="importConfig" column="import_config" length="1024">
-			<type
-				name="org.openmrs.module.metadatasharing.api.db.hibernate.XMLSerializableType">
-				<param name="class">org.openmrs.module.metadatasharing.ImportConfig</param>
-			</type>
+		<property name="importConfigXml" column="import_config" length="1024" type="java.lang.String">
 		</property>
 		<property name="remoteVersion" type="java.lang.Integer"
 			column="remote_version" />

@@ -13,6 +13,10 @@
  */
 package org.openmrs.module.metadatasharing;
 
+import com.thoughtworks.xstream.XStream;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.serializer.MetadataSerializer;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -33,7 +37,8 @@ public class ImportedPackage extends Package implements Serializable {
 	private ImportConfig importConfig = new ImportConfig();
 	
 	private SubscriptionStatus subscriptionStatus = SubscriptionStatus.DISABLED;
-	
+	private XStream xstream;
+
 	public ImportedPackage() {
 	}
 	
@@ -137,6 +142,23 @@ public class ImportedPackage extends Package implements Serializable {
 	 */
 	public void setSubscriptionStatus(SubscriptionStatus subscriptionStatus) {
 		this.subscriptionStatus = subscriptionStatus;
+	}
+
+	public String getImportConfigXml(){
+		return getXStream().toXML(importConfig);
+	}
+
+	public void setImportConfigXml(String importConfigXml){
+		importConfig = (ImportConfig) getXStream().fromXML(importConfigXml);
+	}
+
+	private XStream getXStream() {
+		if (xstream == null) {
+			MetadataSerializer serialier = Context.getRegisteredComponent(MetadataSharingConsts.MODULE_ID + ".MetadataSerializer", MetadataSerializer.class);
+			xstream = serialier.getXStream();
+		}
+
+		return xstream;
 	}
 	
 	/**
