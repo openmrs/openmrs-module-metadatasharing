@@ -36,7 +36,7 @@ import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0")
+@OpenmrsProfile(openmrsPlatformVersion = "2.*")
 public class CollectionConverterCompatibility2_0 implements CollectionConverterCompatibility {
 
 	@Override

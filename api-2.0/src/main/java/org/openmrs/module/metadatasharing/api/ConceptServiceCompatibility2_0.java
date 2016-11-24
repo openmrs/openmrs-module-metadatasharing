@@ -19,7 +19,7 @@ import org.openmrs.ConceptSource;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0")
+@OpenmrsProfile(openmrsPlatformVersion = "2.*")
 public class ConceptServiceCompatibility2_0 implements ConceptServiceCompatibility {
 
 	@Override

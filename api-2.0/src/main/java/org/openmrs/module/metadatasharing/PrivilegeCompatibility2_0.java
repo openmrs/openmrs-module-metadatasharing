@@ -16,7 +16,7 @@ package org.openmrs.module.metadatasharing;
 import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.util.PrivilegeConstants;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0")
+@OpenmrsProfile(openmrsPlatformVersion = "2.*")
 public class PrivilegeCompatibility2_0 implements PrivilegeCompatibility {
 
 	@Override
