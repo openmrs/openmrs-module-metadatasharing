@@ -37,7 +37,9 @@
 				value="PREFER_THEIRS" />
 			<spring:message code="metadatasharing.mergePreferTheirs" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.exactMatch" value="OMIT" />
-			<spring:message code="metadatasharing.omit" /> <br /> <br />
+			<spring:message code="metadatasharing.omit" /> <br />
+			&nbsp; &nbsp; <springform:radiobutton path="importConfig.exactMatch" value="OVERWRITE_MINE" />
+			<spring:message code="metadatasharing.overwritemine" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmExactMatch" />
 			<spring:message code="metadatasharing.askIfDatesDiffer" />
@@ -55,7 +57,9 @@
 			<spring:message code="metadatasharing.mergePreferTheirs" /> <br />
 			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch"
 				value="OMIT" />
-			<spring:message code="metadatasharing.omit" /> <br /> <br />
+			<spring:message code="metadatasharing.omit" /> <br />
+			&nbsp; &nbsp; <springform:radiobutton path="importConfig.possibleMatch" value="OVERWRITE_MINE" />
+			<spring:message code="metadatasharing.overwritemine" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmPossibleMatch" />
 			<spring:message code="metadatasharing.askIfDatesDiffer" />

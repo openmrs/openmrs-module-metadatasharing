@@ -70,6 +70,16 @@
 				</span>
 			</label>
 		</p>
+		<p>
+			<input id="mode-MIRROR" type="radio" name="importMode" value="MIRROR" />&nbsp;
+			<label for="mode-MIRROR">
+				<spring:message code="metadatasharing.import.mode.mirror" />
+				<br/>
+				<span class="import-mode-description">
+					<spring:message code="metadatasharing.import.mode.mirror.description" />
+				</span>
+			</label>
+		</p>
 	</fieldset>
 	<p>
 		<input type="button"
