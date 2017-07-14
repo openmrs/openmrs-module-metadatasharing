@@ -78,7 +78,10 @@
 			<spring:message code="metadatasharing.omit" /> <br /> <br />
 
 			&nbsp; &nbsp; <springform:checkbox path="importConfig.confirmNoMatch" />
-			<spring:message code="metadatasharing.askEveryTime" />
+			<spring:message code="metadatasharing.askEveryTime" /> <br /> <br />
+
+			&nbsp; &nbsp; <springform:checkbox path="importConfig.skipAssessing" />
+			<spring:message code="metadatasharing.import.skipAssessing" />
 		</p>
 	</fieldset>
 	<p>

@@ -31,6 +31,8 @@ public class ImportConfig {
 	private boolean confirmPossibleMatch = false;
 	
 	private boolean confirmNoMatch = false;
+
+	private boolean skipAssessing = false;
 	
 	public ImportConfig() {
 	}
@@ -132,7 +134,15 @@ public class ImportConfig {
 	public void setConfirmNoMatch(boolean confirmNoMatch) {
 		this.confirmNoMatch = confirmNoMatch;
 	}
-	
+
+	public boolean isSkipAssessing() {
+		return skipAssessing;
+	}
+
+	public void setSkipAssessing(boolean skipAssessing) {
+		this.skipAssessing = skipAssessing;
+	}
+
 	public static ImportConfig valueOf(ImportMode importMode) {
 		ImportConfig config = new ImportConfig();
 		switch (importMode) {

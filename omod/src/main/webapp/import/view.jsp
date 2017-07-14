@@ -189,9 +189,6 @@
 			<input type="button"
 				value="<spring:message code="metadatasharing.import.startAssessing" />"
 				onclick="window.location='assessNextItem.form'" />
-			<input type="button"
-				   value="<spring:message code="metadatasharing.import.skipAssessing" />"
-				   onclick="window.location='complete.form'; $j(this).attr('disabled', true);" />
 		</c:when>
 		<c:when test="${!empty loadNext}">
 			<input type="button"

@@ -13,21 +13,6 @@
  */
 package org.openmrs.module.metadatasharing.web.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -71,6 +56,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 /**
  * Controller for package import pages.
@@ -399,7 +398,13 @@ public class ImportController {
 		
 		model.addAttribute(ITEMS, importItems);
 		model.addAttribute(ITEMS_STATS, itemsStats);
-		return VIEW_PATH;
+
+		if (importer.getImportConfig().isSkipAssessing()) {
+			return WebUtils.redirect(COMPLETE_PATH);
+		}
+		else {
+			return VIEW_PATH;
+		}
 	}
 	
 	@RequestMapping(LOAD_PATH)
