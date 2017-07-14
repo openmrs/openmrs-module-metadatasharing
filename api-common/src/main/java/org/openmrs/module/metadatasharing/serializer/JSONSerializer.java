@@ -13,17 +13,16 @@
  */
 package org.openmrs.module.metadatasharing.serializer;
 
-import java.io.Writer;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.serializer.converter.SubscriptionStatusConverter;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.springframework.stereotype.Component;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import com.thoughtworks.xstream.io.json.JsonWriter;
+import java.io.Writer;
 
 /**
  * Serializes objects into JSON string. It is used mostly in AJAX pages to serialize response.
@@ -47,6 +46,7 @@ public class JSONSerializer implements OpenmrsSerializer {
 			}
 		});
 		xstream.registerConverter(new SubscriptionStatusConverter());
+		xstream.autodetectAnnotations(true);
 	}
 	
 	/**

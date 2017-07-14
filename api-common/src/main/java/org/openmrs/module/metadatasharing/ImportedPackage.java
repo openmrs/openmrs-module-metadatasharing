@@ -14,6 +14,7 @@
 package org.openmrs.module.metadatasharing;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.serializer.MetadataSerializer;
 
@@ -37,6 +38,8 @@ public class ImportedPackage extends Package implements Serializable {
 	private ImportConfig importConfig = new ImportConfig();
 	
 	private SubscriptionStatus subscriptionStatus = SubscriptionStatus.DISABLED;
+
+	@XStreamOmitField
 	private XStream xstream;
 
 	public ImportedPackage() {
