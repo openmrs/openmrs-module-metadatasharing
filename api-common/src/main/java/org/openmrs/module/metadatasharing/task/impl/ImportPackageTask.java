@@ -14,7 +14,6 @@
 package org.openmrs.module.metadatasharing.task.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -25,7 +24,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.openmrs.ConceptSource;
 import org.openmrs.OpenmrsObject;
 import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
@@ -215,19 +213,10 @@ public class ImportPackageTask extends Task {
 
 		Set<ObjectWrapper<Object>> savedItems = new HashSet<ObjectWrapper<Object>>();
 
-		log("Saving concept sources first if any");
-		for (ImportedItem importedItem : importedItems) {
-			if (!importedItem.getImportType().isOmit()) {
-				saveItem(importedItem, savedItems, ConceptSource.class);
-			}
-		}
-		Context.flushSession(); //flushing so that ConceptSources are inserted into db for ConceptReferenceTermValidator
-
-		savedItems.clear();
 		log("Saving items");
 		for (ImportedItem importedItem : importedItems) {
 			if (!importedItem.getImportType().isOmit()) {
-				saveItem(importedItem, savedItems, null);
+				saveItem(importedItem, savedItems);
 			}
 		}
 
@@ -287,7 +276,7 @@ public class ImportPackageTask extends Task {
 		return mappings;
 	}
 
-	private void saveItem(ImportedItem importedItem, Set<ObjectWrapper<Object>> savedItems, Class<?> filter) throws APIException {
+	private void saveItem(ImportedItem importedItem, Set<ObjectWrapper<Object>> savedItems) throws APIException {
 		Object item = (importedItem.getExisting() != null) ? importedItem.getExisting() : importedItem.getIncoming();
 
 		if (!savedItems.add(new ObjectWrapper<Object>(item))) {
@@ -296,21 +285,17 @@ public class ImportPackageTask extends Task {
 
 		List<Object> dependencies = Handler.getPriorityDependencies(item);
 		for (Object dependency : dependencies) {
-			saveItem(new ImportedItem(dependency), savedItems, filter);
+			saveItem(new ImportedItem(dependency), savedItems);
 		}
 
-		if (filter == null || filter.isInstance(item)) {
-			log.debug("Saving " + item.getClass().getName() + " [" + Handler.getUuid(item) + "]");
+		log.debug("Saving " + item.getClass().getName() + " [" + Handler.getUuid(item) + "]");
 
-			Object savedItem = Handler.saveItem(item);
+		Object savedItem = Handler.saveItem(item);
 
-			if (savedItem == null) {
-				log.debug(item.getClass().getName() + " [" + Handler.getUuid(item) + "] will be saved with a parent");
-			} else {
-				log.debug(item.getClass().getName() + "[" + Handler.getUuid(item) + "] saved");
-			}
+		if (savedItem == null) {
+			log.debug(item.getClass().getName() + " [" + Handler.getUuid(item) + "] will be saved with a parent");
 		} else {
-			log.debug("Skipping " + item.getClass().getName() + " [" + Handler.getUuid(item) + "] as it is not " + filter.getName());
+			log.debug(item.getClass().getName() + "[" + Handler.getUuid(item) + "] saved");
 		}
 
 	}

@@ -14,7 +14,6 @@
 package org.openmrs.module.metadatasharing.serializer.mapper;
 
 import org.hibernate.proxy.HibernateProxy;
-import org.hibernate.proxy.pojo.javassist.SerializableProxy;
 import org.openmrs.module.metadatasharing.visitor.impl.OpenmrsObjectVisitor;
 
 import com.thoughtworks.xstream.mapper.Mapper;
