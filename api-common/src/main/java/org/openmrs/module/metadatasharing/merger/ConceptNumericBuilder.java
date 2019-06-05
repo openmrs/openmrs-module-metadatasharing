@@ -61,7 +61,7 @@ public class ConceptNumericBuilder {
 			description.setConcept(numeric);
         }
 
-		numeric.getNames(true).addAll(concept.getNames(true));
+		numeric.setNames(concept.getNames(true));
 		for (ConceptName name : numeric.getNames(true)) {
 	        name.setConcept(numeric);
         }
