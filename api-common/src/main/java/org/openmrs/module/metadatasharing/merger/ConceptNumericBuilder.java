@@ -21,6 +21,8 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.ConceptSet;
 
+import java.util.HashSet;
+
 
 /**
  * Builder for {@link ConceptNumeric}.
@@ -33,7 +35,7 @@ public class ConceptNumericBuilder {
 		//It is not set in the copy constructor
 		numeric.setUuid(concept.getUuid());
 		
-		//Replace Hibernate collections
+		// Replace Hibernate collection implementations with basic Java implementations (see Rafal's comment on META-365)
 		Concept newConcept = new Concept(); //Needed to retrieve specific implementations
 		numeric.setAnswers(newConcept.getAnswers());
 		numeric.setConceptMappings(newConcept.getConceptMappings());
@@ -61,7 +63,7 @@ public class ConceptNumericBuilder {
 			description.setConcept(numeric);
         }
 
-		numeric.setNames(concept.getNames(true));
+		numeric.setNames(new HashSet<ConceptName>(concept.getNames(true)));
 		for (ConceptName name : numeric.getNames(true)) {
 	        name.setConcept(numeric);
         }
