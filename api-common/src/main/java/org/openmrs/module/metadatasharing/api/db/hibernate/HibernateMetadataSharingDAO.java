@@ -16,6 +16,8 @@ package org.openmrs.module.metadatasharing.api.db.hibernate;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.openmrs.api.db.hibernate.DbSessionFactory;  
 import org.hibernate.criterion.Order;
@@ -35,6 +37,8 @@ public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 	
 	@Autowired
 	private DbSessionFactory sessionFactory;
+
+	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * @see org.openmrs.module.metadatasharing.api.db.MetadataSharingDAO#getExportedPackage(java.lang.Integer)
@@ -78,11 +82,17 @@ public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 	 */
 	@Override
 	public ImportedItem getImportItem(Class<?> type, String uuid) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ImportedItem.class);
-		criteria.add(Restrictions.eq("uuid", uuid));
-		criteria.add(Restrictions.eq("classname", type.getName()));
-		ImportedItem result = (ImportedItem) criteria.uniqueResult();
-		return result;
+		try {
+			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ImportedItem.class);
+			criteria.add(Restrictions.eq("uuid", uuid));
+			criteria.add(Restrictions.eq("classname", type.getName()));
+			ImportedItem result = (ImportedItem) criteria.uniqueResult();
+			return result;
+		}
+		catch (RuntimeException e) {
+			log.error("Error attempting to get import item: " + type.getSimpleName() + ": " + uuid, e);
+			throw e;
+		}
 	}
 	
 	/**

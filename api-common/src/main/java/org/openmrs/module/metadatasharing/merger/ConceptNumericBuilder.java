@@ -13,6 +13,9 @@
  */
 package org.openmrs.module.metadatasharing.merger;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptDescription;
@@ -61,10 +64,12 @@ public class ConceptNumericBuilder {
 			description.setConcept(numeric);
         }
 
-		numeric.getNames(true).addAll(concept.getNames(true));
-		for (ConceptName name : numeric.getNames(true)) {
-	        name.setConcept(numeric);
-        }
+		Collection<ConceptName> names = new HashSet();
+		for (ConceptName name : concept.getNames(true)) {
+			name.setConcept(numeric);
+			names.add(name);
+		}
+		numeric.setNames(names);
 
 		return numeric;
 	}

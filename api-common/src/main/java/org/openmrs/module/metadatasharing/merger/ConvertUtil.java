@@ -15,6 +15,8 @@ package org.openmrs.module.metadatasharing.merger;
 
 import java.util.Collection;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
@@ -26,6 +28,8 @@ import org.openmrs.module.metadatasharing.util.ImportUtil;
  *
  */
 public class ConvertUtil {
+
+	protected static final Log log = LogFactory.getLog(ConvertUtil.class);
 	
 	public static void convert(Collection<ImportedItem> importedItems) {
 		for (ImportedItem importedItem : importedItems) {
@@ -59,7 +63,13 @@ public class ConvertUtil {
 					}
 					
 					Context.evictFromSession(existing);
-					Context.getConceptService().saveConcept(numeric);
+					try {
+						Context.getConceptService().saveConcept(numeric);
+					}
+					catch (RuntimeException e) {
+						log.error("Error saving Concept Numeric " + numeric + " (" + numeric.getUuid() + ")", e);
+						throw e;
+					}
 					importedItem.setExisting(numeric);
 					
 					//It's slightly inefficient, but it's the easiest way to get around lazily initialization exceptions.
