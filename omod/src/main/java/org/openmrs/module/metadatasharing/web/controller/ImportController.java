@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.openmrs.module.metadatasharing.ImportConfig;
 import org.openmrs.module.metadatasharing.ImportMode;
 import org.openmrs.module.metadatasharing.ImportType;
@@ -56,10 +57,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.xml.sax.InputSource;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -133,7 +146,8 @@ public class ImportController {
 	
 	public static final String COMPLETE_PATH = IMPORT_PATH + "/complete";
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	protected static final Log log = LogFactory.getLog(ImportController.class);
+
 	
 	@Autowired
 	private PackageContainerValidator packageContainerValidator;
@@ -566,7 +580,40 @@ public class ImportController {
 		assessItemForm.setIndex(index);
 		assessItemForm.setImportType(importedItem.getImportType());
 		model.addAttribute(assessItemForm);
+		
+		XStream xstream= new XStream(new StaxDriver());
+		String xml1=xstream.toXML(importedItem.getIncoming());
+		String xml2=xstream.toXML(importedItem.getExisting());
+
+		String xmlIncomingString=formatXml(xml1);
+		String xmlExistingString=formatXml(xml2);
+
+		model.addAttribute("xmlExistingString",xmlExistingString);		
+		model.addAttribute("xmlIncomingString", xmlIncomingString);
+
 	}
+	
+	 public static String formatXml(String xml) {
+		   
+	      try {
+	         Transformer serializer = SAXTransformerFactory.newInstance().newTransformer();
+	         
+	         serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+	         serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	         
+	         Source xmlSource = new SAXSource(new InputSource(
+	            new ByteArrayInputStream(xml.getBytes())));
+	         StreamResult res =  new StreamResult(new ByteArrayOutputStream());            
+	         
+	         serializer.transform(xmlSource, res);
+	         
+	         return new String(((ByteArrayOutputStream)res.getOutputStream()).toByteArray());
+	         
+	      } catch(Exception e) {
+	    	  log.warn("Could not format the xml", e);
+	         return xml;
+	      }
+	   }
 	
 	@RequestMapping(value = ITEM_PATH, method = RequestMethod.GET, params = "uuid")
 	public void assessItem(@ModelAttribute(ITEMS)
