@@ -128,16 +128,26 @@ public class PublishUtils {
 	
 	/**
 	 * Creates an absolute publish URL for getting package updates
-	 * 
+	 *
 	 * @param pack the package to which's updates the URL will point
 	 * @return the String representation of the URL
 	 */
 	public static String createAbsolutePublishURL(ExportedPackage pack) {
+		return createAbsolutePublishURL(pack.getGroupUuid());
+	}
+
+	/**
+	 * Creates an absolute publish URL for getting package updates
+	 *
+	 * @param groupUuid the groupUuid of the package to which's updates the URL will point
+	 * @return the String representation of the URL
+	 */
+	public static String createAbsolutePublishURL(String groupUuid) {
 		String prefix = Context.getAdministrationService().getGlobalProperty(MetadataSharingConsts.GP_URL_PREFIX);
 		if (prefix == null) {
 			return null;
 		} else {
-			return prefix + createRelativeResourcePath("/ws/rest/metadatasharing/package/" + pack.getGroupUuid() + "/latest");
+			return prefix + createRelativeResourcePath("/ws/rest/metadatasharing/package/" + groupUuid + "/latest");
 		}
 	}
 	

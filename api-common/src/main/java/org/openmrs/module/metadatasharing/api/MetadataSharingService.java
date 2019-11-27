@@ -23,6 +23,7 @@ import org.openmrs.aop.RequiredDataAdvice;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ExportedPackageSummary;
 import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.ImportedPackage;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
@@ -100,6 +101,15 @@ public interface MetadataSharingService extends OpenmrsService {
 	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
 	@Transactional(readOnly = true)
 	List<ExportedPackage> getAllExportedPackages() throws APIException;
+
+
+	/**
+	 * @return the list of all Export Package Summaries
+	 * @since 1.6
+	 */
+	@Authorized(MetadataSharingConsts.MODULE_PRIVILEGE)
+	@Transactional(readOnly = true)
+	List<ExportedPackageSummary> getAllExportedPackageSummaries();
 	
 	/**
 	 * Gets all packages with the given group
