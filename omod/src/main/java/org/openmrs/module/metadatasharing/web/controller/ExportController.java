@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.beanutils.BeanComparator;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
@@ -160,6 +161,8 @@ public class ExportController {
 				packages.add(summary);
 			}
 		}
+		Collections.sort(packages, new BeanComparator("version"));
+		Collections.reverse(packages);
 		if (packages.isEmpty()) {
 			return WebUtils.redirect(LIST_PATH);
 		}
