@@ -13,12 +13,11 @@
  */
 package org.openmrs.module.metadatasharing.api.impl;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +27,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ExportedPackageSummary;
 import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.ImportedPackage;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
@@ -75,7 +75,12 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 	public List<ExportedPackage> getAllExportedPackages() throws APIException {
 		return dao.getAllExportedPackages();
 	}
-	
+
+	@Override
+	public List<ExportedPackageSummary> getAllExportedPackageSummaries() {
+		return dao.getAllExportedPackageSummaries();
+	}
+
 	@Override
 	public ImportedItem getImportedItemByUuid(Class<?> type, String uuid) throws APIException {
 		return dao.getImportItem(type, uuid);
@@ -96,7 +101,7 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 	public Collection<ImportedItem> persistImportedItems(Collection<ImportedItem> importItems) throws APIException {
 		return dao.persistImportItems(importItems);
 	}
-	
+
 	@Override
 	public ExportedPackage getLatestExportedPackageByGroup(String groupUuid) throws APIException {
 		return dao.getLatestExportedPackage(groupUuid);

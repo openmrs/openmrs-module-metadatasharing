@@ -57,38 +57,33 @@ function nameColumnRenderer($data){
 	var $p = $j("<p/>");
 	$ret.append( $p );
 	var $name = null;
-	if($data.aData[1].latestVersion != null && $data.aData[1].latestVersion != 0) { //normal package
-		$name = $j("<a/>").text($data.aData[1].name).attr("href", "details.form?group="+$data.aData[1].groupUuid);
+	var $nameData = $data.aData[1];
+	if ($nameData.latestVersion != null && $nameData.latestVersion != 0) { //normal package
+		$name = $j("<a/>").text($nameData.name).attr("href", "details.form?group="+$nameData.groupUuid);
 		$p.append($name);
 		if($publishConfigured) {
-			var $txt = "";
-			var $publishedVersions = $data.aData[1].publishedVersions;
-			if($publishedVersions == null) {
-				$txt=$messages.notPublished;
-			} else {
-				$txt = $messages.publishedVersions + ": ";
-				for(var $i = 0; $i < $publishedVersions.length ; $i++) {
-					$txt += $publishedVersions[$i];
-					if($i != $publishedVersions.length-1) {
-						$txt += ", ";
-					}
-				}
-				
-				if($publishedVersions.pop() < $data.aData[1].latestVersion) {
-					if ($publishConfigured) {
-						var $publish = " <a href='togglePublished.form?returnTo=main&id=" + $data.aData[1].id + "'>Publish</a>";
-						$txt += "<span class='publishWarning warning'>" + $messages.warning + ": " + $messages.latestVersionNotPublished + 
-							$publish + "</span>";
-					}
+			var $publishedVersions = $nameData.publishedVersions;
+			var $latestPublishedVersion = ($publishedVersions == null ? 0 : $publishedVersions.pop());
+
+			var $txt = $messages.latestVersion + ": " + $nameData.latestVersion;
+			$txt += ", " + $messages.latestPublishedVersion + ": ";
+			$txt += ($latestPublishedVersion === 0 ? $messages.notPublished : $latestPublishedVersion);
+
+			if($latestPublishedVersion < $nameData.latestVersion) {
+				if ($publishConfigured) {
+					var $publish = " <a href='togglePublished.form?returnTo=main&id=" + $nameData.id + "'>Publish</a>";
+					$txt += "<span class='publishWarning warning'>" + $messages.warning + ": " + $messages.latestVersionNotPublished +
+						$publish + "</span>";
 				}
 			}
 			$p.append("<small>" + $txt + "</small>");
 		}
-	} else { //old package type
-		$name = $j("<span/>").text($data.aData[1].name);
+	}
+	else { //old package type
+		$name = $j("<span/>").text($nameData.name);
 		$p.append($name);
-		var $download = "<a href='download.form?id=" + $data.aData[1].id + "'>" + $messages.downloadPackage + "</a>";
-		var $delete = "<a href='delete.form?id=" + $data.aData[1].id + "'>" + $messages.deletePackage + "</a>";
+		var $download = "<a href='download.form?id=" + $nameData.id + "'>" + $messages.downloadPackage + "</a>";
+		var $delete = "<a href='delete.form?id=" + $nameData.id + "'>" + $messages.deletePackage + "</a>";
 		$p.append("<small>" + $messages.oldPackage + " " + $download + " " + $delete  + "</small>");
 	}
 	return $ret.html();

@@ -19,10 +19,11 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
-import org.openmrs.api.db.hibernate.DbSessionFactory;  
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ExportedPackageSummary;
 import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.ImportedPackage;
 import org.openmrs.module.metadatasharing.api.db.MetadataSharingDAO;
@@ -111,7 +112,13 @@ public class HibernateMetadataSharingDAO implements MetadataSharingDAO {
 		}
 		return importedItems;
 	}
-	
+
+	@Override
+	public List<ExportedPackageSummary> getAllExportedPackageSummaries() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ExportedPackageSummary.class);
+		return criteria.list();
+	}
+
 	/**
 	 * @see org.openmrs.module.metadatasharing.api.db.MetadataSharingDAO#getLatestExportedPackage(String)
 	 */

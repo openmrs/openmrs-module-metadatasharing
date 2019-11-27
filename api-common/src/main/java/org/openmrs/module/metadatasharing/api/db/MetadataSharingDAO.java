@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ExportedPackageSummary;
 import org.openmrs.module.metadatasharing.ImportedItem;
 import org.openmrs.module.metadatasharing.ImportedPackage;
 import org.openmrs.module.metadatasharing.api.MetadataSharingService;
@@ -53,7 +54,13 @@ public interface MetadataSharingDAO {
 	 * @see MetadataSharingService#getAllExportedPackages()
 	 */
 	List<ExportedPackage> getAllExportedPackages();
-	
+
+	/**
+	 * @return all export package ids
+	 * @since 1.6
+	 */
+	List<ExportedPackageSummary> getAllExportedPackageSummaries();
+
 	/**
 	 * @see MetadataSharingService#getExportedPackagesByGroup(String)
 	 */
