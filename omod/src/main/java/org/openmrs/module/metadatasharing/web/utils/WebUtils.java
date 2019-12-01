@@ -13,6 +13,11 @@
  */
 package org.openmrs.module.metadatasharing.web.utils;
 
+import org.openmrs.Concept;
+import org.openmrs.OpenmrsObject;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.metadatasharing.api.MetadataService;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -64,6 +69,23 @@ public class WebUtils {
 		RedirectView redirect = new RedirectView(url, true);
 		redirect.setExposeModelAttributes(exposeModelAttributes);
 		return new ModelAndView(redirect);
+	}
+
+	public static String metadataUrl(String type, String uuid) {
+		try {
+			Class clazz = OpenmrsClassLoader.getInstance().loadClass(type);
+			Object o = Context.getService(MetadataService.class).getItem(clazz, uuid);
+			if (o instanceof OpenmrsObject) {
+				Integer id = ((OpenmrsObject)o).getId();
+				if (clazz == Concept.class) {
+					return "dictionary/concept.htm?conceptId=" + id;
+				}
+				// TODO: Add additional here
+			}
+		}
+		catch (Exception e) {
+		}
+		return "";
 	}
 	
 	private WebUtils() {

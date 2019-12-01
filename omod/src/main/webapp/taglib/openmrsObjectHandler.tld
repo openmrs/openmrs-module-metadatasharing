@@ -7,7 +7,7 @@
 
 	<description>ObjectHandler tag library</description>
 	<tlib-version>1.0</tlib-version>
-	<short-name>handler</short-name>  
+	<short-name>handler</short-name>
   
 	<tag>
 		<name>handle</name>
@@ -24,4 +24,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+
+	<function>
+		<name>metadataUrl</name>
+		<function-class>org.openmrs.module.metadatasharing.web.utils.WebUtils</function-class>
+		<function-signature>java.lang.String metadataUrl(java.lang.String, java.lang.String)</function-signature>
+	</function>
+
 </taglib>
