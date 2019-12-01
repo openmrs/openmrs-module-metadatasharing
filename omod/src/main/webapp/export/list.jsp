@@ -13,13 +13,14 @@
 		importPackage: '<spring:message code="metadatasharing.importPackage" />',
 		createPackage: '<spring:message code="metadatasharing.createPackage" />',
 		notPublished: '<spring:message code="metadatasharing.notPublished" />',
-		publishedVersions: '<spring:message code="metadatasharing.publishedVersions" />',
+		latestVersion: '<spring:message code="metadatasharing.latestVersion" />',
+		latestPublishedVersion: '<spring:message code="metadatasharing.latestPublishedVersion" />',
 		warning: '<spring:message code="metadatasharing.warning" />',
 		downloadPackage: '<spring:message code="metadatasharing.download" />',
 		deletePackage: '<spring:message code="metadatasharing.delete" />',
 		latestVersionNotPublished: '<spring:message code="metadatasharing.warning.latestVersionNotPublished" />',
-		oldPackage: '<spring:message code="metadatasharing.package.old" />',
-	}
+		oldPackage: '<spring:message code="metadatasharing.package.old" />'
+	};
 
 	var $publishConfigured = <utils:printJavaScript text="${publishConfigured}"/>;
 	var $packages = new Array();
@@ -29,7 +30,7 @@
 		p.push([${order[pack.groupUuid]},{name:<utils:printJavaScript text="${pack.name}" asString="true"/>, 
 			publishedVersions:<colletions:printCollectionJavaScript var="${publishedVersions[pack.groupUuid]}" />,
 			latestVersion:<utils:printJavaScript text="${pack.version}"/>, groupUuid:<utils:printJavaScript text="${pack.groupUuid}" asString="true"/>,
-			id: <utils:printJavaScript text="${pack.id}"/>},
+			id: <utils:printJavaScript text="${pack.exportedPackageId}"/>},
 			<utils:printJavaScript text="${pack.description}" asString="true"/>,
 			<utils:printJavaScript text="${pack.dateCreated}" asString="true"/>]);
 	</c:forEach>  

@@ -25,7 +25,7 @@
 	var p = $packages;
 	//[ID, VERSION, NAME, DESCRIPTION, DATE_CREATED, PUBLISHED, GROUP]
 	<c:forEach var="pack" items="${packages}">
-		p.push([<utils:printJavaScript text="${pack.id}"/>,<utils:printJavaScript text="${pack.version}"/>,
+		p.push([<utils:printJavaScript text="${pack.exportedPackageId}"/>,<utils:printJavaScript text="${pack.version}"/>,
 		        <utils:printJavaScript text="${pack.name}" asString="true"/>, 
 		<utils:printJavaScript text="${pack.description}" asString="true"/>,
 		<utils:printJavaScript text="${pack.dateCreated}" asString="true"/>,

@@ -13,9 +13,11 @@
  */
 package org.openmrs.module.metadatasharing.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,11 +28,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.beanutils.BeanComparator;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatamapping.api.MetadataMappingService;
 import org.openmrs.module.metadatasharing.ExportedPackage;
+import org.openmrs.module.metadatasharing.ExportedPackageSummary;
 import org.openmrs.module.metadatasharing.Item;
 import org.openmrs.module.metadatasharing.MetadataSharing;
 import org.openmrs.module.metadatasharing.MetadataSharingConsts;
@@ -111,9 +113,8 @@ public class ExportController {
 	
 	@RequestMapping(LIST_PATH)
 	public void list(Model model) {
-		MetadataSharingService service = Context.getService(MetadataSharingService.class);
-		List<ExportedPackage> packages = service.getAllExportedPackages();
-		Map<String, ExportedPackage> latestVersion = new HashMap<String, ExportedPackage>();
+		List<ExportedPackageSummary> packages = getService().getAllExportedPackageSummaries();
+		Map<String, ExportedPackageSummary> latestVersion = new HashMap<String, ExportedPackageSummary>();
 		// key is group
 		
 		Map<String, List<Integer>> publishedVersions = new HashMap<String, List<Integer>>();
@@ -124,8 +125,8 @@ public class ExportController {
 		// by default
 		
 		int groupsCount = 0;
-		for (ExportedPackage pack : packages) {
-			ExportedPackage latest = latestVersion.get(pack.getGroupUuid());
+		for (ExportedPackageSummary pack : packages) {
+			ExportedPackageSummary latest = latestVersion.get(pack.getGroupUuid());
 			if (latest == null) { // the package is added first time, so let's
 				                  // provide ordering information
 				order.put(pack.getGroupUuid(), groupsCount++);
@@ -154,14 +155,22 @@ public class ExportController {
 	 */
 	@RequestMapping(DETAILS_PATH)
 	public String details(String group, Model model) {
-		List<ExportedPackage> packages = MetadataSharing.getService().getExportedPackagesByGroup(group);
-		if (packages != null) {
+		List<ExportedPackageSummary> packages = new ArrayList<ExportedPackageSummary>();
+		for (ExportedPackageSummary summary : getService().getAllExportedPackageSummaries()) {
+			if (summary.getGroupUuid().equalsIgnoreCase(group)) {
+				packages.add(summary);
+			}
+		}
+		Collections.sort(packages, new BeanComparator("version"));
+		Collections.reverse(packages);
+		if (packages.isEmpty()) {
+			return WebUtils.redirect(LIST_PATH);
+		}
+		else {
 			model.addAttribute("packages", packages);
-			model.addAttribute("publishUrl", PublishUtils.createAbsolutePublishURL(packages.get(0)));
+			model.addAttribute("publishUrl", PublishUtils.createAbsolutePublishURL(packages.get(0).getGroupUuid()));
 			model.addAttribute("publishConfigured", MetadataSharing.getInstance().isPublishConfigured());
 			return DETAILS_PATH;
-		} else {
-			return WebUtils.redirect(LIST_PATH);
 		}
 	}
 	
@@ -436,5 +445,9 @@ public class ExportController {
 		
 		model.addAttribute("uuid", task.getUuid());
 		return WebUtils.redirect(TaskController.DETAILS_PATH);
+	}
+
+	private MetadataSharingService getService() {
+		return Context.getService(MetadataSharingService.class);
 	}
 }
