@@ -44,7 +44,7 @@ function hideShow(elementId) {
 </style>
 
 <div id="selectItems"></div>
-<h3><spring:message code="metadatasharing.createPackage" /></h3>
+<h3><spring:message code="metadatasharing.createPackage" />: ${exporter.getPackage().getName()}</h3>
 
 <springform:form modelAttribute="exporter" action="complete.form" method="post">
 	<springform:errors path="package" cssStyle="error" />
@@ -57,7 +57,7 @@ function hideShow(elementId) {
 			<legend>4. <spring:message code="metadatasharing.reviewChoice" /></legend>
 			<table style="width:100%;">
 				<thead>
-					<tr><th></th><th><th></th></th></tr>
+					<tr><th></th><th><th></th></tr>
 				</thead>
 				<tbody>
 					<c:forEach var="packageItem" items="${packageItems.items}" varStatus="status">
