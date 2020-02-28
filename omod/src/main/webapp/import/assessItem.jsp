@@ -10,13 +10,16 @@
 <%@ include file="../template/jqueryPage.jsp"%>
 <openmrs:htmlInclude
 	file="${pageContext.request.contextPath}/moduleResources/metadatasharing/css/metadatasharing.css" />
+		
 
-<script type="text/javascript">
+<script type="text/javascript" >
 	var $j = jQuery.noConflict();
 	var chooseExistingTable;
 	var chooseExistingDialog;
+	var tableForItems;	
 
 	$j(document).ready(function() {
+				
 		chooseExistingTable = $j("#chooseExistingTable")
 				.dataTable(
 						{
@@ -85,7 +88,20 @@
 
 		$j('#chooseExistingButton').click(showChooseExistingDialog);
 
-		$j('#nextButton').focus();
+		$j('#nextButton').focus();				
+		
+		tableForItems = $j('#tableForItems').dialog(
+				{ autoOpen: false, modal: true, width: '95%', height: $j(window).height()-100,
+					resizable: false, draggable: false,
+					title: '<spring:message code="metadatasharing.compare" />'
+					 });
+		
+		$j('#compare').click(function() {		
+				tableForItems.dialog("open");	
+		});
+		
+		
+
 	});
 
 	function highlightDifferences() {
@@ -124,6 +140,7 @@
 	<input type="button" value="Back to Summary"
 		onclick="window.location='load.form'" />
 </p>
+
 
 <springform:form commandName="assessItemForm">
 		<spring:message code="metadatasharing.assessingItem" />
@@ -237,6 +254,9 @@
 				</fieldset>
 			</td>
 		</tr>
+		
+	<tr>		<td><input type="button" id="compare" value="<spring:message code="metadatasharing.compare" />" /></td><td></td>
+	</tr>
 		<tr>
 			<td><springform:radiobutton path="importType" value="CREATE"
 					id="createButton" disabled="${!empty incomingInvalid}" />
@@ -273,6 +293,14 @@
 			value="<spring:message code="metadatasharing.next" />" /> <br />
 	</p>
 </springform:form>
+
+<div id="tableForItems">
+		<table><tr><th>Incoming Item</th><th>Existing Item</th></tr>
+		<tr><td><div id="str1"><pre> <c:out value="${xmlIncomingString}"/> </pre></div>
+		</td><td><div id="str2"><pre><c:out value="${xmlExistingString}"/></pre></div>
+		</td></tr>
+		</table>		
+</div>
 
 <div id="chooseExistingDialog">
 	<table id="chooseExistingTable" style="width: 100%">
