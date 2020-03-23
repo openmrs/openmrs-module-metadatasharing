@@ -23,7 +23,6 @@
 	<!-- Beans related to the web context -->
 	 
 	<!-- Annotation based controllers -->
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 	
 	<context:component-scan base-package="org.openmrs.module.metadatasharing.web.controller" />
 	
