@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 
-@Configuration("metadatasharing")
+@Configuration("metadatasharing.dynamicBeanConfiguration")
 public class DynamicBeanConfiguration {
 	/**
 	 * The DefaultAnnotationHandlerMapping class was deprecated and eventually
