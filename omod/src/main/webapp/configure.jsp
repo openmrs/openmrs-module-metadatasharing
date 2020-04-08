@@ -63,7 +63,7 @@
 	<spring:message code="metadatasharing.configure" />
 </h3>
 
-<springform:form commandName="configureForm">
+<springform:form modelAttribute="configureForm">
 	<fieldset>
 		<legend><spring:message code="metadatasharing.configure.importing"/></legend>
 

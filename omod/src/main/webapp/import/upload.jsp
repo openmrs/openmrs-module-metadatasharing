@@ -47,7 +47,7 @@ table.upload {
 	<spring:message code="metadatasharing.importPackage" />
 </h3>
 
-<springform:form commandName="uploadForm" enctype="multipart/form-data"
+<springform:form modelAttribute="uploadForm" enctype="multipart/form-data"
 	id="uploadForm">
 	<fieldset>
 		<legend>

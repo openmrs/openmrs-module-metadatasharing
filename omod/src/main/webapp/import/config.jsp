@@ -22,7 +22,7 @@
 	<spring:message code="metadatasharing.importPackage" />
 </h3>
 
-<springform:form commandName="importer">
+<springform:form modelAttribute="importer">
 	<fieldset>
 		<legend>
 			4.

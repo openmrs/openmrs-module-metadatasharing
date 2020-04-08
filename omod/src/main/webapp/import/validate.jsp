@@ -17,7 +17,7 @@
 }
 </style>
 
-<springform:form commandName="importer" method="post">
+<springform:form modelAttribute="importer" method="post">
 	<fieldset>
 		<legend>
 			2.

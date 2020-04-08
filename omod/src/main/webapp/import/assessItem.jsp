@@ -125,7 +125,7 @@
 		onclick="window.location='load.form'" />
 </p>
 
-<springform:form commandName="assessItemForm">
+<springform:form modelAttribute="assessItemForm">
 		<spring:message code="metadatasharing.assessingItem" />
 		${assessItemForm.index + 1} <input
 		name="assessItemForm.index" type="hidden"
