@@ -3,7 +3,9 @@
 	<class name="ImportedPackage" table="metadatasharing_imported_package">
 		<id name="id" type="int" column="imported_package_id"
 			unsaved-value="0">
-			<generator class="native" />
+			<generator class="native">
+				<param name="sequence">metadatasharing_imported_package_imported_package_id_seq</param>
+			</generator>
 		</id>
 		<discriminator column="imported_package_id" insert="false" />
 		<property name="uuid" type="java.lang.String" column="uuid"

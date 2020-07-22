@@ -3,7 +3,9 @@
 	<class name="ImportedItem" table="metadatasharing_imported_item">
 		<id name="importedItemId" type="int" column="imported_item_id"
 			unsaved-value="0">
-			<generator class="native" />
+			<generator class="native">
+				<param name="sequence">metadatasharing_imported_item_imported_item_id_seq</param>
+			</generator>
 		</id>
 		<property name="uuid" type="java.lang.String" column="uuid"
 			length="38" not-null="true" index="uuid_classname" />
