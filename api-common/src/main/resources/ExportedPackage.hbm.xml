@@ -2,7 +2,9 @@
 <hibernate-mapping package="org.openmrs.module.metadatasharing">
 	<class name="ExportedPackage" table="metadatasharing_exported_package">
 		<id name="exportedPackageId" type="int" column="exported_package_id" unsaved-value="0">
-			<generator class="native" />
+			<generator class="native">
+				<param name="sequence">metadatasharing_exported_package_exported_package_id_seq</param>
+			</generator>
 		</id>
 		<discriminator column="exported_package_id" insert="false" />
 		<property name="uuid" type="java.lang.String" column="uuid"  length="38" unique="true" />
