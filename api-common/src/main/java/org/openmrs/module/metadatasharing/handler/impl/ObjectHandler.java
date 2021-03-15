@@ -140,7 +140,9 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 								Collection<Object> incomingCollection = (Collection<Object>) incomingField;
 
 								if (importType.isOverwriteMine()) {
-									//We'll be skipping incoming elements if they exist.
+									// Skip incoming elements that already exist.
+									// Void or delete elements that have been voided or deleted in the incoming.
+									// Add new incoming elements.
 									List<Object> incomingDiffCollection = new LinkedList<Object>(incomingCollection);
 
 									Iterator<Object> existingCollectionIt = existingCollection.iterator();
@@ -160,7 +162,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
 										}
 									}
 
-									//Let's add completely new incoming elements.
+									// Add completely new incoming elements.
 									for (Object incomingElement : incomingDiffCollection) {
                                         Object mappedToExisting = incomingToExisting.get(incomingElement);
                                         if (mappedToExisting != null) {
@@ -170,6 +172,7 @@ public class ObjectHandler implements MetadataPriorityDependenciesHandler<Object
                                         }
                                     }
 								} else {
+									// Add new incoming elements. Leave everything else alone.
 									for (Object incomingElement : incomingCollection) {
 										Object existing = incomingToExisting.get(incomingElement);
 

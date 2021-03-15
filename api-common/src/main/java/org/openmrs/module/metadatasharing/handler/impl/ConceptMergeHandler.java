@@ -1,6 +1,7 @@
 package org.openmrs.module.metadatasharing.handler.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 
 			for (Locale locale : locales) {
 				if (importType.isPreferTheirs()) {
-					//Only one preferred name is allowed for a locale.
+					// Only one preferred name is allowed for a locale.
 					ConceptName preferredName = incomingConcept.getPreferredName(locale);
 					if (preferredName != null) {
 						for (ConceptName existingName : existingConcept.getNames(locale)) {
@@ -45,7 +46,7 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 						}
 					}
 
-					//Only one fully specified name is allowed for a locale.
+					// Only one fully specified name is allowed for a locale.
 					ConceptName fullySpecifiedName = incomingConcept.getFullySpecifiedName(locale);
 					if (fullySpecifiedName != null) {
 						for (ConceptName existingName : existingConcept.getNames(locale)) {
@@ -54,6 +55,19 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 									existingName.setConceptNameType(null); //make it synonym
 								}
 							}
+						}
+					}
+
+					// Update name capitalization to avoid creating duplicates, if necessary
+					Map<String, ConceptName> existingLowerCaseNames = new HashMap<String, ConceptName>();
+					for (ConceptName existingName : existingConcept.getNames(locale)) {
+						existingLowerCaseNames.put(existingName.getName().toLowerCase(), existingName);
+					}
+					for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+						ConceptName existingName = existingLowerCaseNames.get(incomingName.getName().toLowerCase());
+						if (existingName != null && !incomingName.getName().equals(existingName.getName())) {
+							existingName.setName(incomingName.getName());
+							incomingConcept.removeName(incomingName);
 						}
 					}
 				} else if (!importType.isOverwriteMine()) {
@@ -72,6 +86,18 @@ public class ConceptMergeHandler implements MetadataMergeHandler<Concept> {
 							if (incomingName.isFullySpecifiedName()) {
 								incomingName.setConceptNameType(null); //make it synonym
 							}
+						}
+					}
+
+					// Eliminate duplicate names
+					Map<String, ConceptName> existingLowerCaseNames = new HashMap<String, ConceptName>();
+					for (ConceptName existingName : existingConcept.getNames(locale)) {
+						existingLowerCaseNames.put(existingName.getName().toLowerCase(), existingName);
+					}
+					for (ConceptName incomingName : incomingConcept.getNames(locale)) {
+						ConceptName existingName = existingLowerCaseNames.get(incomingName.getName().toLowerCase());
+						if (existingName != null && !incomingName.getName().equals(existingName.getName())) {
+							incomingConcept.removeName(incomingName);
 						}
 					}
 				}
