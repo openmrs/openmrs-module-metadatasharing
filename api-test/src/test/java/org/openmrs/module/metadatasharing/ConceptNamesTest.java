@@ -139,10 +139,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
-			
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
-			 */
+
 			@Override
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
@@ -159,10 +156,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Context.getConceptService().saveConcept(concept);
 			}
-			
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
-			 */
+
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
 				importer.setImportConfig(ImportConfig.valueOf(ImportMode.MIRROR));
@@ -207,10 +201,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				Context.getConceptService().saveConcept(concept);
 				return Arrays.asList(concept);
 			}
-			
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
-			 */
+
 			@Override
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
@@ -227,10 +218,7 @@ public class ConceptNamesTest extends BaseShareTest {
 				
 				Context.getConceptService().saveConcept(concept);
 			}
-			
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
-			 */
+
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
 			    for (ImportedItem importedItem: importer.getImportedItems(0)) {
@@ -258,6 +246,7 @@ public class ConceptNamesTest extends BaseShareTest {
 
 	@Test
 	@Ignore("This doesn't work in the existing implementation.")
+	// Incoming changes to capitalization are simply ignored.
 	public void shouldAllowChangingNameCapitalization() throws Exception {
 		final String conceptUuid = UUID.randomUUID().toString();
 
@@ -281,9 +270,6 @@ public class ConceptNamesTest extends BaseShareTest {
 				return Arrays.asList(concept);
 			}
 
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
-			 */
 			@Override
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
@@ -301,9 +287,6 @@ public class ConceptNamesTest extends BaseShareTest {
 				Context.getConceptService().saveConcept(concept);
 			}
 
-			/**
-			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
-			 */
 			@Override
 			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
 				for (ImportedItem importedItem: importer.getImportedItems(0)) {
@@ -326,7 +309,79 @@ public class ConceptNamesTest extends BaseShareTest {
 	}
 
 	@Test
-	public void shouldChangeNameToPreferredNameIfPreferTheirs() throws Exception {
+	@Ignore("This doesn't work in the existing implementation.")
+	// The error that the server throws in this case (which is not the error this test produces) is
+	// `org.openmrs.api.DuplicateConceptNameException: 'AA' is a duplicate name in locale 'en' for the same concept`
+	public void shouldSwapSynonymWithPreferredNameIfPreferTheirs() throws Exception {
+		final String conceptUuid = UUID.randomUUID().toString();
+
+		runShareTest(new ShareTestHelper() {
+
+			@Override
+			public List<?> prepareExportServer() throws Exception {
+				Concept concept = new Concept();
+				concept.setUuid(conceptUuid);
+
+				ConceptName preferredName = new ConceptName("AA", Locale.ENGLISH);
+				concept.setPreferredName(preferredName);
+
+				ConceptName synonym = new ConceptName("b", Locale.ENGLISH);
+				concept.addName(synonym);
+
+				Context.getConceptService().saveConcept(concept);
+				return Arrays.asList(concept);
+			}
+
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#prepareImportServer()
+			 */
+			@Override
+			public void prepareImportServer() throws Exception {
+				Concept concept = new Concept();
+				concept.setUuid(conceptUuid);
+
+				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
+				concept.setPreferredName(preferredName);
+
+				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
+				concept.addName(synonym);
+
+				Context.getConceptService().saveConcept(concept);
+			}
+
+			/**
+			 * @see org.openmrs.module.metadatasharing.ShareTestHelper#runOnImportServerBeforeImport(org.openmrs.module.metadatasharing.wrapper.PackageImporter)
+			 */
+			@Override
+			public void runOnImportServerBeforeImport(PackageImporter importer) throws Exception {
+				for (ImportedItem importedItem: importer.getImportedItems(0)) {
+					if (importedItem.getIncoming() instanceof Concept) {
+						importedItem.setImportType(ImportType.PREFER_THEIRS);
+					}
+				}
+			}
+
+			@Override
+			public void runOnImportServerAfterImport() throws Exception {
+				Concept concept = Context.getConceptService().getConceptByUuid(conceptUuid);
+
+				Collection<ConceptName> names = concept.getNames();
+				Set<String> expectedNames = new HashSet<String>();
+				expectedNames.addAll(Arrays.asList("AA", "b"));
+				assertNull(diffConceptNameSets(concept.getNames(), expectedNames));
+
+				ConceptName preferredName = concept.getPreferredName(Locale.ENGLISH);
+				Assert.assertEquals("AA must be preferred", "AA", preferredName.getName());
+			}
+
+		});
+	}
+
+	@Test
+	// This test should fail, but doesn't.
+	// The error that the server throws in this case (which is not the error this test produces) is
+	// `org.openmrs.api.DuplicateConceptNameException: 'b' is a duplicate name in locale 'en' for the same concept`
+	public void shouldChangePreferredNameToSynonymIfPreferTheirs() throws Exception {
 		final String conceptUuid = UUID.randomUUID().toString();
 
 		runShareTest(new ShareTestHelper() {
@@ -358,9 +413,6 @@ public class ConceptNamesTest extends BaseShareTest {
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
 				concept.setPreferredName(preferredName);
 				assertTrue(preferredName.isFullySpecifiedName());
-
-				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
-				concept.addName(synonym);
 
 				Context.getConceptService().saveConcept(concept);
 			}
