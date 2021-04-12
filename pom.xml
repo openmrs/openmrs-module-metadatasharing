@@ -100,7 +100,7 @@
 				<version>${openMRSVersion}</version>
 				<type>jar</type>
 				<scope>provided</scope>
-			</dependency>
+			</dependency> 
 
 			<dependency>
 				<groupId>org.openmrs.web</groupId>

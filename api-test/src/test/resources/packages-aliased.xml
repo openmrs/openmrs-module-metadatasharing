@@ -1,0 +1,13 @@
+<!--
+	Defines the EMR metadata packages
+-->
+<MetadataPackagesConfig>
+  <packages>
+    <MetadataPackageConfig>
+      <filenameBase>metadata/Visit_Type_Package</filenameBase>
+      <groupUuid>12345ba6-a634-42d5-9314-e12689856ab2</groupUuid>
+      <version>1</version>
+      <importMode>MIRROR</importMode>
+    </MetadataPackageConfig>
+  </packages>
+</MetadataPackagesConfig> 
