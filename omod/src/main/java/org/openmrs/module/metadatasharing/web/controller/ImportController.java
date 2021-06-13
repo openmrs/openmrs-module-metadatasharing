@@ -283,6 +283,11 @@ public class ImportController {
 				importer.loadSerializedPackageStream(in);
 				in.close();
 			}
+			catch(Exception e){
+				log.error(e);
+				errors.rejectValue("file","metadatasharing.error.package.file.invalid");
+				return UPLOAD_PATH;
+			}
 			finally {
 				IOUtils.closeQuietly(in);
 			}
