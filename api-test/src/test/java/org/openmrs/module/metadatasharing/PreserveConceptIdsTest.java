@@ -21,6 +21,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
@@ -42,7 +43,8 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 				Concept c = new Concept();
 				ConceptName conceptName = new ConceptName("1234567890-1234567890", Locale.US);
 				c.addName(conceptName);
-				
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				Context.getConceptService().saveConcept(c);
 				
 				// check to make sure the child server uses this one
@@ -75,13 +77,17 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 		runShareTest(new ShareTestHelper() {
 			
 			Integer newConceptId = null;
+
+			Concept concept;
 			
 			@Override
 			public List<?> prepareExportServer() throws Exception {
 				
 				Concept c = new Concept();
 				c.addName(new ConceptName("Test", Locale.US));
-				
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+				concept = c;
+
 				Context.getConceptService().saveConcept(c);
 				
 				// check to make sure the child server uses this one
@@ -104,8 +110,8 @@ public class PreserveConceptIdsTest extends BaseShareTest {
 			@Override
 			public void runOnImportServerAfterImport() throws Exception {
 				Concept c = Context.getConceptService().getConcept(newConceptId);
-				
-				Assert.assertNull("The concept was found with the same id, wha happened??", c);
+
+				Assert.assertEquals(concept, c);
 			}
 		});
 	}

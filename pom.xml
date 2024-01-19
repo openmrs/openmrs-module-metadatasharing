@@ -74,7 +74,7 @@
 	</modules>
 
 	<properties>
-		<openMRSVersion>1.9.9</openMRSVersion>
+		<openMRSVersion>2.0.0</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>

@@ -24,6 +24,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptMap;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
@@ -50,6 +51,7 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				c.addName(new ConceptName("c", Locale.ENGLISH));
 				c.setUuid("c");
 				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 				Context.getConceptService().saveConcept(c);
 				
 				ConceptSource newSource = new ConceptSource();
@@ -63,15 +65,15 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				Context.getConceptService().saveConceptSource(commonSource);
 				
 				ConceptMap newMap = new ConceptMap();
-				newMap.setSource(newSource);
-				newMap.setSourceCode("c");
+				newMap.getConceptReferenceTerm().setConceptSource(newSource);
+				newMap.getConceptReferenceTerm().setCode("c");
 				c.addConceptMapping(newMap);
 				
 				Context.getConceptService().saveConcept(c);
 				
 				ConceptMap commonMap = new ConceptMap();
-				commonMap.setSource(commonSource);
-				commonMap.setSourceCode("cd");
+				commonMap.getConceptReferenceTerm().setConceptSource(commonSource);
+				commonMap.getConceptReferenceTerm().setCode("cd");
 				c.addConceptMapping(commonMap);
 				
 				Context.getConceptService().saveConcept(c);
@@ -86,6 +88,8 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				c.addName(new ConceptName("c", Locale.ENGLISH));
 				c.setUuid("c");
 				c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				Context.getConceptService().saveConcept(c);
 				
 				ConceptSource commonSource = new ConceptSource();
@@ -94,8 +98,8 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				Context.getConceptService().saveConceptSource(commonSource);
 				
 				ConceptMap commonMap = new ConceptMap();
-				commonMap.setSource(commonSource);
-				commonMap.setSourceCode("cd");
+				commonMap.getConceptReferenceTerm().setConceptSource(commonSource);
+				commonMap.getConceptReferenceTerm().setCode("cd");
 				c.addConceptMapping(commonMap);
 				
 				Context.getConceptService().saveConcept(c);
@@ -121,7 +125,7 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 				
 				Set<String> uuids = new HashSet<String>(Arrays.asList("csNew", "csOld"));
 				for (ConceptMap conceptMap : concept.getConceptMappings()) {
-					if (!uuids.contains(conceptMap.getSource().getUuid())) {
+					if (!uuids.contains(conceptMap.getConceptReferenceTerm().getConceptSource().getUuid())) {
 						Assert.fail("Must be csNew or csOld");
 					}
 				}
@@ -132,6 +136,7 @@ public class ConceptMappingPreferTheirsTest extends BaseShareTest {
 	@Test
 	public void shouldUpdateRelatedConceptSourceWhenImportedAgain() throws Exception {
 		Concept concept = ConceptMock.newInstance().addMapping("1", "source").addPreferredName("hiv", Locale.ENGLISH)
+				.addDescription("Description", Locale.ENGLISH)
 		        .saveConcept().getConcept();
 		PackageExporter exporter = MetadataSharing.getInstance().newPackageExporter();
 		exporter.addItem(concept);

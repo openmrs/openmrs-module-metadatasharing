@@ -50,17 +50,17 @@ public class ShareableLocation extends Location {
 		setLatitude(loc.getLatitude());
 		setLongitude(loc.getLongitude());
 		setName(loc.getName());
-		setNeighborhoodCell(loc.getNeighborhoodCell());
+		setAddress3(loc.getAddress3());
 		setParentLocation(loc.getParentLocation());
 		setPostalCode(loc.getPostalCode());
-		setRegion(loc.getRegion());
+		setAddress6(loc.getAddress6());
 		setRetired(loc.getRetired());
 		setRetiredBy(loc.getRetiredBy());
 		setRetireReason(loc.getRetireReason());
 		setStateProvince(loc.getStateProvince());
-		setSubregion(loc.getSubregion());
+		setAddress5(loc.getAddress5());
 		setTags(loc.getTags());
-		setTownshipDivision(loc.getTownshipDivision());
+		setAddress4(loc.getAddress4());
 		setUuid(loc.getUuid());
 	}
 	
@@ -101,17 +101,17 @@ public class ShareableLocation extends Location {
 		loc.setLatitude(getLatitude());
 		loc.setLongitude(getLongitude());
 		loc.setName(getName());
-		loc.setNeighborhoodCell(getNeighborhoodCell());
+		loc.setAddress3(getAddress3());
 		loc.setParentLocation(getParentLocation());
 		loc.setPostalCode(getPostalCode());
-		loc.setRegion(getRegion());
+		loc.setAddress6(getAddress6());
 		loc.setRetired(getRetired());
 		loc.setRetiredBy(getRetiredBy());
 		loc.setRetireReason(getRetireReason());
 		loc.setStateProvince(getStateProvince());
-		loc.setSubregion(getSubregion());
+		loc.setAddress5(getAddress5());
 		loc.setTags(getTags());
-		loc.setTownshipDivision(getTownshipDivision());
+		loc.setAddress4(getAddress4());
 		loc.setUuid(getUuid());
 		return loc;
 	}
