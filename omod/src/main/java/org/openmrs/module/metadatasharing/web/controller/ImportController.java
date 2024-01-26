@@ -153,12 +153,12 @@ public class ImportController {
 	@Autowired
 	private SubscriptionUpdater updater;
 	
-	@RequestMapping(LIST_PATH)
+	@RequestMapping(LIST_PATH + ".form")
 	public void list(Model model) {
 		model.addAttribute("subscriptions", MetadataSharing.getService().getAllImportedPackages());
 	}
 	
-	@RequestMapping(value = TOGGLE_SUBSCRIBE_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = TOGGLE_SUBSCRIBE_PATH + ".form", method = RequestMethod.GET)
 	public String toggleSubscribe(Integer id) {
 		ImportedPackage importedPackage = MetadataSharing.getService().getImportedPackageById(id);
 		if (importedPackage != null) {
@@ -172,7 +172,7 @@ public class ImportController {
 		return WebUtils.redirect(LIST_PATH);
 	}
 	
-	@RequestMapping(value = DELETE_SUBSCRIBE_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = DELETE_SUBSCRIBE_PATH + ".form", method = RequestMethod.GET)
 	public String purgeSubscribe(Integer id) {
 		ImportedPackage importedPackage = MetadataSharing.getService().getImportedPackageById(id);
 		if (importedPackage != null) {
@@ -182,7 +182,7 @@ public class ImportController {
 	}
 	
 	
-	@RequestMapping(value = JSON_CHECK_UPDATES_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = JSON_CHECK_UPDATES_PATH + ".form", method = RequestMethod.GET)
 	public ModelAndView jsonCheckUpdates(Integer id, ModelMap model) {
 		ImportedPackage importedPackage = MetadataSharing.getService().getImportedPackageById(id);
 		if (importedPackage != null && importedPackage.isSubscribed()) {
@@ -263,12 +263,12 @@ public class ImportController {
 		return new ModelAndView(jsonObjectView);
 	}
 	
-	@RequestMapping(value = UPLOAD_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = UPLOAD_PATH + ".form", method = RequestMethod.GET)
 	public void upload(SessionStatus status) {
 		status.setComplete();
 	}
 	
-	@RequestMapping(value = UPLOAD_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = UPLOAD_PATH + ".form", method = RequestMethod.POST)
 	public String uploadPOST(UploadForm uploadForm, Errors errors, Model model) throws IOException {
 		uploadFormValidator.validate(uploadForm, errors);
 		if (errors.hasErrors()) {
@@ -315,13 +315,13 @@ public class ImportController {
 		}
 	}
 	
-	@RequestMapping(value = VALIDATE_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = VALIDATE_PATH + ".form", method = RequestMethod.GET)
 	public void validate(@ModelAttribute(IMPORTER)
 	PackageImporter importer, Errors errors) throws SerializationException {
 		packageContainerValidator.validateForErrorsAndWarnings(importer, errors);
 	}
 	
-	@RequestMapping(value = VALIDATE_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = VALIDATE_PATH + ".form", method = RequestMethod.POST)
 	public String validatePOST(@ModelAttribute(IMPORTER)
 	PackageImporter importer, Errors errors) {
 		packageContainerValidator.validate(importer, errors);
@@ -333,11 +333,11 @@ public class ImportController {
 		}
 	}
 	
-	@RequestMapping(value = MODE_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = MODE_PATH + ".form", method = RequestMethod.GET)
 	public void mode() {
 	}
 	
-	@RequestMapping(value = MODE_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = MODE_PATH + ".form", method = RequestMethod.POST)
 	public String modePOST(@ModelAttribute(IMPORTER)
 	PackageImporter importer, String importMode) {
 		ImportMode mode = ImportMode.valueOf(importMode);
@@ -354,12 +354,12 @@ public class ImportController {
 		return WebUtils.redirect(CONFIG_PATH);
 	}
 	
-	@RequestMapping(value = CONFIG_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = CONFIG_PATH + ".form", method = RequestMethod.GET)
 	public void config(@ModelAttribute(IMPORTER)
 	PackageImporter importer) {
 	}
 	
-	@RequestMapping(value = CONFIG_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = CONFIG_PATH + ".form", method = RequestMethod.POST)
 	public String configPOST(@ModelAttribute(IMPORTER)
 	PackageImporter importer, Model model) throws IOException {
 		ImportedPackage importedPackage = MetadataSharing.getService().getImportedPackageByGroup(
@@ -380,7 +380,7 @@ public class ImportController {
 		return WebUtils.redirect(LOAD_PATH);
 	}
 	
-	@RequestMapping(value = LOAD_PATH, params = "part")
+	@RequestMapping(value = LOAD_PATH + ".form", params = "part")
 	public String load(@ModelAttribute(IMPORTER)
 	PackageImporter importer, @ModelAttribute(PARTS)
 	Map<Integer, Boolean> parts, Integer part, Model model) {
@@ -412,7 +412,7 @@ public class ImportController {
 		}
 	}
 	
-	@RequestMapping(LOAD_PATH)
+	@RequestMapping(LOAD_PATH + ".form")
 	public String load(@ModelAttribute(IMPORTER)
 	PackageImporter importer, @ModelAttribute(ITEMS_STATS)
 	ImportedItemsStats stats, @ModelAttribute(PARTS)
@@ -429,7 +429,7 @@ public class ImportController {
 		return VIEW_PATH;
 	}
 	
-	@RequestMapping(VIEW_PATH)
+	@RequestMapping(VIEW_PATH + ".form")
 	public void view(@ModelAttribute(IMPORTER)
 	PackageImporter importer, @ModelAttribute(ITEMS_STATS)
 	ImportedItemsStats stats, @ModelAttribute(PARTS)
@@ -444,7 +444,7 @@ public class ImportController {
 		model.addAttribute(ITEMS_STATS, itemsStats);
 	}
 	
-	@RequestMapping(value = COMPLETE_PATH)
+	@RequestMapping(value = COMPLETE_PATH + ".form")
 	public String complete(@ModelAttribute(IMPORTER)
 	PackageImporter importer, Errors errors, Model model, SessionStatus session) {
 		Task task = importer.schedulePackageImport();
@@ -573,7 +573,7 @@ public class ImportController {
 		model.addAttribute(assessItemForm);
 	}
 	
-	@RequestMapping(value = ITEM_PATH, method = RequestMethod.GET, params = "uuid")
+	@RequestMapping(value = ITEM_PATH + ".form", method = RequestMethod.GET, params = "uuid")
 	public void assessItem(@ModelAttribute(ITEMS)
 	List<ImportedItem> items, Integer index, String uuid, Model model) {
 		ImportedItem importedItem = items.get(index);
@@ -589,7 +589,7 @@ public class ImportController {
 		assessItem(items, index, model);
 	}
 	
-	@RequestMapping(value = ITEM_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = ITEM_PATH + ".form", method = RequestMethod.POST)
 	public String assessItemPOST(@ModelAttribute(ITEMS)
 	List<ImportedItem> items, AssessItemForm assessItemForm, Model model) {
 		ImportedItem importedItem = items.get(assessItemForm.getIndex());
