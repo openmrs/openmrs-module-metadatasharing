@@ -111,7 +111,7 @@ public class ExportController {
 	@Autowired
 	private JsonObjectView jsonView;
 	
-	@RequestMapping(LIST_PATH)
+	@RequestMapping(LIST_PATH + ".form")
 	public void list(Model model) {
 		List<ExportedPackageSummary> packages = getService().getAllExportedPackageSummaries();
 		Map<String, ExportedPackageSummary> latestVersion = new HashMap<String, ExportedPackageSummary>();
@@ -153,7 +153,7 @@ public class ExportController {
 	 * Gets all packages with the given group and passes to the model (they will be rendered in .jsp
 	 * page)
 	 */
-	@RequestMapping(DETAILS_PATH)
+	@RequestMapping(DETAILS_PATH + ".form")
 	public String details(String group, Model model) {
 		List<ExportedPackageSummary> packages = new ArrayList<ExportedPackageSummary>();
 		for (ExportedPackageSummary summary : getService().getAllExportedPackageSummaries()) {
@@ -174,7 +174,7 @@ public class ExportController {
 		}
 	}
 	
-	@RequestMapping(DELETE_PATH)
+	@RequestMapping(DELETE_PATH + ".form")
 	public String delete(Integer id, Model model) {
 		ExportedPackage pack = MetadataSharing.getService().getExportedPackageById(id);
 		if (pack != null) {
@@ -206,14 +206,14 @@ public class ExportController {
 		}
 	}
 	
-	@RequestMapping(DOWNLOAD_PATH)
+	@RequestMapping(DOWNLOAD_PATH + ".form")
 	public ModelAndView download(Integer id, Model model) {
 		ExportedPackage pack = MetadataSharing.getService().getExportedPackageById(id);
 		model.addAttribute("package", pack);
 		return new ModelAndView(downloadPackageView);
 	}
 	
-	@RequestMapping(value = CREATE_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = CREATE_PATH + ".form", method = RequestMethod.GET)
 	public void create(Model model) {
 		if (!model.containsAttribute(EXPORTER)) {
 			model.addAttribute(EXPORTER, MetadataSharing.getInstance().newPackageExporter());
@@ -221,7 +221,7 @@ public class ExportController {
 		model.addAttribute("publishConfigured", MetadataSharing.getInstance().isPublishConfigured());
 	}
 	
-	@RequestMapping(value = UPGRADE_PATH)
+	@RequestMapping(value = UPGRADE_PATH + ".form")
 	public String upgrade(Integer id, Boolean empty, Model model) throws SerializationException, IOException {
 		ExportedPackage exportedPackage = MetadataSharing.getService().getExportedPackageById(id);
 		PackageVersioner versioner = null;
@@ -257,7 +257,7 @@ public class ExportController {
 		return WebUtils.redirect(CREATE_PATH);
 	}
 	
-	@RequestMapping(value = CREATE_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = CREATE_PATH + ".form", method = RequestMethod.POST)
 	public String create(@ModelAttribute(EXPORTER)
 	PackageExporter exporter, Errors errors, Model model) {
 		model.addAttribute("publishConfigured", MetadataSharing.getInstance().isPublishConfigured());
@@ -279,11 +279,11 @@ public class ExportController {
 		}
 	}
 	
-	@RequestMapping(value = EDIT_PATH)
+	@RequestMapping(value = EDIT_PATH + ".form")
 	public void edit() {
 	}
 	
-	@RequestMapping(value = ADD_ALL_ITEMS_PATH)
+	@RequestMapping(value = ADD_ALL_ITEMS_PATH + ".form")
 	public String addAllItems(@ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, String type, Boolean includeRetired) {
 		if (includeRetired) {
@@ -302,7 +302,7 @@ public class ExportController {
 		return WebUtils.redirect(EDIT_PATH);
 	}
 	
-	@RequestMapping(value = REMOVE_ALL_ITEMS_PATH)
+	@RequestMapping(value = REMOVE_ALL_ITEMS_PATH + ".form")
 	public String removeAllItems(@ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, String type) {
 		packageItems.getCompleteTypes().remove(type);
@@ -310,7 +310,7 @@ public class ExportController {
 		return WebUtils.redirect(EDIT_PATH);
 	}
 	
-	@RequestMapping(value = SELECT_ITEMS_PATH, method = RequestMethod.GET)
+	@RequestMapping(value = SELECT_ITEMS_PATH + ".form", method = RequestMethod.GET)
 	public void selectItems(@RequestParam(required = false)
 	String type, Model model) {
 		if (type == null) {
@@ -322,7 +322,7 @@ public class ExportController {
 		// Items will be fetched with JSON.
 	}
 	
-	@RequestMapping(value = SELECT_ITEMS_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = SELECT_ITEMS_PATH + ".form", method = RequestMethod.POST)
 	public String selectItems(@ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, String type, HttpServletRequest request) {
 		String[] addUuids = request.getParameterValues("addUuids");
@@ -372,7 +372,7 @@ public class ExportController {
 		return WebUtils.redirect(EDIT_PATH);
 	}
 	
-	@RequestMapping(JSON_ITEMS_PATH)
+	@RequestMapping(JSON_ITEMS_PATH + ".form`")
 	public ModelAndView jsonItems(@ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, String type, HttpServletRequest httpRequest, Model model) throws IOException {
 		DatatablesRequest request = DatatablesRequest.parseRequest(httpRequest);
@@ -421,7 +421,7 @@ public class ExportController {
 		return new ModelAndView(jsonView);
 	}
 	
-	@RequestMapping(value = COMPLETE_PATH, method = RequestMethod.POST)
+	@RequestMapping(value = COMPLETE_PATH + ".form", method = RequestMethod.POST)
 	public String complete(@ModelAttribute(EXPORTER)
 	PackageExporter exporter, Errors errors, @ModelAttribute(PACKAGE_ITEMS)
 	PackageItems packageItems, Model model, SessionStatus session) {

@@ -45,7 +45,7 @@ public class TaskController {
 	@Autowired
 	private TaskEngine taskEngine;
 	
-	@RequestMapping(value = LIST_PATH)
+	@RequestMapping(value = LIST_PATH + ".form")
 	public void list(Model model) {
 		model.addAttribute(TASKS, taskEngine.getTasks());
 	}
@@ -56,7 +56,7 @@ public class TaskController {
 		return WebUtils.redirect(LIST_PATH);
 	}
 	
-	@RequestMapping(value = DETAILS_PATH)
+	@RequestMapping(value = DETAILS_PATH + ".form")
 	public void details(String uuid, Model model) {
 		Task task = taskEngine.getTask(uuid);
 		model.addAttribute(TASK, task);
