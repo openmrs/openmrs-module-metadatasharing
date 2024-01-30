@@ -47,17 +47,17 @@ public class LocationMock extends Location {
 		setLatitude(loc.getLatitude());
 		setLongitude(loc.getLongitude());
 		setName(loc.getName());
-		setNeighborhoodCell(loc.getNeighborhoodCell());
+		setAddress3(loc.getAddress3());
 		setParentLocation(loc.getParentLocation());
 		setPostalCode(loc.getPostalCode());
-		setRegion(loc.getRegion());
+		setAddress6(loc.getAddress6());
 		setRetired(loc.getRetired());
 		setRetiredBy(loc.getRetiredBy());
 		setRetireReason(loc.getRetireReason());
 		setStateProvince(loc.getStateProvince());
-		setSubregion(loc.getSubregion());
+		setAddress5(loc.getAddress5());
 		setTags(loc.getTags());
-		setTownshipDivision(loc.getTownshipDivision());
+		setAddress4(loc.getAddress4());
 		setUuid(loc.getUuid());
 	}
 	

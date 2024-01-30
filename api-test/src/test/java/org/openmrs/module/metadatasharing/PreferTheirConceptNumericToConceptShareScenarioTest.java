@@ -20,6 +20,7 @@ import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.context.Context;
@@ -41,6 +42,7 @@ public class PreferTheirConceptNumericToConceptShareScenarioTest extends BaseSha
 				c.addName(new ConceptName("ConceptNumericConcept", Locale.US));
 				c.setHiNormal(Double.valueOf(1));
 				c.setUuid("23423a2982236623");
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 				Context.getConceptService().saveConcept(c);
 				
 				return Collections.nCopies(1, c);
@@ -52,6 +54,7 @@ public class PreferTheirConceptNumericToConceptShareScenarioTest extends BaseSha
 				Concept c = new Concept();
 				c.addName(new ConceptName("ConceptNumericConcept", Locale.US));
 				c.setUuid("23423a2982236623");
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 				Context.getConceptService().saveConcept(c);
 				
 			}
