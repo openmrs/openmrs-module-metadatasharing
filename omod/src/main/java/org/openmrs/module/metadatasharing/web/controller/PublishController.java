@@ -32,7 +32,6 @@ import org.openmrs.module.metadatasharing.publish.PublishUtils;
 import org.openmrs.module.metadatasharing.subscription.SubscriptionHeader;
 import org.openmrs.module.metadatasharing.web.exception.PackageNotFoundException;
 import org.openmrs.module.metadatasharing.web.view.DownloadPackageView;
-import org.openmrs.module.metadatasharing.web.view.GetSubscriptionHeaderView;
 import org.openmrs.module.metadatasharing.wrapper.PackageExporter;
 import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsConstants;
@@ -49,13 +48,13 @@ import org.springframework.web.servlet.ModelAndView;
  * The controller for publish related pages.
  */
 @Controller(MetadataSharingConsts.MODULE_ID + ".PublishController")
-public class PublishController {
+public class PublishController<GetLatestSubscriptionHeaderView> {
 	
 	/**
 	 * The view which returns XML serialized "header" variable from the model
 	 */
 	@Autowired
-	private GetSubscriptionHeaderView subscriptionHeaderView;
+	private GetLatestSubscriptionHeaderView subscriptionHeaderView;
 	
 	/**
 	 * The view which returns zipped package content to the client
@@ -89,7 +88,7 @@ public class PublishController {
 	 * group (group is extracted from the request URL)
 	 */
 	@RequestMapping(value = OLD_PACKAGE_PATH + "/*/latest", method = RequestMethod.GET)
-	public ModelAndView getSubscriptionHeader(Model model, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView getLatestSubscriptionHeader(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Context.addProxyPrivilege(MetadataSharingConsts.MODULE_PRIVILEGE);
 			String req = request.getRequestURI();
@@ -103,7 +102,7 @@ public class PublishController {
 				header.setContentUri(PublishUtils.createRelativeURI("../" + pack.getGroupUuid() + "/" + pack.getVersion()
 				        + "/download"));
 				model.addAttribute("header", header);
-				return new ModelAndView(subscriptionHeaderView, model.asMap());
+				return new ModelAndView((String) subscriptionHeaderView, model.asMap());
 			} else {
 				throw new PackageNotFoundException();
 			}
@@ -118,9 +117,9 @@ public class PublishController {
 	 * This method/mapping solves compatibility issues between 1.8.1+ versions and previous
 	 */
 	@RequestMapping(value = NEW_PACKAGE_PATH + "/*/latest", method = RequestMethod.GET)
-	public ModelAndView getSubscriptionHeaderCompatibility(Model model, HttpServletRequest request,
+	public ModelAndView getLatestSubscriptionHeaderCompatibility(Model model, HttpServletRequest request,
 	                                                       HttpServletResponse response) {
-		return getSubscriptionHeader(model, request, response);
+		return getLatestSubscriptionHeader(model, request, response);
 	}
 	
 	/**
