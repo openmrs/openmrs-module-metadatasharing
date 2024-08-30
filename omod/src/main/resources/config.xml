@@ -90,6 +90,11 @@
 			Key to grant access to remote systems to consume module webservices RESTfully
 		</description>
 	</globalProperty>
+	<globalProperty>
+        <property>@MODULE_ID@.serializer.whitelist.types</property>
+        <defaultValue>org.openmrs.module.metadatasharing.ImportConfig</defaultValue>
+        <description>Add whitelisting for components loaded via XStream TRUNK-6188</description>
+    </globalProperty>
 	<!-- /Required Global Properties -->
 
 	<!-- Internationalization -->

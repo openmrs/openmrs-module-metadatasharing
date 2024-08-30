@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.metadatasharing.serializer;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
@@ -39,6 +41,7 @@ import org.openmrs.module.metadatasharing.serializer.mapper.NonExistigFieldMappe
 import org.openmrs.module.metadatasharing.subscription.SubscriptionHeader;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
+import org.openmrs.serialization.SimpleXStreamSerializer;
 import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,6 +181,19 @@ public class MetadataSerializer implements OpenmrsSerializer {
 		xstream.setMode(XStream.ID_REFERENCES);
 		xstream.processAnnotations(new Class[] { SubscriptionHeader.class, Item.class });
 		
+		setupXStreamSecurity(xstream);
 	}
 	
+	private void setupXStreamSecurity(XStream xstream) {
+		SimpleXStreamSerializer serializer = Context.getRegisteredComponent("simpleXStreamSerializer", SimpleXStreamSerializer.class);
+		if (serializer != null) {
+			try {
+				Method method = serializer.getClass().getMethod("initXStream", XStream.class);
+				method.invoke(serializer, xstream);
+			}
+			catch (Exception ex) {
+				log.error("Failed to set up XStream Security", ex);
+			}
+		}
+	}
 }
