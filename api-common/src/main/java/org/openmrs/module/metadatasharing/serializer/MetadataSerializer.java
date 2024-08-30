@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.User;
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.Item;
@@ -185,15 +186,20 @@ public class MetadataSerializer implements OpenmrsSerializer {
 	}
 	
 	private void setupXStreamSecurity(XStream xstream) {
-		SimpleXStreamSerializer serializer = Context.getRegisteredComponent("simpleXStreamSerializer", SimpleXStreamSerializer.class);
-		if (serializer != null) {
-			try {
-				Method method = serializer.getClass().getMethod("initXStream", XStream.class);
-				method.invoke(serializer, xstream);
-			}
-			catch (Exception ex) {
-				log.error("Failed to set up XStream Security", ex);
+		try {
+			SimpleXStreamSerializer serializer = Context.getRegisteredComponent("simpleXStreamSerializer", SimpleXStreamSerializer.class);
+			if (serializer != null) {
+				try {
+					Method method = serializer.getClass().getMethod("initXStream", XStream.class);
+					method.invoke(serializer, xstream);
+				}
+				catch (Exception ex) {
+					log.error("Failed to set up XStream Security", ex);
+				}
 			}
 		}
+		catch (APIException ex) {
+    		//Ignore APIException("Error during getting registered component) for platform versions below 2.7.0
+    	}
 	}
 }
