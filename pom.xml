@@ -382,6 +382,13 @@
 					<version>2.12</version>
 				</plugin>
 
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.13.0</version>
+				</plugin>
+
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
