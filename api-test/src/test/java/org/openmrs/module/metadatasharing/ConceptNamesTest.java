@@ -26,6 +26,7 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.wrapper.PackageImporter;
@@ -50,9 +51,11 @@ public class ConceptNamesTest extends BaseShareTest {
 			public List<?> prepareExportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
-				
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
+
 				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
@@ -71,9 +74,10 @@ public class ConceptNamesTest extends BaseShareTest {
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
-				
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
@@ -124,9 +128,10 @@ public class ConceptNamesTest extends BaseShareTest {
 			public List<?> prepareExportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
-				
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
@@ -145,9 +150,10 @@ public class ConceptNamesTest extends BaseShareTest {
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
-				
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
@@ -194,9 +200,10 @@ public class ConceptNamesTest extends BaseShareTest {
 			public List<?> prepareExportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 				
 				ConceptName preferredName = new ConceptName("a", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);
@@ -215,9 +222,10 @@ public class ConceptNamesTest extends BaseShareTest {
 			public void prepareImportServer() throws Exception {
 				Concept concept = new Concept();
 				concept.setUuid(conceptUuid);
-				
+				concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				ConceptName preferredName = new ConceptName("b", Locale.ENGLISH);
-				concept.setPreferredName(Locale.ENGLISH, preferredName);
+				concept.setPreferredName(preferredName);
 				
 				ConceptName synonym = new ConceptName("AA", Locale.ENGLISH);
 				concept.addName(synonym);

@@ -8,13 +8,11 @@ import junit.framework.Assert;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
-import org.openmrs.GlobalProperty;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.ExportedPackage;
 import org.openmrs.module.metadatasharing.ImportExportTestUtils;
-import org.openmrs.module.metadatasharing.MetadataSharingConsts;
 import org.openmrs.module.metadatasharing.handler.Handler;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
@@ -31,6 +29,7 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 		c.addName(new ConceptName("c", Locale.ENGLISH));
 		c.setUuid("c");
 		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+		c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 		Context.getConceptService().saveConcept(c);
 		
 		ExportedPackage pack = ImportExportTestUtils.exportPackage(null,
@@ -51,6 +50,7 @@ public class MetadataExporterTest extends BaseModuleContextSensitiveTest {
 		c.addName(new ConceptName("c", Locale.ENGLISH));
 		c.setUuid("c");
 		c.setDatatype(Context.getConceptService().getConceptDatatypeByName("N/A"));
+		c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 		Context.getConceptService().saveConcept(c);
 		
 		final String conceptUUId = "c";

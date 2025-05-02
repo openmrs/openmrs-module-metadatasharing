@@ -28,6 +28,7 @@ public class ConceptShareScenarioTest extends BaseShareScenarioTest<Concept> {
 	@Override
 	public List<Concept> prepareItemsToExport() {
 		Concept concept = ConceptMock.newInstance().addPreferredName("Some test concept", Locale.ENGLISH).setDatatype("N/A")
+				.addDescription("Description", Locale.ENGLISH)
 		        .saveConcept().getConcept();
 		return Arrays.asList(concept);
 	}
