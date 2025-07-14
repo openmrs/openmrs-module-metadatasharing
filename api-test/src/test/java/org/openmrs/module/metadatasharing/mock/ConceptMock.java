@@ -79,7 +79,7 @@ public class ConceptMock {
 	public ConceptMock setPreferredName(String name, Locale locale) {
 		for (ConceptName conceptName : concept.getNames()) {
 			if (conceptName.getName().equals(name) && conceptName.getLocale().equals(locale)) {
-				concept.setPreferredName(locale, conceptName);
+				concept.setPreferredName(conceptName);
 				return this;
 			}
 		}
@@ -89,7 +89,7 @@ public class ConceptMock {
 	public ConceptMock setShortName(String name, Locale locale) {
 		for (ConceptName conceptName : concept.getNames()) {
 			if (conceptName.getName().equals(name) && conceptName.getLocale().equals(locale)) {
-				concept.setShortName(locale, conceptName);
+				concept.setShortName(conceptName);
 				return this;
 			}
 		}
@@ -99,14 +99,14 @@ public class ConceptMock {
 	public ConceptMock addPreferredName(String name, Locale locale) {
 		ConceptName conceptName = new ConceptName(name, locale);
 		conceptName.setUuid(UUID.randomUUID().toString());
-		concept.setPreferredName(locale, conceptName);
+		concept.setPreferredName(conceptName);
 		return this;
 	}
 	
 	public ConceptMock addShortName(String name, Locale locale) {
 		ConceptName conceptName = new ConceptName(name, locale);
 		conceptName.setUuid(UUID.randomUUID().toString());
-		concept.setShortName(locale, conceptName);
+		concept.setShortName(conceptName);
 		return this;
 	}
 	
@@ -126,8 +126,8 @@ public class ConceptMock {
 			conceptSource.setHl7Code(source);
 		}
 		ConceptMap conceptMap = new ConceptMap();
-		conceptMap.setSource(conceptSource);
-		conceptMap.setSourceCode(code);
+		conceptMap.getConceptReferenceTerm().setConceptSource(conceptSource);
+		conceptMap.getConceptReferenceTerm().setCode(code);
 		concept.addConceptMapping(conceptMap);
 		return this;
 	}
@@ -203,14 +203,14 @@ public class ConceptMock {
 			for (ConceptMap conceptMap : concept.getConceptMappings()) {
 				boolean found = false;
 				for (ConceptMap expectedMap : expected.getConceptMappings()) {
-					if (expectedMap.getSourceCode().equals(conceptMap.getSourceCode())) {
+					if (expectedMap.getConceptReferenceTerm().getCode().equals(conceptMap.getConceptReferenceTerm().getCode())) {
 						found = true;
-						if (!assertBothOrNoneNull("map source", expectedMap.getSource(), conceptMap.getSource())) {
+						if (!assertBothOrNoneNull("map source", expectedMap.getConceptReferenceTerm().getConceptSource(), conceptMap.getConceptReferenceTerm().getConceptSource())) {
 							if (!ignoreUuids) {
-								Assert.assertEquals("map source uuid", expectedMap.getSource().getUuid(), conceptMap
-								        .getSource().getUuid());
+								Assert.assertEquals("map source uuid", expectedMap.getConceptReferenceTerm().getConceptSource().getUuid(), conceptMap.getConceptReferenceTerm()
+								        .getConceptSource().getUuid());
 							}
-							Assert.assertEquals("map source name", expectedMap.getSource().getName(), conceptMap.getSource()
+							Assert.assertEquals("map source name", expectedMap.getConceptReferenceTerm().getConceptSource().getName(), conceptMap.getConceptReferenceTerm().getConceptSource()
 							        .getName());
 						}
 					}

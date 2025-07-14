@@ -21,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
@@ -41,6 +42,7 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 				Concept c = new Concept();
 				c.setUuid("1");
 				c.addName(new ConceptName("DrugAnswerDrugConcept", Locale.US));
+				c.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 				Context.getConceptService().saveConcept(c);
 				
 				//here's the drug
@@ -54,7 +56,8 @@ public class ConceptWithAnswerDrugShareScenarioTest extends BaseShareTest {
 				Concept cTest = new Concept();
 				cTest.setUuid("3");
 				cTest.addName(new ConceptName("TestAnswerDrugConcept", Locale.US));
-				
+				cTest.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
+
 				ConceptAnswer ca = new ConceptAnswer();
 				ca.setAnswerConcept(c);
 				ca.setAnswerDrug(drug);

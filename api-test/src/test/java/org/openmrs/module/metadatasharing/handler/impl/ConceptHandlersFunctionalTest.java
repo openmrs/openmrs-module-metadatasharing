@@ -19,6 +19,7 @@ import java.util.Locale;
 import junit.framework.Assert;
 
 import org.openmrs.Concept;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.metadatasharing.handler.BaseHandlersTest;
@@ -30,6 +31,7 @@ public class ConceptHandlersFunctionalTest extends BaseHandlersTest<Concept> {
 	public Concept getNewItem(){
 		Concept concept = new Concept();
 		concept.addName(new ConceptName("New Concept", Locale.ENGLISH));
+		concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 		return concept;
 	}
 	
@@ -38,6 +40,7 @@ public class ConceptHandlersFunctionalTest extends BaseHandlersTest<Concept> {
 		Concept concept = new Concept();
 		concept.setUuid("1");
 		concept.addName(new ConceptName("Existing concept", Locale.ENGLISH));
+		concept.addDescription(new ConceptDescription("Description", Locale.ENGLISH));
 		return Context.getConceptService().saveConcept(concept);
 	}
 	

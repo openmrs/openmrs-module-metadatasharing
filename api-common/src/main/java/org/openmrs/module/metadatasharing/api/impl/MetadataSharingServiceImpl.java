@@ -211,7 +211,7 @@ public class MetadataSharingServiceImpl extends BaseOpenmrsService implements Me
 				return null;
 			}
 			
-		}.executeInManualFlushMode();
+		}.executeInAutoFlushMode();
 	}
 	
 	/**

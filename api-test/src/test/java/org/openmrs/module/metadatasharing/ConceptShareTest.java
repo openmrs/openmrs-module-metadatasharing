@@ -35,7 +35,9 @@ public class ConceptShareTest extends BaseShareTest {
 			@Override
 			public List<?> prepareExportServer() throws Exception {
 				exportedConcept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH)
-				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A").saveConcept()
+				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A")
+						.addDescription("Description", Locale.ENGLISH)
+						.saveConcept()
 				        .getConcept();
 				
 				return Arrays.asList(exportedConcept);
@@ -64,7 +66,9 @@ public class ConceptShareTest extends BaseShareTest {
 			@Override
 			public List<?> prepareExportServer() throws Exception {
 				exportedConcept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH)
-				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A").saveConcept()
+				        .addMapping("373066001", "SNOMED CT").addMapping("1065", "AMPATH").setDatatype("N/A")
+						.addDescription("Description", Locale.ENGLISH)
+						.saveConcept()
 				        .getConcept();
 				
 				return Arrays.asList(exportedConcept);
@@ -72,8 +76,10 @@ public class ConceptShareTest extends BaseShareTest {
 			
 			@Override
 			public void prepareImportServer() throws Exception {
-				ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH).addMapping("373066001", "SNOMED CT")
-				        .setDatatype("N/A").saveConcept();
+				ConceptMock.newInstance().addPreferredName("Yes Yes 2", Locale.ENGLISH).addMapping("373066001", "SNOMED CT")
+				        .setDatatype("N/A")
+						.addDescription("Description", Locale.ENGLISH)
+						.saveConcept();
 			}
 			
 			@Override
@@ -96,7 +102,9 @@ public class ConceptShareTest extends BaseShareTest {
 			
 			@Override
 			public List<?> prepareExportServer() throws Exception {
-				Concept concept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH).saveConcept()
+				Concept concept = ConceptMock.newInstance().addPreferredName("Yes Yes", Locale.ENGLISH)
+						.addDescription("Description", Locale.ENGLISH)
+						.saveConcept()
 				        .getConcept();
 				
 				return Arrays.asList(concept);
@@ -105,6 +113,7 @@ public class ConceptShareTest extends BaseShareTest {
 			@Override
 			public void prepareImportServer() throws Exception {
 				ConceptMock.newInstance().addName("YES YES", Locale.ENGLISH).addPreferredName("Yes!", Locale.ENGLISH)
+						.addDescription("Description", Locale.ENGLISH)
 				        .saveConcept();
 			}
 			
