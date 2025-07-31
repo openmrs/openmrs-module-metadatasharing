@@ -70,10 +70,10 @@ public class ReplaceMethodInovker {
 			return method.invoke(object, args);
 		}
 		catch (IllegalAccessException e) {
-			throw new RuntimeException("Failed to call " + method.getName(), e);
+			throw new RuntimeException("Failed to call " + method.getName() + " because you don't have access to it " , e);
 		}
-		catch (InvocationTargetException e) {
-			throw new RuntimeException("Failed to call " + method.getName() + "\n\n" + ExceptionUtils.getFullStackTrace(e), e);
+		catch (InvocationTargetException e) {		
+			throw new RuntimeException("Failed to call " + method.getName() + " Object class "+ object.getClass().getName() + "\n\n" + ExceptionUtils.getFullStackTrace(e), e);
 		}
 	}
 	
