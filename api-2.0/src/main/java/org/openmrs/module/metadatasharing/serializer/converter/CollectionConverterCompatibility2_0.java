@@ -46,21 +46,14 @@ public class CollectionConverterCompatibility2_0 implements CollectionConverterC
 
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer,
-			MarshallingContext context, ConverterLookup converterLookup) {
-		
-		if (source instanceof PersistentList) {
-			source = new ArrayList((Collection) source);
-		} else if (source instanceof PersistentMap) {
-			source = new HashMap((Map) source);
-		} else if (source instanceof PersistentSortedMap) {
-			source = new TreeMap((SortedMap) source);
-		} else if (source instanceof PersistentSortedSet) {
-			source = new TreeSet((SortedSet) source);
-		} else if (source instanceof PersistentSet) {
-			source = new HashSet((Set) source);
+						MarshallingContext context, ConverterLookup converterLookup) {
+
+		if (source instanceof PersistentCollection) {
+			source = new ArrayList<>((Collection<?>) source);
 		}
-		
-		// delegate the collection to the appropriate converter
+
+		// Delegate to the appropriate converter
 		converterLookup.lookupConverterForType(source.getClass()).marshal(source, writer, context);
 	}
+
 }
