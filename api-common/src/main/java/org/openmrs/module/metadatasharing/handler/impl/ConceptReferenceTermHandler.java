@@ -42,6 +42,9 @@ public class ConceptReferenceTermHandler implements MetadataPriorityDependencies
 		if (object.getConceptSource() != null) {
 			result.add(object.getConceptSource());
 		}
+		if(object.getConceptReferenceTermMaps() != null) {
+			result.addAll(object.getConceptReferenceTermMaps());
+		}
 		return result;
 	}
 

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package id="1" uuid="f380b50b-379c-402f-be40-87db9e0111db">
+  <dateCreated id="2">2012-08-29 12:04:32</dateCreated>
+  <name>useless-concept</name>
+  <description>useless concept export</description>
+  <openmrsVersion>1.9.0  Build 27760</openmrsVersion>
+  <version>1</version>
+  <groupUuid>1d181738-f2b2-4ed8-a087-da2a67092f14</groupUuid>
+  <modules id="3">
+    <entry>
+      <string>htmlwidgets</string>
+      <string>1.6.0</string>
+    </entry>
+    <entry>
+      <string>reportingcompatibility</string>
+      <string>1.5.7</string>
+    </entry>
+    <entry>
+      <string>xforms</string>
+      <string>4.0.9.5</string>
+    </entry>
+    <entry>
+      <string>htmlformentry</string>
+      <string>1.9.3</string>
+    </entry>
+    <entry>
+      <string>htmlformentry19ext</string>
+      <string>0.9</string>
+    </entry>
+    <entry>
+      <string>metadatasharing</string>
+      <string>1.1-SNAPSHOT</string>
+    </entry>
+    <entry>
+      <string>patientflags</string>
+      <string>1.3.4</string>
+    </entry>
+    <entry>
+      <string>reporting</string>
+      <string>0.7.1.1</string>
+    </entry>
+    <entry>
+      <string>logic</string>
+      <string>0.5.2</string>
+    </entry>
+    <entry>
+      <string>serialization.xstream</string>
+      <string>0.2.5</string>
+    </entry>
+  </modules>
+  <items class="linked-hash-set" id="4">
+    <org.openmrs.module.metadatasharing.Item id="5" uuid="927a803f-df3c-47aa-baeb-56cd0e262692">
+      <id>6099</id>
+      <classname>org.openmrs.Concept</classname>
+      <dateChanged id="6">2012-08-29 12:03:49</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+  </items>
+  <relatedItems class="linked-hash-set" id="7">
+    <org.openmrs.module.metadatasharing.Item id="8" uuid="8d4a4c94-c2cc-11de-8d13-0010c6dffd0f">
+      <id>4</id>
+      <classname>org.openmrs.ConceptDatatype</classname>
+      <dateChanged id="9">2004-02-02 00:00:00</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="10" uuid="8d4907b2-c2cc-11de-8d13-0010c6dffd0f">
+      <id>1</id>
+      <classname>org.openmrs.ConceptClass</classname>
+      <dateChanged id="11">2004-02-02 00:00:00</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="12" uuid="ef84bdfb-de50-4b63-93ac-8b0ce2ba7435">
+      <id>3461</id>
+      <classname>org.openmrs.ConceptName</classname>
+      <dateChanged id="13">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="14" uuid="f8371eab-407f-4099-8cb7-7439bf6d525c">
+      <id>3462</id>
+      <classname>org.openmrs.ConceptName</classname>
+      <dateChanged id="15">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="16" uuid="f2bcd078-bc33-4718-882f-227af3f87c98">
+      <id>3464</id>
+      <classname>org.openmrs.ConceptName</classname>
+      <dateChanged id="17">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="18" uuid="f1f6578d-b3d3-47e1-9a74-3a4917e5e254">
+      <id>3463</id>
+      <classname>org.openmrs.ConceptName</classname>
+      <dateChanged id="19">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="20" uuid="d22f90ab-3c30-4938-a55e-88a71454973d">
+      <id>2425</id>
+      <classname>org.openmrs.ConceptDescription</classname>
+      <dateChanged id="21">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="22" uuid="3a518d23-25f7-4dd7-8ccc-d4b0b257960d">
+      <id>1</id>
+      <classname>org.openmrs.ConceptMap</classname>
+      <dateChanged id="23">2012-08-29 12:03:49</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="24" uuid="6b63176e-f96c-48ec-bbd9-e88c00b9a752">
+      <id>1</id>
+      <classname>org.openmrs.ConceptMapType</classname>
+      <dateChanged id="25">2011-11-04 00:00:00</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="26" uuid="e6be7ef5-29bd-487e-b13f-6749f7e6616b">
+      <id>1</id>
+      <classname>org.openmrs.ConceptReferenceTerm</classname>
+      <dateChanged id="27">2012-08-29 12:01:20</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="28" uuid="25e06cde-6b7c-4c5e-a720-20018863fb5e">
+      <id>1</id>
+      <classname>org.openmrs.ConceptSource</classname>
+      <dateChanged id="29">2012-08-29 11:54:40</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="30" uuid="7b085901-a7f3-4c64-9eca-5c468a1fc153">
+      <id>1</id>
+      <classname>org.openmrs.ConceptReferenceTermMap</classname>
+      <dateChanged id="31">2012-08-29 12:02:56</dateChanged>
+    </org.openmrs.module.metadatasharing.Item>
+    <org.openmrs.module.metadatasharing.Item id="32" uuid="a26bea69-1102-4b38-9f7e-4aaf28a2ae44">
+      <id>2</id>
+      <classname>org.openmrs.ConceptReferenceTerm</classname>
+      <dateChanged id="33">2012-08-29 12:03:25</dateChanged>
+      <retired>false</retired>
+    </org.openmrs.module.metadatasharing.Item>
+  </relatedItems>
+</package>
