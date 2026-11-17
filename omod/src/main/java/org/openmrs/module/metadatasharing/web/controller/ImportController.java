@@ -543,10 +543,25 @@ public class ImportController {
 		return new ModelAndView(jsonObjectView);
 	}
 	
-	@RequestMapping(value = ITEM_PATH, method = RequestMethod.GET)
+	/**
+	 * Assesses one item of the import. The import screen links here without a uuid; with a uuid, that existing item
+	 * replaces the incoming one, if it can be replaced. One handler for both, as Spring 5.3 no longer matches
+	 * assessItem.form to a handler mapped to assessItem.
+	 */
+	@RequestMapping(value = ITEM_PATH + ".form", method = RequestMethod.GET)
 	public void assessItem(@ModelAttribute(ITEMS)
-	List<ImportedItem> items, Integer index, Model model) {
+	List<ImportedItem> items, Integer index, @RequestParam(value = "uuid", required = false)
+	String uuid, Model model) {
 		ImportedItem importedItem = items.get(index);
+		
+		if (StringUtils.isNotBlank(uuid) && importedItem.isExistingReplaceable()) {
+			Object existing = Handler.getItemByUuid(Handler.getRegisteredClass(importedItem.getIncoming()), uuid);
+			if (existing != null) {
+				importedItem.setExisting(existing);
+				importedItem.setImportType(ImportType.PREFER_MINE);
+			}
+		}
+		
 		importedItem.loadExisting();
 		
 		try {
@@ -571,22 +586,6 @@ public class ImportController {
 		assessItemForm.setIndex(index);
 		assessItemForm.setImportType(importedItem.getImportType());
 		model.addAttribute(assessItemForm);
-	}
-	
-	@RequestMapping(value = ITEM_PATH + ".form", method = RequestMethod.GET, params = "uuid")
-	public void assessItem(@ModelAttribute(ITEMS)
-	List<ImportedItem> items, Integer index, String uuid, Model model) {
-		ImportedItem importedItem = items.get(index);
-		
-		if (importedItem.isExistingReplaceable()) {
-			Object existing = Handler.getItemByUuid(Handler.getRegisteredClass(importedItem.getIncoming()), uuid);
-			if (existing != null) {
-				importedItem.setExisting(existing);
-				importedItem.setImportType(ImportType.PREFER_MINE);
-			}
-		}
-		
-		assessItem(items, index, model);
 	}
 	
 	@RequestMapping(value = ITEM_PATH + ".form", method = RequestMethod.POST)
