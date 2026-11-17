@@ -126,7 +126,7 @@ public class Item extends BaseOpenmrsObject implements Serializable {
 	 * @return the retired
 	 */
 	public boolean isRetired() {
-		return retired;
+		return retired != null && retired;
 	}
 	
 	/**
