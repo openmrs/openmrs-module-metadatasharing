@@ -14,9 +14,9 @@
 package org.openmrs.module.metadatasharing.serializer.converter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -25,11 +25,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentList;
-import org.hibernate.collection.PersistentMap;
-import org.hibernate.collection.PersistentSet;
-import org.hibernate.collection.PersistentSortedMap;
-import org.hibernate.collection.PersistentSortedSet;
 import org.openmrs.annotation.OpenmrsProfile;
 
 import com.thoughtworks.xstream.converters.ConverterLookup;
@@ -48,16 +43,18 @@ public class CollectionConverterCompatibility1_9 implements CollectionConverterC
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context, ConverterLookup converterLookup) {
 		
-		if (source instanceof PersistentList) {
-			source = new ArrayList((Collection) source);
-		} else if (source instanceof PersistentMap) {
-			source = new HashMap((Map) source);
-		} else if (source instanceof PersistentSortedMap) {
-			source = new TreeMap((SortedMap) source);
-		} else if (source instanceof PersistentSortedSet) {
-			source = new TreeSet((SortedSet) source);
-		} else if (source instanceof PersistentSet) {
-			source = new HashSet((Set) source);
+		if (source instanceof PersistentCollection) {
+			if (source instanceof List) {
+				source = new ArrayList((List) source);
+			} else if (source instanceof SortedMap) {
+				source = new TreeMap((SortedMap) source);
+			} else if (source instanceof Map) {
+				source = new HashMap((Map) source);
+			} else if (source instanceof SortedSet) {
+				source = new TreeSet((SortedSet) source);
+			} else if (source instanceof Set) {
+				source = new HashSet((Set) source);
+			}
 		}
 		
 		// delegate the collection to the approapriate converter
