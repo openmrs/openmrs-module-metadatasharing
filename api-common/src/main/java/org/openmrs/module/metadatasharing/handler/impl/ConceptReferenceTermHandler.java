@@ -63,8 +63,11 @@ public class ConceptReferenceTermHandler implements MetadataPriorityDependencies
 	@Override
     public String getName(ConceptReferenceTerm o) {
 		String name = "";
-		if (o.getConceptSource() != null) {
-			name += o.getConceptSource().getName() + ":";
+		if (o.getName() != null) {
+			name += o.getName() + " ";
+		}
+		if (o.getConceptSource() != null) {	
+			name += o.getConceptSource().getName() + ": " ;			
 		}
 	    if (o.getCode() != null) {
 	    	name += o.getCode();
