@@ -15,6 +15,7 @@ package org.openmrs.module.metadatasharing.web.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -182,7 +183,7 @@ public class PublishController {
 	String key, Class<?> type, @RequestParam(required = false)
 	String ids, @RequestParam(required = false)
 	String uuids, @RequestParam(required = false)
-	Date modifiedSince, HttpServletResponse response) throws IOException, SerializationException {
+	Date modifiedSince,@RequestParam(required = false ,defaultValue ="false") boolean includeRetired, HttpServletResponse response) throws IOException, SerializationException {
 		if (Boolean.valueOf(Context.getAdministrationService()
 		        .getGlobalProperty(MetadataSharingConsts.GP_ENABLE_ON_THE_FLY_PACKAGES, "false").trim())) {
 			String accessKey = Context.getAdministrationService()
@@ -226,7 +227,21 @@ public class PublishController {
 								}
 							}
 						}
-					}
+						if (uuids == null && ids == null) {
+							List<Object> items = Handler.getItems(type, includeRetired, null, null, null);
+							if (items != null) {
+								for (Object item : items) {
+									if (modifiedSince == null) {
+										exporter.addItem(item);
+									} else {
+										if (OpenmrsUtil.compareWithNullAsEarliest(Handler.getDateChanged(item),
+												modifiedSince) > 0) {
+											exporter.addItem(item);
+										}
+									}
+								}
+							}
+						}
 					exporter.getPackage().setName("Package");
 					exporter.getPackage().setDescription(
 					    "Contains " + exporter.getPackage().getItems().size() + " items of type " + type.getSimpleName());
@@ -237,7 +252,8 @@ public class PublishController {
 					response.setHeader("Content-Disposition", "attachment; filename=\"metadata.zip\"");
 					MetadataZipper zipper = new MetadataZipper();
 					zipper.zipPackage(response.getOutputStream(), exporter.getExportedPackage().getSerializedPackage());
-				}
+						}
+					}					
 				finally {
 					Context.removeProxyPrivilege(MetadataSharingConsts.MODULE_PRIVILEGE);
 					Context.removeProxyPrivilege(privilegeCompatibility.GET_CONCEPTS());
@@ -262,8 +278,8 @@ public class PublishController {
 	String key, Class<?> type, @RequestParam(required = false)
 	String ids, @RequestParam(required = false)
 	String uuids, @RequestParam(required = false)
-	Date modifiedSince, HttpServletResponse response) throws IOException, SerializationException {
-		getNewPackage(key, type, ids, uuids, modifiedSince, response);
+	Date modifiedSince,@RequestParam(required = false ,defaultValue ="false") boolean includeRetired, HttpServletResponse response) throws IOException, SerializationException {
+		getNewPackage(key, type, ids, uuids, modifiedSince,includeRetired, response);
 	}
 	
 	private static void sendErrorResponseAfterDelay(HttpServletResponse response, int httpCode, String errorMessage)
